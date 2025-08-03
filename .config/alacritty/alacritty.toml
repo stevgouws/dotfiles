@@ -1,0 +1,58 @@
+import = [
+    "~/.config/alacritty/themes/themes/catppuccin_macchiato.toml"
+]
+
+[window]
+
+decorations = "None"
+startup_mode = "Maximized"
+
+[font]
+size = 16
+
+[font.normal]
+family = "MesloLGM Nerd Font"
+style  = "Regular"
+
+[font.bold]
+family = "MesloLGM Nerd Font"
+style  = "Bold"
+
+[font.italic]
+family = "MesloLGM Nerd Font"
+style  = "Italic"
+
+[keyboard]
+
+[[keyboard.bindings]]
+key = "v"
+mods = "Control|Option|Shift"
+action = "ToggleViMode"
+
+
+[[keyboard.bindings]]
+key = "k"
+mods = "Shift"
+mode = "Vi"
+action = "ScrollHalfPageUp"
+
+
+[[keyboard.bindings]]
+key = "j"
+mods = "Shift"
+mode = "Vi"
+action = "ScrollHalfPageDown"
+
+
+# Map Ctrl+Shift+Alt+k to actually send that instead of just ctrl k
+[[keyboard.bindings]]
+key = "k"
+mods = "Shift|Alt|Control"
+chars = "\u001b[1;8K"
+
+# Map Ctrl+Shift+Alt+l to actually send that instead of just ctrl l
+[[keyboard.bindings]]
+key = "l"
+mods = "Shift|Alt|Control"
+chars = "\u001b[1;8L"
+
