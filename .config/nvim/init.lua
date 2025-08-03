@@ -22,7 +22,7 @@ vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>lc", "/@voxsmartltd\\/components<CR>Wci\"file:../component-library/dist<ESC>", { desc = "Link Component Library" })
+vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 
 require("config.lazy")
 -- require('mini.surround').setup()
