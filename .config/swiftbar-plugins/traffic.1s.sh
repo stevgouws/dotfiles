@@ -16,14 +16,14 @@
 
 #!/usr/bin/env bash
 
-: "${SWIFTBAR_PLUGINS_PATH:?Need to set SWIFTBAR_PLUGINS_PATH}"
+# : "${SWIFTBAR_PLUGINS_PATH:?Need to set SWIFTBAR_PLUGINS_PATH}"
 
 # 1) Read the key (e.g. RED) from current_status.txt:
-key=$(<"$SWIFTBAR_PLUGINS_PATH/traffic/current_status.txt")
+key=$(<"$HOME/.config/swiftbar-plugins/traffic/current_status.txt")
 key=${key//[$'\t\r\n ']/} # strip whitespace
 
 # 2) Lookup in statuses.txt
-status=$(grep -m1 "^${key}=" "$SWIFTBAR_PLUGINS_PATH/traffic/statuses.txt" | cut -d= -f2-)
+status=$(grep -m1 "^${key}=" "$HOME/.config/swiftbar-plugins/traffic/statuses.txt" | cut -d= -f2-)
 
 # 3) Check & output
 if [[ -z $status ]]; then
