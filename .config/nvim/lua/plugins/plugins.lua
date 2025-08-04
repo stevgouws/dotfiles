@@ -5,4 +5,5 @@ return {
 --   "kylechui/nvim-surround",
  --  { 'echasnovski/mini.surround', version = '*' },
    { "tpope/vim-surround", event = "VeryLazy" },
+   { "tpope/vim-repeat", event = "VeryLazy" },
 }
