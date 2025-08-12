@@ -28,10 +28,11 @@ vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
+vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 
 require("config.lazy")
--- require('mini.surround').setup()
 
 -- highlight on yank: https://neovim.io/doc/user/lua.html#_vim.hl
 vim.api.nvim_create_autocmd("TextYankPost", {
