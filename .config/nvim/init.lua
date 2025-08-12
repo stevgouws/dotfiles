@@ -3,6 +3,12 @@ vim.opt.number = true
 
 if vim.g.vscode then
     -- VSCode extension
+    -- Auto-format on leaving insert mode in VSCode Neovim
+    vim.api.nvim_create_autocmd("InsertLeave", {
+      callback = function()
+        vim.cmd("call VSCodeNotify('editor.action.formatDocument')")
+      end
+    })
 else
   -- ordinary Neovim
   vim.opt.relativenumber = true -- not needed VScode provides it anyway
