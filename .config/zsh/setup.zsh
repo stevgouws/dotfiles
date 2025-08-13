@@ -28,7 +28,7 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 # typeset -g ZVM_ESCAPE_KEYTIMEOUT=0
 #bindkey -v
 # zinit ice depth=1
-#zinit light jeffreytse/zsh-vi-mode
+# zinit light jeffreytse/zsh-vi-mode # feels slow???
 
 ## Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
