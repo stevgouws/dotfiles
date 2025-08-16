@@ -1,0 +1,120 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  # Simple text replacement
+  - trigger: ":espanso"
+    replace: "Hi there!"
+
+  # NOTE: espanso uses YAML to define matches, so pay attention to the indentation!
+
+  # But matches can also be dynamic:
+
+  # Print the current date
+  - trigger: ":date"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%m/%d/%Y"
+
+  # Print the output of a shell command
+  - trigger: ":shell"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "echo 'Hello from your shell'"
+
+  # And much more! For more information, visit the docs: https://espanso.org/docs/
+
+  - trigger: id;
+    replace: pnpm install && pnpm dev
+    force_mode: clipboard
+  - regex: \bd;
+    replace: "pnpm dev"
+  - trigger: i;
+    replace: "pnpm install"
+  - trigger: b;
+    replace: "pnpm build"
+  - trigger: gp;
+    replace: "git pull"
+  - trigger: gc;
+    replace: "git checkout "
+  - trigger: gc-
+    replace: "git checkout -"
+  - trigger: "gm;"
+    replace: git checkout main && git pull
+    force_mode: clipboard
+  - trigger: gb;
+    replace: "git checkout -b "
+  - trigger: cl;
+    replace: 'console.log("{{clipb}}", {{clipb}});'
+    vars:
+      - name: "clipb"
+        type: "clipboard"
+# Emojis
+
+  - trigger: srg;
+    replace: ¯\_(ツ)_/¯
+  - trigger: fp;
+    replace: "🤦‍♂️"
+  - trigger: "gc:"
+    replace: "✅"
+  - trigger: ki;
+    replace: "😘"
+  - trigger: ha;
+    replace: "😂" 
+  - trigger: pd;
+    replace: "👇" 
+  - trigger: pl;
+    replace: "👈" 
+  - trigger: pr;
+    replace: "👉 " 
+  - trigger: pu;
+    replace: "👆" 
+  - trigger: ay;
+    replace: "🙏" 
+  - trigger: ?;
+    replace: "❓" 
+  - trigger: hh;
+    replace: "🤣" 
+  - trigger: see;
+    replace: "🙈" 
+  - trigger: sn;
+    replace: "😆" 
+  - trigger: sw;
+    replace: "😅" 
+  - trigger: ta;
+    replace: "🎉" 
+  - trigger: th;
+    replace: "🤔" 
+  - trigger: tu;
+    replace: "👍" 
+  - trigger: ua;
+    replace: "😒" 
+  - trigger: wa;
+    replace: "👋" 
+  - trigger: wi;
+    replace: "😉" 
+  - trigger: x;
+    replace: "❌" 
+          
+  - trigger: ":quote"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: choice
+        params:
+          values:
+            - "Every moment is a fresh beginning."
+            - "Everything you can imagine is real."
+            - "Whatever you do, do it well."

@@ -40,3 +40,38 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank()
     end,
 })
+
+
+
+vim.api.nvim_create_user_command('Null', function()
+  -- find the “{” above (backward, no wrap)…
+  local open = vim.fn.searchpairpos('{', '', '}', 'bnW')
+  -- and the “}” below (forward, no wrap)
+  local close = vim.fn.searchpairpos('{', '', '}', 'nW')
+
+  local start_line = open[1]
+  local end_line   = close[1]
+
+  if start_line == 0 or end_line == 0 then
+    vim.notify("No enclosing { … } block found", vim.log.levels.WARN)
+    return
+  end
+
+  -- run the substitute on those lines
+  vim.cmd(string.format("%d,%ds/null/undefined/g", start_line, end_line))
+end, {
+  desc  = "Replace all `null` with `undefined` in the nearest {…} block",
+  nargs = 0,
+})
+
+-- Toggle search highlights
+vim.keymap.set('n', '<leader>/', ':set hlsearch!<CR>', { desc = 'Toggle search highlight' })
+
+-- Case-insensitive searching, unless pattern contains uppercase
+vim.o.ignorecase = true
+vim.o.smartcase  = true
+
+-- Override weird Y not yanking whole line https://chatgpt.com/c/6890b23f-4700-8320-a68e-a9a446394ef9
+vim.keymap.del('n', 'Y')  -- clear the unwanted mapping
+vim.keymap.set('n', 'Y', 'yy', { noremap = true, silent = true, desc = 'Yank whole line' })
+
