@@ -29,6 +29,7 @@ vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
+vim.keymap.set("v", "<leader>s", "s", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 
@@ -42,7 +43,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 
-
+-- Replace undefined with line in current Block
 vim.api.nvim_create_user_command('Null', function()
   -- find the “{” above (backward, no wrap)…
   local open = vim.fn.searchpairpos('{', '', '}', 'bnW')
@@ -74,4 +75,40 @@ vim.o.smartcase  = true
 -- Override weird Y not yanking whole line https://chatgpt.com/c/6890b23f-4700-8320-a68e-a9a446394ef9
 vim.keymap.del('n', 'Y')  -- clear the unwanted mapping
 vim.keymap.set('n', 'Y', 'yy', { noremap = true, silent = true, desc = 'Yank whole line' })
+--
+---- Leap: always show labels at the beginning of the match
+---- https://github.com/ggandor/leap.nvim?tab=readme-ov-file
+---- `on_beacons` hooks into `beacons.light_up_beacons`, the function
+---- responsible for displaying stuff.
+--require('leap').opts.on_beacons = function (targets, _, _)
+  --for _, t in ipairs(targets) do
+    ---- Overwrite the `offset` value in all beacons.
+    ---- target.beacon looks like: { <offset>, <extmark_opts> }
+    --if t.label and t.beacon then t.beacon[1] = 0 end
+  --end
+  ---- Returning `true` tells `light_up_beacons` to continue as usual
+  ---- (`false` would short-circuit).
+  --return true
+--end
+
+-- Leap recommended customisations as per https://github.com/ggandor/leap.nvim?tab=readme-ov-file
+
+-- Exclude whitespace and the middle of alphabetic words from preview:
+--   foobar[baaz] = quux
+--   ^----^^^--^^-^-^--^
+require('leap').opts.preview_filter =
+  function (ch0, ch1, ch2)
+    return not (
+      ch1:match('%s') or
+      ch0:match('%a') and ch1:match('%a') and ch2:match('%a')
+    )
+  end
+
+-- Define equivalence classes for brackets and quotes, in addition to the default whitespace group:
+require('leap').opts.equivalence_classes = { ' \t\r\n', '([{', ')]}', '\'"`' }
+
+-- Use the traversal keys to repeat the previous motion without explicitly invoking Leap:
+require('leap.user').set_repeat_keys('<enter>', '<backspace>')
+
+
 

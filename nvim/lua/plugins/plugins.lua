@@ -6,4 +6,11 @@ return {
  --  { 'echasnovski/mini.surround', version = '*' },
    { "tpope/vim-surround", event = "VeryLazy" },
    { "tpope/vim-repeat", event = "VeryLazy" },
+   {
+     "ggandor/leap.nvim",
+     dependencies = { "tpope/vim-repeat" },
+     config = function()
+       require("leap").add_default_mappings()
+     end,
+   },
 }
