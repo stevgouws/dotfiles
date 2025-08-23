@@ -30,6 +30,7 @@ vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
 vim.keymap.set("v", "<leader>s", "s", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>s", "S", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 
@@ -109,6 +110,3 @@ require('leap').opts.equivalence_classes = { ' \t\r\n', '([{', ')]}', '\'"`' }
 
 -- Use the traversal keys to repeat the previous motion without explicitly invoking Leap:
 require('leap.user').set_repeat_keys('<enter>', '<backspace>')
-
-
-
