@@ -13,4 +13,12 @@ return {
        require("leap").add_default_mappings()
      end,
    },
+   {
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup {
+        -- your opts here
+      }
+    end
+  } 
 }
