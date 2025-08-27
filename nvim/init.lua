@@ -29,8 +29,8 @@ vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
-vim.keymap.set("v", "<leader>s", "s", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>s", "S", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 
