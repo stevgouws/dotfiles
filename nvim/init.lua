@@ -33,7 +33,15 @@ vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true }
 vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
-vim.keymap.set("n", "<leader>lx", "/\vx1-components\": \"^<CR>Wci\"file:../vx1-component-library/dist<ESC>:w<CR>", { desc = "Link VX1 Component Library" })
+vim.keymap.set("n", "<leader>lx", function()
+  local keys = vim.api.nvim_replace_termcodes(
+    [[/\vx1-components": "\^<CR>Wci"file:../vx1-component-library/dist<Esc>]],
+    true, false, true
+  )
+  vim.api.nvim_feedkeys(keys, "n", false)
+  vim.cmd([[%s%vs-fe-vx1-components-lib%vx1-component-library%ge]])
+  vim.cmd("w")
+end, { desc = "Link VX1 Component Library", silent = true })
 
 require("config.lazy")
 
