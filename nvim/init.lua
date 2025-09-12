@@ -33,6 +33,7 @@ vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true }
 vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
+vim.keymap.set("n", "<leader>lx", "/\vx1-components\": \"^<CR>Wci\"file:../vx1-component-library/dist<ESC>:w<CR>", { desc = "Link VX1 Component Library" })
 
 require("config.lazy")
 
