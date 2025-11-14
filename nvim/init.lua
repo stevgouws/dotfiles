@@ -34,7 +34,7 @@ vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>lc", "/\"@voxsmartltd/components\"<CR>Wci\"file:../component-library/dist<ESC>:w<CR>", { desc = "Link Component Library" })
 vim.keymap.set("n", "<leader>lx", function()
   local keys = vim.api.nvim_replace_termcodes(
-    [[/\vx1-components": "\^<CR>Wci"file:../vx1-component-library/dist<Esc>]],
+    [[/\vx1-components": "\^<CR>Wci"file:../../../vx1-component-library/dist<Esc>]],
     true, false, true
   )
   vim.api.nvim_feedkeys(keys, "n", false)
@@ -42,6 +42,13 @@ vim.keymap.set("n", "<leader>lx", function()
   vim.cmd("w")
 end, { desc = "Link VX1 Component Library", silent = true })
 
+vim.keymap.set("n", "<leader>to", "?test(\\|it(<CR>ea.only<ESC>:w<CR>", { desc = "Wrap current testcase in .only" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>tO", "?.only(<CR>dt(<ESC>:w<CR>", { desc = "Delete current testcase .only" })
+vim.keymap.set("n", "<leader>ts", "?test(\\|it(<CR>ea.skip<ESC>:w<CR>", { desc = "Wrap current testcase in .skip" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>tS", "?.skip(<CR>dt(<ESC>:w<CR>", { desc = "Delete current testcase .skip" })
+
+
+vim.keymap.set("n", "<leader>sa", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Scaffold: ArgsType" })
 require("config.lazy")
 
 -- highlight on yank: https://neovim.io/doc/user/lua.html#_vim.hl
@@ -50,7 +57,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank()
     end,
 })
-
 
 -- Replace undefined with line in current Block
 vim.api.nvim_create_user_command('Null', function()
