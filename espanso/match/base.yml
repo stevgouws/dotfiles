@@ -39,6 +39,12 @@ matches:
   - trigger: id;
     replace: pnpm install && pnpm dev
     force_mode: clipboard
+  - trigger: ib;
+    replace: pnpm install && pnpm build
+    force_mode: clipboard
+  - trigger: ibp;
+    replace: pnpm install && pnpm build && pnpm preview
+    force_mode: clipboard
   - regex: \bd;
     replace: "pnpm dev"
   - trigger: i;
@@ -52,10 +58,30 @@ matches:
   - trigger: gc-
     replace: "git checkout -"
   - trigger: "gm;"
-    replace: git checkout main && git pull
+    replace: "git checkout main && git pull"
+    force_mode: clipboard
+  - trigger: "gcm;"
+    replace: "git checkout main && git pull"
+    force_mode: clipboard
+  - trigger: "grm;"
+    replace: "git rebase main"
     force_mode: clipboard
   - trigger: gb;
     replace: "git checkout -b "
+  - regex: \bv;
+    replace: "clear &&  npx vitest --no-coverage "
+    force_mode: clipboard
+  - trigger: vp;
+    replace: "clear &&  npx vitest --no-coverage {{clipboard}}"
+    force_mode: clipboard
+    vars:
+      - name: "clipboard"
+        type: "clipboard"
+  - trigger: vr;
+    replace: "clear &&  npx vitest run --no-coverage"
+  - trigger: br;
+    replace: "border:solid red 5px;"
+  #  delay: 50
   - trigger: cl;
     replace: 'console.log("{{clipb}}", {{clipb}});'
     vars:
