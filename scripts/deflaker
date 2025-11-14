@@ -1,0 +1,11 @@
+loops="$1"
+filematch="$2"
+clear
+printf "Running %s %s times...\n" "${filematch:-All Tests}" "$loops"
+pass=0 fail=0; for i in $(seq 1 "$loops"); do
+  if DEBUG_PRINT_LIMIT=100000 NODE_OPTIONS="--stack-trace-limit=200 --trace-uncaught --trace-warnings" npx vitest run "$filematch" --no-coverage | grep -A4 "Test Files" | grep -qwi 'failed'; then
+    ((fail++)); printf "\033[31m×\033[0m"
+  else
+    ((pass++)); printf "\e[32m✓\e[0m"
+  fi
+done; printf "\nPassed: %d  Failed: %d\n" "$pass" "$fail"
