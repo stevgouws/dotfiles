@@ -1,5 +1,16 @@
 -- vim.opt.scrolloff = 999 -- really slow in vscode because of redraw
 vim.opt.number = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+
+vim.opt.clipboard = "unnamed"
+vim.opt.gdefault = true
+
+vim.g.mapleader = " "
+
 if vim.g.vscode then
     -- VSCode extension
     -- Auto-format on leaving insert mode in VSCode Neovim
@@ -12,16 +23,7 @@ else
   -- ordinary Neovim
   vim.opt.relativenumber = true -- not needed VScode provides it anyway
 end
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.smartindent = true
 
-vim.opt.clipboard = "unnamed"
-vim.opt.gdefault = true
-
-vim.g.mapleader = " "
 vim.keymap.set("n", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
