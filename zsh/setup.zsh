@@ -103,3 +103,4 @@ eval "$(zoxide init --cmd cd zsh)"
 # print grey & reset colour
 echo "${fg[grey]}Loaded setup.zsh…${reset_color}"
 
+alias alacritty="/Applications/Alacritty.app/Contents/MacOS/alacritty"
