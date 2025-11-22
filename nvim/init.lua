@@ -51,6 +51,41 @@ vim.keymap.set("n", "<leader>tS", "?.skip(<CR>dt(<ESC>:w<CR>", { desc = "Delete 
 
 
 vim.keymap.set("n", "<leader>sa", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Scaffold: ArgsType" })
+vim.keymap.set("n", "<leader>sp", "yiwkO<ESC>pbItype <ESC>$aProps = {}<ESC>i<CR><ESC>O", { desc = "Scaffold: PropsType" })
+
+-- Get current git branch name (fallback if not in a repo)
+local function git_branch()
+  local result = vim.fn.systemlist("git rev-parse --abbrev-ref HEAD")
+  if vim.v.shell_error ~= 0 or not result[1] or result[1] == "" then
+    return "no-branch"
+  end
+  return result[1]
+end
+
+vim.keymap.set("n", "<leader>rn", function()
+  local root = vim.fn.getcwd()        -- VSCode workspace root
+  local branch = git_branch()
+
+  vim.fn.jobstart({
+    "/Applications/Alacritty.app/Contents/MacOS/alacritty",
+    "msg",
+    "create-window",
+    "--title", branch,
+    "--working-directory", root,
+  }, {
+    detach = true,
+  })
+  -- 2) Bring Alacritty to the foreground
+  vim.fn.jobstart({
+    "osascript",
+    "-e",
+    'tell application "Alacritty" to activate',
+  }, {
+    detach = true,
+  })
+
+end, { silent = true })
+
 require("config.lazy")
 
 -- highlight on yank: https://neovim.io/doc/user/lua.html#_vim.hl
