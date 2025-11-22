@@ -4,7 +4,7 @@ import = [
 
 [window]
 
-decorations = "None"
+# decorations = "None"
 startup_mode = "Maximized"
 
 [font]
