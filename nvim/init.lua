@@ -44,14 +44,14 @@ vim.keymap.set("n", "<leader>lx", function()
   vim.cmd("w")
 end, { desc = "Link VX1 Component Library", silent = true })
 
-vim.keymap.set("n", "<leader>to", "?test(\\|it(<CR>ea.only<ESC>:w<CR>", { desc = "Wrap current testcase in .only" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>tO", "?.only(<CR>dt(<ESC>:w<CR>", { desc = "Delete current testcase .only" })
-vim.keymap.set("n", "<leader>ts", "?test(\\|it(<CR>ea.skip<ESC>:w<CR>", { desc = "Wrap current testcase in .skip" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>tS", "?.skip(<CR>dt(<ESC>:w<CR>", { desc = "Delete current testcase .skip" })
+vim.keymap.set("n", "<leader>mo", "?test(\\|it(<CR>ea.only<ESC>:w<CR>", { desc = "Mark: Wrap current testcase in .only" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>mO", "?.only(<CR>dt(<ESC>:w<CR>", { desc = "Mark: Delete current testcase .only" })
+vim.keymap.set("n", "<leader>ms", "?test(\\|it(<CR>ea.skip<ESC>:w<CR>", { desc = "Mark: Wrap current testcase in .skip" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>mS", "?.skip(<CR>dt(<ESC>:w<CR>", { desc = "Mark: Delete current testcase .skip" })
 
 
-vim.keymap.set("n", "<leader>sa", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Scaffold: ArgsType" })
-vim.keymap.set("n", "<leader>sp", "yiwkO<ESC>pbItype <ESC>$aProps = {}<ESC>i<CR><ESC>O", { desc = "Scaffold: PropsType" })
+vim.keymap.set("n", "<leader>ta", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Types: ArgsType" })
+vim.keymap.set("n", "<leader>tp", "yiwkO<ESC>pbItype <ESC>$aProps = {}<ESC>i<CR><ESC>O", { desc = "Types: PropsType" })
 
 -- Get current git branch name (fallback if not in a repo)
 local function git_branch()
