@@ -68,6 +68,8 @@ matches:
     force_mode: clipboard
   - trigger: gb;
     replace: "git checkout -b "
+  - trigger: gl;
+    replace: "git log --oneline "
   - regex: \bv;
     replace: "clear &&  npx vitest --no-coverage "
     force_mode: clipboard
