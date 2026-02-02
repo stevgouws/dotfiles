@@ -51,6 +51,9 @@ matches:
     replace: "pnpm install"
   - trigger: b;
     replace: "pnpm build"
+  - trigger: "bp;"
+    replace: "pnpm build && pnpm preview"
+    force_mode: clipboard
   - trigger: gp;
     replace: "git pull"
   - trigger: gc;
@@ -63,13 +66,20 @@ matches:
   - trigger: "gcm;"
     replace: "git checkout main && git pull"
     force_mode: clipboard
+  - trigger: "gr;"
+    replace: "git rebase origin/main"
+    force_mode: clipboard
   - trigger: "grm;"
-    replace: "git rebase main"
+    replace: "git rebase origin/main"
     force_mode: clipboard
   - trigger: gb;
     replace: "git checkout -b "
   - trigger: gl;
     replace: "git log --oneline "
+  - trigger: gwl
+    replace: "git worktree list"
+  - trigger: gwr
+    replace: "git worktree remove"
   - regex: \bv;
     replace: "clear &&  npx vitest --no-coverage "
     force_mode: clipboard
@@ -89,7 +99,7 @@ matches:
     vars:
       - name: "clipb"
         type: "clipboard"
-# Emojis
+  # Emojis
 
   - trigger: srg;
     replace: ¯\_(ツ)_/¯
@@ -100,42 +110,42 @@ matches:
   - trigger: ki;
     replace: "😘"
   - trigger: ha;
-    replace: "😂" 
+    replace: "😂"
   - trigger: pd;
-    replace: "👇" 
+    replace: "👇"
   - trigger: pl;
-    replace: "👈" 
+    replace: "👈"
   - trigger: pr;
-    replace: "👉 " 
+    replace: "👉 "
   - trigger: pu;
-    replace: "👆" 
+    replace: "👆"
   - trigger: ay;
-    replace: "🙏" 
+    replace: "🙏"
   - trigger: ?;
-    replace: "❓" 
+    replace: "❓"
   - trigger: hh;
-    replace: "🤣" 
+    replace: "🤣"
   - trigger: see;
-    replace: "🙈" 
+    replace: "🙈"
   - trigger: sn;
-    replace: "😆" 
+    replace: "😆"
   - trigger: sw;
-    replace: "😅" 
+    replace: "😅"
   - trigger: ta;
-    replace: "🎉" 
+    replace: "🎉"
   - trigger: th;
-    replace: "🤔" 
+    replace: "🤔"
   - trigger: tu;
-    replace: "👍" 
+    replace: "👍"
   - trigger: ua;
-    replace: "😒" 
+    replace: "😒"
   - trigger: wa;
-    replace: "👋" 
+    replace: "👋"
   - trigger: wi;
-    replace: "😉" 
+    replace: "😉"
   - regex: \bx;
-    replace: "❌" 
-          
+    replace: "❌"
+
   - trigger: ":quote"
     replace: "{{output}}"
     vars:
