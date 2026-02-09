@@ -54,6 +54,8 @@ matches:
   - trigger: "bp;"
     replace: "pnpm build && pnpm preview"
     force_mode: clipboard
+  - trigger: bw;
+    replace: "pnpm build --watch"
   - trigger: gp;
     replace: "git pull"
   - trigger: gc;
@@ -118,6 +120,8 @@ matches:
   - trigger: "bpk"
     replace: "pnpm build && pnpm preview"
     force_mode: clipboard
+  - trigger: bwk
+    replace: "pnpm build --watch"
   - trigger: gpk
     replace: "git pull"
   - trigger: gck
