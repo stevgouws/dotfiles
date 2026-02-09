@@ -6,6 +6,7 @@ return {
  --  { 'echasnovski/mini.surround', version = '*' },
    { "tpope/vim-surround", event = "VeryLazy" },
    { "tpope/vim-repeat", event = "VeryLazy" },
+   { "tpope/vim-abolish", event = "VeryLazy" },
    {
      "ggandor/leap.nvim",
      dependencies = { "tpope/vim-repeat" },
