@@ -82,6 +82,8 @@ matches:
     replace: "git worktree list"
   - trigger: gwr
     replace: "git worktree remove"
+  - regex: \bp;
+    replace: "clear && npx playwright test --project=chromium "
   - regex: \bv;
     replace: "clear &&  npx vitest --no-coverage "
     force_mode: clipboard
@@ -98,72 +100,6 @@ matches:
   #  delay: 50
   - trigger: cl;
     replace: 'console.log("{{clipb}}", {{clipb}});'
-    vars:
-      - name: "clipb"
-        type: "clipboard"
-  # test k
-  - trigger: idk
-    replace: pnpm install && pnpm dev
-    force_mode: clipboard
-  - trigger: ibk
-    replace: pnpm install && pnpm build
-    force_mode: clipboard
-  - trigger: ibpk
-    replace: pnpm install && pnpm build && pnpm preview
-    force_mode: clipboard
-  - regex: \bdk
-    replace: "pnpm dev"
-  - trigger: ik
-    replace: "pnpm install"
-  - trigger: bk
-    replace: "pnpm build"
-  - trigger: "bpk"
-    replace: "pnpm build && pnpm preview"
-    force_mode: clipboard
-  - trigger: bwk
-    replace: "pnpm build --watch"
-  - trigger: gpk
-    replace: "git pull"
-  - trigger: gck
-    replace: "git checkout "
-  - trigger: gc-
-    replace: "git checkout -"
-  - trigger: "gmk"
-    replace: "git checkout main && git pull"
-    force_mode: clipboard
-  - trigger: "gcmk"
-    replace: "git checkout main && git pull"
-    force_mode: clipboard
-  - trigger: "grk"
-    replace: "git rebase origin/main"
-    force_mode: clipboard
-  - trigger: "grmk"
-    replace: "git rebase origin/main"
-    force_mode: clipboard
-  - trigger: gbk
-    replace: "git checkout -b "
-  - trigger: glk
-    replace: "git log --oneline "
-  - trigger: gwl
-    replace: "git worktree list"
-  - trigger: gwr
-    replace: "git worktree remove"
-  - regex: \bvk
-    replace: "clear &&  npx vitest --no-coverage "
-    force_mode: clipboard
-  - trigger: vpk
-    replace: "clear &&  npx vitest --no-coverage {{clipboard}}"
-    force_mode: clipboard
-    vars:
-      - name: "clipboard"
-        type: "clipboard"
-  - trigger: vrk
-    replace: "clear &&  npx vitest run --no-coverage"
-  - trigger: brk
-    replace: "border:solid red 5pxk"
-  #  delay: 50
-  - trigger: clk
-    replace: 'console.log("{{clipb}}", {{clipb}})k'
     vars:
       - name: "clipb"
         type: "clipboard"
