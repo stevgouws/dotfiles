@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+branch="$1"
+dir_name="${branch##*/}"   # strip everything before the last /
+worktree_dir="$HOME/projects/fe-uiT/$dir_name"
+
+# 1) Local branch exists
+if git show-ref --verify --quiet "refs/heads/$branch"; then
+  echo "Local branch '$branch' exists, adding worktree for it..."
+  git worktree add "$worktree_dir" "$branch"
+
+# 2) Remote branch exists on origin (but not locally)
+elif git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+  echo "Remote branch 'origin/$branch' exists, creating local branch from it..."
+  git worktree add "$worktree_dir" -b "$branch" "origin/$branch"
+
+# 3) Brand new branch – create from origin/main
+else
+  echo "Branch '$branch' does not exist locally or on origin, creating from origin/main..."
+  git worktree add --no-track "$worktree_dir" -b "$branch" origin/main
+fi
+
+# Open new Alacritty window and run pnpm commands in it
+/Applications/Alacritty.app/Contents/MacOS/alacritty \
+  msg create-window \
+  --hold \
+  --title "$branch" \
+  --working-directory "$worktree_dir" \
+  --command zsh -lic "
+    set -euo pipefail
+    pnpm install
+    pnpm local:init-app-config-and-dotenv-files
+    pnpm -r --filter '!@vcs-ui2/app' --filter '!@vcs-ui2/user-guides' run build
+    cp \"$HOME/projects/fe-ui/packages/e2e/.env.e2e\" \"$worktree_dir/packages/e2e/\"
+    cp \"$HOME/projects/fe-ui/.env\" \"$worktree_dir/\"
+    cp \"$HOME/projects/fe-ui/.env.iis\" \"$worktree_dir/\"
+    code .
+    exec zsh -l
+  "
