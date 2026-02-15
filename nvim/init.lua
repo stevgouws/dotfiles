@@ -43,6 +43,8 @@ vim.keymap.set("n", "<leader>lx", function()
   vim.cmd([[%s%vs-fe-vx1-components-lib%vx1-component-library%ge]])
   vim.cmd("w")
 end, { desc = "Link VX1 Component Library", silent = true })
+vim.keymap.set("n", "<leader>lu", "/\"@voxsmartltd/frontend-utils\"<CR>Wci\"file:../../../fe-utils-library/dist<ESC>:w<CR>", { desc = "Link Utils Lib" })
+
 
 vim.keymap.set("n", "<leader>mo", "?test(\\|it(<CR>ea.only<ESC>:w<CR>", { desc = "Mark: Wrap current testcase in .only" }) -- need to double escape pipe
 vim.keymap.set("n", "<leader>mO", "?.only(<CR>dt(<ESC>:w<CR>", { desc = "Mark: Delete current testcase .only" })
