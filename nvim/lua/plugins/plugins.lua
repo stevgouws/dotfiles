@@ -6,7 +6,15 @@ return {
  --  { 'echasnovski/mini.surround', version = '*' },
    { "tpope/vim-surround", event = "VeryLazy" },
    { "tpope/vim-repeat", event = "VeryLazy" },
-   { "tpope/vim-abolish", event = "VeryLazy" },
+   { "tpope/vim-abolish",
+    event = "VeryLazy",
+    config = function()
+      -- coerce to dash/kebab case
+      vim.keymap.set({ "n", "x" }, "crk", "cr-", { remap = true, silent = true })
+      -- coerce to MixedCase/TitleCase 
+      vim.keymap.set({ "n", "x" }, "crt", "crm", { remap = true, silent = true })
+    end,
+   },
    {
      "ggandor/leap.nvim",
      dependencies = { "tpope/vim-repeat" },
