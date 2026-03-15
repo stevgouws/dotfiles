@@ -29,6 +29,8 @@ vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
+vim.keymap.set("x", "p", [["_dP]]) -- don't overwrite yank on paste
+
 vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
