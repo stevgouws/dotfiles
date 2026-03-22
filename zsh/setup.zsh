@@ -18,7 +18,7 @@ fi
 
 # Manual steps
 # brew install jandedobbeleer/oh-my-posh/oh-my-posh
-# also need to manually install font: https://ohmyposh.dev/docs/installation/fonts#nerd-fonts 
+# also need to manually install font: https://ohmyposh.dev/docs/installation/fonts#nerd-fonts
 # oh-my-posh font install meslo
 # brew install fzf
 #
@@ -104,3 +104,6 @@ eval "$(zoxide init --cmd cd zsh)"
 echo "${fg[grey]}Loaded setup.zsh…${reset_color}"
 
 alias alacritty="/Applications/Alacritty.app/Contents/MacOS/alacritty"
+
+# Change hammerspoon config path (run once)
+# defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
