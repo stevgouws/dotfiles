@@ -18,6 +18,9 @@ end
 myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.config/hammerspoon/", reloadConfig):start()
 hs.alert.show("Config loaded...")
 
+-- Modes
+
+-- Raycast
 local raycast = hs.hotkey.modal.new({ "ctrl", "shift" }, "r")
 
 function raycast:entered()
@@ -33,6 +36,49 @@ local function triggerRaycast(mods, key)
     raycast:exit()
     hs.eventtap.keyStroke(mods, key, 0)
   end
+end
+
+
+
+-- raycast:bind("", "f", triggerRaycast({ "ctrl", "shift", "option", "cmd" }, "-")) -- File Search
+raycast:bind("", "f", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/raycast/file-search/search-files")
+end)
+
+raycast:bind("", "b", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/raycast/browser-bookmarks/index")
+end)
+
+raycast:bind("", "t", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-tab")
+end)
+
+raycast:bind("", "s", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/raycast/snippets/search-snippets")
+end)
+
+raycast:bind("", "k", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/eluce2/list-keyboard-maestro-macros/list?arguments=%7B%22name%22%3A%22%22%7D")
+end)
+
+-- exit keys
+raycast:bind("", "escape", function() raycast:exit() end)
+raycast:bind("", "return", function() raycast:exit() end)
+
+-- Utils
+local utils = hs.hotkey.modal.new({ "ctrl", "shift" }, "u")
+
+function utils:entered()
+  hs.alert.show("Utils")
+end
+
+function utils:exited()
+  hs.alert.closeAll()
 end
 
 function toKebabCase()
@@ -55,30 +101,12 @@ function toKebabCase()
 
 end
 
-raycast:bind("", "k", function()
+utils:bind("", "k", function()
   raycast:exit()
   toKebabCase()
 end)
 
--- Replace these with your real Raycast hotkeys
--- raycast:bind("", "f", triggerRaycast({ "ctrl", "shift", "option", "cmd" }, "-")) -- File Search
-raycast:bind("", "f", function()
-  raycast:exit()
-  hs.urlevent.openURL("raycast://extensions/raycast/file-search/search-files")
-end)
-raycast:bind("", "b", function()
-  raycast:exit()
-  hs.urlevent.openURL("raycast://extensions/raycast/browser-bookmarks/index")
-end)
- -- raycast:bind("", "c", function()
-   -- raycast:exit()
-   -- hs.urlevent.openURL("raycast://extensions/erics118/change-case/change-case")
- -- end)
-raycast:bind("", "t", function()
-  raycast:exit()
-  hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-tab")
-end)
 
 -- exit keys
-raycast:bind("", "escape", function() raycast:exit() end)
-raycast:bind("", "return", function() raycast:exit() end)
+utils:bind("", "escape", function() utils:exit() end)
+utils:bind("", "return", function() utils:exit() end)
