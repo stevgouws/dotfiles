@@ -29,6 +29,15 @@ vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
+-- give <C-a> to tmux prefix
+-- Disable Ctrl-a / Ctrl-x default behavior
+vim.keymap.set('n', '<C-a>', '<Nop>', { noremap = true })
+vim.keymap.set('n', '<C-x>', '<Nop>', { noremap = true })
+
+-- Use + and - for increment/decrement instead
+vim.keymap.set({ "v", "n" }, '+', '<C-a>', { noremap = true })
+vim.keymap.set({ "v", "n" }, '-', '<C-x>', { noremap = true })
+
 -- don't overwrite yank on paste
 vim.keymap.set("x", "p", function()
   return '"_d"' .. vim.v.register .. 'P'
