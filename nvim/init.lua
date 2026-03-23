@@ -29,7 +29,10 @@ vim.keymap.set("v", "J", "20j", { noremap = true, silent = true })
 vim.keymap.set("n", "K", "20k", { noremap = true, silent = true })
 vim.keymap.set("v", "K", "20k", { noremap = true, silent = true })
 
-vim.keymap.set("x", "p", [["_dP]]) -- don't overwrite yank on paste
+-- don't overwrite yank on paste
+vim.keymap.set("x", "p", function()
+  return '"_d"' .. vim.v.register .. 'P'
+end, { expr = true, noremap = true, desc = "Paste in visual mode without overwriting the source register" })
 
 vim.keymap.set("n", "<leader>j", "J", { noremap = true, silent = true })
 vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true })
