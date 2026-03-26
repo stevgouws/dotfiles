@@ -3,6 +3,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
   hs.notify.new({title="Hammerspoon", informativeText="Hello Wooooorld"}):send()
 end)
 
+hs.hotkey.bind({"cmd", "shift", "ctrl", "alt"}, "l", function()
+    hs.caffeinate.systemSleep()
+end)
+
 -- auto reload config when changed
 function reloadConfig(files)
   doReload = false
@@ -24,7 +28,7 @@ hs.alert.show("Config loaded...")
 local raycast = hs.hotkey.modal.new({ "ctrl", "shift" }, "r")
 
 function raycast:entered()
-  hs.alert.show("Raycast")
+  hs.alert.show("raycast")
 end
 
 function raycast:exited()
@@ -66,6 +70,11 @@ raycast:bind("", "k", function()
   hs.urlevent.openURL("raycast://extensions/eluce2/list-keyboard-maestro-macros/list?arguments=%7B%22name%22%3A%22%22%7D")
 end)
 
+raycast:bind("", "e", function()
+  raycast:exit()
+  hs.urlevent.openURL("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols")
+end)
+
 -- exit keys
 raycast:bind("", "escape", function() raycast:exit() end)
 raycast:bind("", "return", function() raycast:exit() end)
@@ -73,8 +82,13 @@ raycast:bind("", "return", function() raycast:exit() end)
 -- Utils
 local utils = hs.hotkey.modal.new({ "ctrl", "shift" }, "u")
 
+utils:bind("", "b", function()
+  utils:exit()
+  hs.execute("open /System/Library/PreferencePanes/Bluetooth.prefPane")
+end)
+
 function utils:entered()
-  hs.alert.show("Utils")
+  hs.alert.show("utils")
 end
 
 function utils:exited()
@@ -110,3 +124,67 @@ end)
 -- exit keys
 utils:bind("", "escape", function() utils:exit() end)
 utils:bind("", "return", function() utils:exit() end)
+
+-- Cleanshot X
+local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "x")
+
+-- Area
+cleanshot_x:bind("", "a", function()
+  cleanshot_x:exit()
+  hs.alert.show("Area ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "1")
+end)
+
+-- Previous Area
+cleanshot_x:bind("", "p", function()
+  cleanshot_x:exit()
+  hs.alert.show("Previous Area ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "7")
+end)
+
+-- Fullscreen
+cleanshot_x:bind("", "f", function()
+  cleanshot_x:exit()
+  hs.alert.show("Fullscreen ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "3")
+end)
+
+-- Window
+cleanshot_x:bind("", "w", function()
+  cleanshot_x:exit()
+  hs.alert.show("Window ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "4")
+end)
+
+-- Timer
+cleanshot_x:bind("", "t", function()
+  cleanshot_x:exit()
+  hs.alert.show("Timer ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "6")
+end)
+
+-- OCR
+cleanshot_x:bind("", "o", function()
+  cleanshot_x:exit()
+  hs.alert.show("OCR ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "5")
+end)
+
+-- Recording
+cleanshot_x:bind("", "r", function()
+  cleanshot_x:exit()
+  hs.alert.show("Recording ✓")
+  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "2")
+end)
+
+function cleanshot_x:entered()
+  hs.alert.show("cleanshot_x")
+end
+
+function cleanshot_x:exited()
+  hs.alert.closeAll()
+end
+
+-- exit keys
+cleanshot_x:bind("", "escape", function() cleanshot_x:exit() end)
+cleanshot_x:bind("", "return", function() cleanshot_x:exit() end)
