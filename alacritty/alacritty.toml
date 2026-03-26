@@ -8,7 +8,7 @@ import = [
 startup_mode = "Maximized"
 
 [font]
-size = 16
+size = 16.5
 
 [font.normal]
 family = "MesloLGM Nerd Font"
@@ -24,6 +24,7 @@ style  = "Italic"
 
 [keyboard]
 
+## Not working
 [[keyboard.bindings]]
 key = "v"
 mods = "Control|Option|Shift"
@@ -55,4 +56,3 @@ chars = "\u001b[1;8K"
 key = "l"
 mods = "Shift|Alt|Control"
 chars = "\u001b[1;8L"
-
