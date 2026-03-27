@@ -131,50 +131,50 @@ local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "x")
 -- Area
 cleanshot_x:bind("", "a", function()
   cleanshot_x:exit()
-  hs.alert.show("Area ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "1")
+  hs.alert.show("Area ✓")
 end)
 
 -- Previous Area
 cleanshot_x:bind("", "p", function()
   cleanshot_x:exit()
-  hs.alert.show("Previous Area ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "7")
+  hs.alert.show("Previous Area ✓")
 end)
 
 -- Fullscreen
 cleanshot_x:bind("", "f", function()
   cleanshot_x:exit()
-  hs.alert.show("Fullscreen ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "3")
+  hs.alert.show("Fullscreen ✓")
 end)
 
 -- Window
 cleanshot_x:bind("", "w", function()
   cleanshot_x:exit()
-  hs.alert.show("Window ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "4")
+  hs.alert.show("Window ✓")
 end)
 
 -- Timer
 cleanshot_x:bind("", "t", function()
   cleanshot_x:exit()
-  hs.alert.show("Timer ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "6")
+  hs.alert.show("Timer ✓")
 end)
 
 -- OCR
 cleanshot_x:bind("", "o", function()
   cleanshot_x:exit()
-  hs.alert.show("OCR ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "5")
+  hs.alert.show("OCR ✓")
 end)
 
 -- Recording
 cleanshot_x:bind("", "r", function()
   cleanshot_x:exit()
-  hs.alert.show("Recording ✓")
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "2")
+  hs.alert.show("Recording ✓")
 end)
 
 function cleanshot_x:entered()
