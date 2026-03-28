@@ -126,7 +126,7 @@ utils:bind("", "escape", function() utils:exit() end)
 utils:bind("", "return", function() utils:exit() end)
 
 -- Cleanshot X
-local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "x")
+local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "c")
 
 -- Area
 cleanshot_x:bind("", "a", function()
@@ -139,21 +139,27 @@ end)
 cleanshot_x:bind("", "p", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "7")
-  hs.alert.show("Previous Area ✓")
+  hs.timer.doAfter(0.3, function()
+    hs.alert.show("Previous Area ✓")
+  end)
 end)
 
 -- Fullscreen
 cleanshot_x:bind("", "f", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "3")
-  hs.alert.show("Fullscreen ✓")
+  hs.timer.doAfter(0.3, function()
+    hs.alert.show("Fullscreen ✓")
+  end)
 end)
 
 -- Window
 cleanshot_x:bind("", "w", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "4")
-  hs.alert.show("Window ✓")
+  hs.timer.doAfter(0.3, function()
+    hs.alert.show("Window ✓")
+  end)
 end)
 
 -- Timer
