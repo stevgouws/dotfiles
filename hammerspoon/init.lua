@@ -206,13 +206,40 @@ function bookmarks:exited()
   hs.alert.closeAll()
 end
 
-local bookmarkMap = {
+-- Identify machine
+local machineName = hs.host.localizedName()
+-- (Optional) print to console once to confirm names
+print(machineName)
+
+local sharedBookmarks = {
+}
+
+local personalBookmarks = {
   b = { name = "Budget Totals", url = "https://docs.google.com/spreadsheets/d/19CYCpFj9xQOh8Z1J_8DdacgO3DJc69Ox-O6ijKqr920/edit?gid=628590374#gid=628590374" },
   a = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
   t = { name = "Tax Free Childcare", url = "https://www.gov.uk/sign-in-childcare-account" },
   s = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
   f = { name = "FNB", url = "https://www.fnb.co.za/" },
 }
+
+local workBookmarks = {
+  -- add your work-only bookmarks here
+}
+
+-- Decide which machine-specific set to use
+local machineBookmarks = {}
+
+if machineName == "MacBook Pro" then
+  machineBookmarks = personalBookmarks
+elseif machineName == "My Work MacBook" then
+  machineBookmarks = workBookmarks
+end
+
+-- Merge shared + machine-specific
+local bookmarkMap = hs.fnutils.copy(sharedBookmarks)
+for k, v in pairs(machineBookmarks) do
+  bookmarkMap[k] = v
+end
 
 for key, entry in pairs(bookmarkMap) do
   bookmarks:bind("", key, function()
