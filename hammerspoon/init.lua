@@ -116,7 +116,7 @@ function toKebabCase()
 end
 
 utils:bind("", "k", function()
-  raycast:exit()
+  utils:exit()
   toKebabCase()
 end)
 
@@ -194,3 +194,33 @@ end
 -- exit keys
 cleanshot_x:bind("", "escape", function() cleanshot_x:exit() end)
 cleanshot_x:bind("", "return", function() cleanshot_x:exit() end)
+
+-- Bookmarks
+local bookmarks = hs.hotkey.modal.new({ "ctrl", "shift" }, "b")
+
+function bookmarks:entered()
+  hs.alert.show("bookmarks")
+end
+
+function bookmarks:exited()
+  hs.alert.closeAll()
+end
+
+local bookmarkMap = {
+  b = { name = "Budget Totals", url = "https://docs.google.com/spreadsheets/d/19CYCpFj9xQOh8Z1J_8DdacgO3DJc69Ox-O6ijKqr920/edit?gid=628590374#gid=628590374" },
+  a = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
+  t = { name = "Tax Free Childcare", url = "https://www.gov.uk/sign-in-childcare-account" },
+  s = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
+  f = { name = "FNB", url = "https://www.fnb.co.za/" },
+}
+
+for key, entry in pairs(bookmarkMap) do
+  bookmarks:bind("", key, function()
+    bookmarks:exit()
+    hs.urlevent.openURLWithBundle(entry.url, "com.google.Chrome")
+  end)
+end
+
+-- exit keys
+bookmarks:bind("", "escape", function() bookmarks:exit() end)
+bookmarks:bind("", "return", function() bookmarks:exit() end)
