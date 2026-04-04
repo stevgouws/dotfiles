@@ -6,6 +6,8 @@ import = [
 
 # decorations = "None"
 startup_mode = "Maximized"
+# Override Mac doing option as special chars and turns option into Alt/Meta for Alacritty
+option_as_alt = "Both"
 
 [font]
 size = 16.5
