@@ -1,4 +1,3 @@
-
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
   hs.notify.new({title="Hammerspoon", informativeText="Hello Wooooorld"}):send()
 end)
@@ -23,15 +22,72 @@ myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.config/hammerspoon/", rel
 hs.alert.show("Config loaded...")
 
 -- Modes
+modeStatus = hs.menubar.new(true, "mode-status")
+-- modeStatus:setTitle(nil)
+
+local isToShowing = false
+
+local function onlyCtrlShift(flags)
+    return flags.ctrl
+       and flags.shift
+       and not flags.cmd
+       and not flags.alt
+       and not flags.fn
+end
+
+local function showMode()
+    if not isToShowing then
+        modeStatus:setTitle("⌃⇧")
+        isToShowing = true
+    end
+end
+
+local function hideMode()
+    if isToShowing then
+        modeStatus:setTitle("")
+        isToShowing = false
+    end
+end
+
+hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, function(e)
+    local flags = e:getFlags()
+
+    if onlyCtrlShift(flags) then
+        showMode()
+    else
+        hideMode()
+    end
+
+    return false
+end):start()
+
+hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
+    local flags = e:getFlags()
+
+    -- Hide when another key is pressed while ctrl+shift are down
+    if flags.ctrl and flags.shift then
+        hideMode()
+    end
+
+    return false
+end):start()
+
+local function setModeStatusBriefly(status)
+  modeStatus:setTitle(status)
+  hs.timer.doAfter(1, function()
+    modeStatus:setTitle(nil)
+  end)
+end
 
 -- Raycast
 local raycast = hs.hotkey.modal.new({ "ctrl", "shift" }, "r")
 
 function raycast:entered()
-  hs.alert.show("raycast")
+  modeStatus:setTitle("raycast")
 end
 
 function raycast:exited()
+  modeStatus:setTitle(nil)
   hs.alert.closeAll()
 end
 
@@ -88,11 +144,12 @@ utils:bind("", "b", function()
 end)
 
 function utils:entered()
-  hs.alert.show("utils")
+  modeStatus:setTitle("utils")
 end
 
 function utils:exited()
   hs.alert.closeAll()
+  modeStatus:setTitle(nil)
 end
 
 function toKebabCase()
@@ -111,8 +168,7 @@ function toKebabCase()
 
     hs.pasteboard.setContents(kebab)
     hs.eventtap.keyStroke({ "cmd" }, "v")
-    hs.alert.show("Kebab ✓")
-
+    setModeStatusBriefly("Kebab ✓")
 end
 
 utils:bind("", "k", function()
@@ -132,63 +188,58 @@ local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "c")
 cleanshot_x:bind("", "a", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "1")
-  hs.alert.show("Area ✓")
+  setModeStatusBriefly("Area ✓")
 end)
 
 -- Previous Area
 cleanshot_x:bind("", "p", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "7")
-  hs.timer.doAfter(0.3, function()
-    hs.alert.show("Previous Area ✓")
-  end)
+  setModeStatusBriefly("Previous Area ✓")
 end)
 
 -- Fullscreen
 cleanshot_x:bind("", "f", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "3")
-  hs.timer.doAfter(0.3, function()
-    hs.alert.show("Fullscreen ✓")
-  end)
+  setModeStatusBriefly("Fullscreen ✓")
 end)
 
 -- Window
 cleanshot_x:bind("", "w", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "4")
-  hs.timer.doAfter(0.3, function()
-    hs.alert.show("Window ✓")
-  end)
+  setModeStatusBriefly("Window ✓")
 end)
 
 -- Timer
 cleanshot_x:bind("", "t", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "6")
-  hs.alert.show("Timer ✓")
+  setModeStatusBriefly("Timer ✓")
 end)
 
 -- OCR
 cleanshot_x:bind("", "o", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "5")
-  hs.alert.show("OCR ✓")
+  setModeStatusBriefly("OCR ✓")
 end)
 
 -- Recording
 cleanshot_x:bind("", "r", function()
   cleanshot_x:exit()
   hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "2")
-  hs.alert.show("Recording ✓")
+  setModeStatusBriefly("Recording ✓")
 end)
 
 function cleanshot_x:entered()
-  hs.alert.show("cleanshot_x")
+  modeStatus:setTitle("cleanshot")
 end
 
 function cleanshot_x:exited()
   hs.alert.closeAll()
+  modeStatus:setTitle(nil)
 end
 
 -- exit keys
@@ -199,11 +250,12 @@ cleanshot_x:bind("", "return", function() cleanshot_x:exit() end)
 local bookmarks = hs.hotkey.modal.new({ "ctrl", "shift" }, "b")
 
 function bookmarks:entered()
-  hs.alert.show("bookmarks")
+  modeStatus:setTitle("bookmarks")
 end
 
 function bookmarks:exited()
   hs.alert.closeAll()
+  modeStatus:setTitle(nil)
 end
 
 -- Identify machine
@@ -223,15 +275,14 @@ local personalBookmarks = {
 }
 
 local workBookmarks = {
-  -- add your work-only bookmarks here
+  b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217" },
 }
 
--- Decide which machine-specific set to use
 local machineBookmarks = {}
 
 if machineName == "MacBook Pro" then
   machineBookmarks = personalBookmarks
-elseif machineName == "My Work MacBook" then
+elseif machineName == "Steven’s MacBook Pro" then
   machineBookmarks = workBookmarks
 end
 
