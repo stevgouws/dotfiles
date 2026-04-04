@@ -35,6 +35,13 @@ matches:
           cmd: "echo 'Hello from your shell'"
 
   # And much more! For more information, visit the docs: https://espanso.org/docs/
+  - trigger: "ttt"
+    replace: "{{current_time}} "
+    vars:
+      - name: current_time
+        type: date
+        params:
+          format: "%H:%M"
 
   - trigger: cc;
     replace: clear && clear
@@ -88,16 +95,16 @@ matches:
   - regex: \bp;
     replace: "clear && npx playwright test --project=chromium "
   - regex: \bv;
-    replace: "clear &&  npx vitest --no-coverage "
+    replace: "clear &&  npx vitest "
     force_mode: clipboard
   - trigger: vp;
-    replace: "clear &&  npx vitest --no-coverage {{clipboard}}"
+    replace: "clear &&  npx vitest {{clipboard}}"
     force_mode: clipboard
     vars:
       - name: "clipboard"
         type: "clipboard"
   - trigger: vr;
-    replace: "clear &&  npx vitest run --no-coverage"
+    replace: "clear &&  npx vitest run "
   - trigger: br;
     replace: "border:solid red 5px;"
   #  delay: 50
