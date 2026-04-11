@@ -1,0 +1,8 @@
+^/README.*
+^/LICENSE.*
+^/COPYING
+\.git
+\.gitignore
+\.DS_Store
+bootstrap\.sh
+Brewfile\..*
