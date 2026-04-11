@@ -1,0 +1,27 @@
+tap "jandedobbeleer/oh-my-posh"
+brew "fd"
+brew "ffmpeg"
+brew "fzf"
+brew "git"
+brew "neovim"
+brew "node"
+brew "pnpm"
+brew "python"
+brew "ripgrep"
+brew "stow"
+brew "zoxide"
+brew "jandedobbeleer/oh-my-posh/oh-my-posh"
+cask "docker-desktop"
+cask "hammerspoon"
+cask "swiftbar"
+mas "Bitwarden", id: 1352778147
+mas "Email", id: 1489591003
+mas "Jolt of Caffeine", id: 1437130425
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "PhotoSweeper", id: 463362050
+mas "Reeder", id: 1529448980
+mas "Timery", id: 1425368544
+mas "Todoist", id: 585829637
+mas "Wavebox", id: 1577078380
+mas "Xcode", id: 497799835
