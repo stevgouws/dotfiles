@@ -105,5 +105,7 @@ echo "${fg[grey]}Loaded setup.zsh…${reset_color}"
 
 alias alacritty="/Applications/Alacritty.app/Contents/MacOS/alacritty"
 
+export PATH="$HOME/.config/scripts:$PATH"
+
 # Change hammerspoon config path (run once)
 # defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
