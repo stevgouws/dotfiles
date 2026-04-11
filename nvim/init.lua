@@ -19,6 +19,8 @@ if vim.g.vscode then
     --     vim.cmd("call VSCodeNotify('editor.action.formatDocument')")
     --   end
     -- })
+  -- remap window focus for vscode too
+  -- local vscode = require("vscode")
 else
   -- ordinary Neovim
   vim.opt.relativenumber = true -- not needed VScode provides it anyway
@@ -60,10 +62,10 @@ end, { desc = "Link VX1 Component Library", silent = true })
 vim.keymap.set("n", "<leader>lu", "/\"@voxsmartltd/frontend-utils\"<CR>Wci\"file:../../../fe-utils-library/dist<ESC>:w<CR>", { desc = "Link Utils Lib" })
 
 
-vim.keymap.set("n", "<leader>mo", "?test(\\|it(<CR>ea.only<ESC>:w<CR>", { desc = "Mark: Wrap current testcase in .only" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>mO", "?.only(<CR>dt(<ESC>:w<CR>", { desc = "Mark: Delete current testcase .only" })
-vim.keymap.set("n", "<leader>ms", "?test(\\|it(<CR>ea.skip<ESC>:w<CR>", { desc = "Mark: Wrap current testcase in .skip" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>mS", "?.skip(<CR>dt(<ESC>:w<CR>", { desc = "Mark: Delete current testcase .skip" })
+vim.keymap.set("n", "<leader>mo", "?test(\\|it(<CR>ea.only<ESC>", { desc = "Mark: Wrap current testcase in .only" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>mO", "?.only(<CR>dt(<ESC>", { desc = "Mark: Delete current testcase .only" })
+vim.keymap.set("n", "<leader>ms", "?test(\\|it(<CR>ea.skip<ESC>", { desc = "Mark: Wrap current testcase in .skip" }) -- need to double escape pipe
+vim.keymap.set("n", "<leader>mS", "?.skip(<CR>dt(<ESC>", { desc = "Mark: Delete current testcase .skip" })
 
 
 vim.keymap.set("n", "<leader>ta", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Types: ArgsType" })
@@ -177,3 +179,68 @@ require('leap').opts.preview_filter =
 
 -- Use the traversal keys to repeat the previous motion without explicitly invoking Leap:
 require('leap.user').set_repeat_keys('<enter>', '<backspace>')
+
+vim.keymap.set("n", "<leader>tt", function()
+  local function exists(path)
+    return vim.uv.fs_stat(path) ~= nil
+  end
+
+  local file = vim.fn.expand("%:p")
+  local dir = vim.fn.fnamemodify(file, ":h")
+  local name = vim.fn.fnamemodify(file, ":t")
+  local stem = vim.fn.fnamemodify(file, ":t:r")
+  local ext = vim.fn.fnamemodify(file, ":e")
+
+  local test_file = file
+
+  -- If not already a test file, look for .test or .spec
+  if not name:match("%.test%.[^.]+$") and not name:match("%.spec%.[^.]+$") then
+    local test_candidate = string.format("%s/%s.test.%s", dir, stem, ext)
+    local spec_candidate = string.format("%s/%s.spec.%s", dir, stem, ext)
+
+    if exists(test_candidate) then
+      test_file = test_candidate
+    elseif exists(spec_candidate) then
+      test_file = spec_candidate
+    else
+      vim.notify("No matching test file found for " .. name, vim.log.levels.WARN)
+      return
+    end
+  end
+
+  -- project root → session name
+  local root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]
+  if not root or root == "" then
+    root = vim.fn.getcwd()
+  end
+
+  local session = vim.fn.fnamemodify(root, ":t")
+
+  local cmd = string.format(
+    'tmux has-session -t %q 2>/dev/null || tmux new -ds %q; tmux send-keys -t %q %q C-m',
+    session,
+    session,
+    session,
+    "clear && clear && npx vitest run " .. test_file
+  )
+
+  os.execute(cmd)
+end)
+
+-- open PR on remote
+vim.keymap.set("n", "<leader>rp", function()
+  vim.fn.jobstart("gh pr view --web", { detach = true })
+end, { desc = "Open PR in browser" })
+
+vim.keymap.set("n", "<leader>rc", function()
+  local word = vim.fn.expand("<cword>")
+
+  local target
+  if word:match("^[0-9a-fA-F]+$") then
+    target = word
+  else
+    target = "HEAD"
+  end
+
+  vim.fn.jobstart({ "gh", "browse", target }, { detach = true })
+end, { desc = "Open commit (cursor or HEAD) in browser" })
