@@ -51,21 +51,56 @@ run_brewfile() {
   brew bundle --file="$file"
 }
 
+clone_repos() {
+  local name="$1"
+  local file="$DOTFILES_DIR/repos.$name"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing repos file: $file"
+    exit 1
+  fi
+
+  while read -r url folder; do
+    [[ -z "$url" || "$url" == \#* ]] && continue
+    if [[ -z "$folder" ]]; then
+      folder=$(basename "$url" .git)
+    fi
+    if [[ -d ~/projects/"$folder" ]]; then
+      echo "  Skipping $folder (already exists)"
+    else
+      echo "  Cloning $folder"
+      git clone "$url" ~/projects/"$folder"
+    fi
+  done < "$file"
+}
+
 install_homebrew
 setup_brew_shellenv
 
 run_brewfile base
-
-case "$PROFILE" in
-  work) run_brewfile work ;;
-  personal) run_brewfile personal ;;
-  *)
-    echo "Usage: $0 --config work|personal"
-    exit 1
-    ;;
-esac
+run_brewfile "$PROFILE"
 
 echo "Linking dot files..."
 stow -d "$DOTFILES_DIR" . -t ~/.config
+
+echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
+
+echo "Creating Obsidian vault folders..."
+
+echo "  Creating ~/obsidian-sync/VoxSmart"
+mkdir -p ~/obsidian-sync/VoxSmart
+
+if [[ "$PROFILE" == "personal" ]]; then
+  echo "  Creating ~/obsidian-sync/Vault13"
+  mkdir -p ~/obsidian-sync/Vault13
+  echo "  Creating ~/obsidian-sync/Vault3"
+  mkdir -p ~/obsidian-sync/Vault3
+fi
+
+echo "Cloning repos..."
+mkdir -p ~/projects
+clone_repos base
+clone_repos "$PROFILE"
 
 echo "Bootstrap complete."

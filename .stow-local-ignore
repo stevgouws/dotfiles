@@ -6,3 +6,4 @@
 \.DS_Store
 bootstrap\.sh
 Brewfile\..*
+repos\..*
