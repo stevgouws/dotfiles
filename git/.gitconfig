@@ -1,0 +1,7 @@
+[user]
+        name = Steven Gouws
+        email = steven@stevengouws.com
+[core]
+##        editor = code --wait
+        editor = nvim
+	hooksPath = /Users/stevengouws/.git-hooks

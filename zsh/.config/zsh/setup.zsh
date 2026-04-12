@@ -12,14 +12,14 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 source "${ZINIT_HOME}/zinit.zsh"
 
 if [[ -f "/opt/homebrew/bin/brew" ]]; then
- # If you're using macOS, you'll want this enabled to make brew installed packages availle in your path
+ # If you're using macOS, you'll want this enabled to make brew installed packages available in your path
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Manual steps
 # brew install jandedobbeleer/oh-my-posh/oh-my-posh
 # also need to manually install font: https://ohmyposh.dev/docs/installation/fonts#nerd-fonts
-# oh-my-posh font install meslo
+# oh-my-posh font install meslo # shouldn't be needed if we used brew to install nerd-fonts in Brewfile.base
 # brew install fzf
 #
 eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
@@ -33,7 +33,6 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 ## Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
-#zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Disable in ~/projects/special-repo
@@ -104,8 +103,3 @@ eval "$(zoxide init --cmd cd zsh)"
 echo "${fg[grey]}Loaded setup.zsh…${reset_color}"
 
 alias alacritty="/Applications/Alacritty.app/Contents/MacOS/alacritty"
-
-export PATH="$HOME/.config/scripts:$PATH"
-
-# Change hammerspoon config path (run once)
-# defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
