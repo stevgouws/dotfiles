@@ -81,7 +81,7 @@ run_brewfile base
 run_brewfile "$PROFILE"
 
 echo "Linking dot files..."
-stow -d "$DOTFILES_DIR" . -t ~/.config
+stow -d "$DOTFILES_DIR" */
 
 echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
