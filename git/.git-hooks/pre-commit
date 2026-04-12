@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+repo_name="$(basename "$(git rev-parse --show-toplevel)")"
+
+if [[ "$branch" == "main" && "$repo_name" != "dotfiles" && "$repo_name" != "practice" ]]; then
+  echo "❌ Commit blocked: you’re on branch 'main' (repo: $repo_name)." >&2
+  exit 1
+fi
+
+exit 0
