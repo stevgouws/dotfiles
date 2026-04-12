@@ -86,6 +86,15 @@ stow -d "$DOTFILES_DIR" */
 echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
 
+echo "Setting MacOSdefaults"
+defaults write com.apple.dock tilesize -int 24
+defaults write com.apple.dock orientation -string right
+defaults write com.apple.dock autohide -bool true
+killall Dock
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+killall Finder
+
 echo "Creating Obsidian vault folders..."
 
 echo "  Creating ~/obsidian-sync/VoxSmart"
