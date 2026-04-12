@@ -74,10 +74,10 @@ clone_repos() {
   done < "$file"
 }
 
-install_homebrew
+# install_homebrew
 setup_brew_shellenv
 
-run_brewfile base
+# run_brewfile base
 run_brewfile "$PROFILE"
 
 echo "Linking dot files..."
@@ -99,17 +99,8 @@ defaults write -g InitialKeyRepeat -int 15
 defaults write -g com.apple.mouse.scaling -float 0.875
 killall SystemUIServer
 
-echo "Creating Obsidian vault folders..."
-
-echo "  Creating ~/obsidian-sync/VoxSmart"
-mkdir -p ~/obsidian-sync/VoxSmart
-
-if [[ "$PROFILE" == "personal" ]]; then
-  echo "  Creating ~/obsidian-sync/Vault13"
-  mkdir -p ~/obsidian-sync/Vault13
-  echo "  Creating ~/obsidian-sync/Vault3"
-  mkdir -p ~/obsidian-sync/Vault3
-fi
+echo "Creating Obsidian folder..."
+mkdir -p ~/obsidian-sync
 
 echo "Cloning repos..."
 mkdir -p ~/projects
