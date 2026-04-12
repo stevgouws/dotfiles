@@ -94,6 +94,10 @@ killall Dock
 defaults write com.apple.finder AppleShowAllFiles -bool true
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 killall Finder
+defaults write -g KeyRepeat -int 2
+defaults write -g InitialKeyRepeat -int 15
+defaults write -g com.apple.mouse.scaling -float 0.875
+killall SystemUIServer
 
 echo "Creating Obsidian vault folders..."
 
