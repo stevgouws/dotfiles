@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1478" height="649">
+ <!-- Created with Image Occlusion Enhanced -->
+ <g>
+  <title>Labels</title>
+ </g>
+ <g>
+  <title>Masks</title>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="64.2414" y="296.25859" width="128.44828" height="44.82759" id="1a0eecb8e9414e5e8b6a734891416301-ao-1"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="383.20692" y="43.67238" width="67.24138" height="31.89655" id="1a0eecb8e9414e5e8b6a734891416301-ao-2"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="372.86209" y="242.81031" width="89.65517" height="42.24138" id="1a0eecb8e9414e5e8b6a734891416301-ao-3"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="668.55175" y="66.94824" width="93.10345" height="31.89655" id="1a0eecb8e9414e5e8b6a734891416301-ao-4"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="671.13796" y="232.46548" width="107.75862" height="58.62069" id="1a0eecb8e9414e5e8b6a734891416301-ao-5"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="565.10347" y="257.46548" width="34.48276" height="24.13793" id="1a0eecb8e9414e5e8b6a734891416301-ao-6"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="646.13796" y="401.431" width="134.48276" height="35.34483" id="1a0eecb8e9414e5e8b6a734891416301-ao-7"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="673.72416" y="510.05169" width="81.89655" height="30.17241" id="1a0eecb8e9414e5e8b6a734891416301-ao-8"/>
+  <rect fill="#FFEBA2" stroke="#2D2D2D" x="851.31037" y="190.2241" width="87.93104" height="56.03448" id="1a0eecb8e9414e5e8b6a734891416301-ao-9"/>
+  <g id="1a0eecb8e9414e5e8b6a734891416301-ao-10">
+   <rect fill="#FFEBA2" stroke="#2D2D2D" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="985.79313" y="97.98272" width="156.03448" height="49.13793"/>
+   <rect fill="#FFEBA2" stroke="#2D2D2D" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="986.6552" y="221.25858" width="152.58621" height="47.41379"/>
+  </g>
+  <text fill="#ffffff" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="1352.17245" y="321.25859" id="1a0eecb8e9414e5e8b6a734891416301-ao-11" font-size="24" font-family="'Arial', 'Helvetica LT Std', Arial, sans-serif" text-anchor="middle" xml:space="preserve">VSPNEXT</text>
+  <g id="1a0eecb8e9414e5e8b6a734891416301-ao-12">
+   <rect fill="#FFEBA2" stroke="#2D2D2D" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="1307.34486" y="195.39652" width="104.31035" height="27.58621"/>
+   <rect fill="#FFEBA2" stroke="#2D2D2D" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="1223.72417" y="384.18962" width="171.55173" height="46.55172"/>
+   <rect fill="#FFEBA2" stroke="#2D2D2D" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="1284.93107" y="286.77583" width="137.06897" height="37.93103"/>
+  </g>
+ </g>
+</svg>
