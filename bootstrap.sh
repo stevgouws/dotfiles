@@ -92,12 +92,36 @@ defaults write com.apple.dock orientation -string right
 defaults write com.apple.dock autohide -bool true
 killall Dock
 defaults write com.apple.finder AppleShowAllFiles -bool true
+# This sets the default for folders that do not already have their own saved Finder view settings.
+# Existing .DS_Store data can override it for specific folders.
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 killall Finder
 defaults write -g KeyRepeat -int 2
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g com.apple.mouse.scaling -float 0.875
 killall SystemUIServer
+osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+
+# Press and hold for VScode
+defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+
+# Maccy
+# Shortcut Hyper + h
+defaults write org.p0deje.Maccy KeyboardShortcuts_popup -string '{"carbonKeyCode":4,"carbonModifiers":6912}'
+defaults write org.p0deje.Maccy popupPosition -string center
+defaults write org.p0deje.Maccy ignoredApps -array "com.bitwarden.desktop"
+defaults write org.p0deje.Maccy pasteByDefault -bool true
+defaults write org.p0deje.Maccy popupScreen -int 0
+defaults write org.p0deje.Maccy previewDelay -int 99999
+defaults write org.p0deje.Maccy showFooter -bool false
+defaults write org.p0deje.Maccy searchVisibility -string duringSearch
+defaults write org.p0deje.Maccy searchMode -string fuzzy
+defaults write org.p0deje.Maccy showTitle -bool false
+
+# Doesn't seem like I need these
+# killall cfprefsd
+# killall Maccy 2>/dev/null
+# open -a Maccy
 
 echo "Creating Obsidian folder..."
 mkdir -p ~/obsidian-sync
