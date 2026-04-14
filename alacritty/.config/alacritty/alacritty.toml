@@ -1,6 +1,3 @@
-import = [
-    "~/.config/alacritty/themes/themes/catppuccin_macchiato.toml"
-]
 
 [window]
 
@@ -58,3 +55,8 @@ chars = "\u001b[1;8K"
 key = "l"
 mods = "Shift|Alt|Control"
 chars = "\u001b[1;8L"
+
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/catppuccin_macchiato.toml"
+]
