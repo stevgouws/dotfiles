@@ -34,9 +34,9 @@ cask "raycast"
 cask "readdle-spark"
 cask "spotify"
 cask "swiftbar"
+cask "todoist-app"
 cask "tableplus"
 cask "thaw"
 cask "visual-studio-code"
 mas "Bitwarden", id: 1352778147
 mas "Timery", id: 1425368544
-mas "Todoist", id: 585827607
