@@ -64,7 +64,14 @@ final_space = true
   alignment = 'left'
   newline = true
   
-  [[blocks.segments]]
+[[blocks.segments]]
+    type = 'session'
+    style = 'plain'
+    foreground = 'yellow'
+    background = 'transparent'
+    template = '{{ if .SSHSession }} {{ .HostName }} {{ end }}'  
+
+[[blocks.segments]]
     type = 'path' 
     style = 'plain'
     background = 'transparent'
