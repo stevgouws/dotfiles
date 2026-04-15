@@ -1,0 +1,426 @@
+[
+	{
+		"name": "fe-host-banana",
+		"rootPath": "/Users/stevengouws/projects/fe-host",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-subscribe",
+		"rootPath": "/Users/stevengouws/projects/fe-subscribe",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-utils-library",
+		"rootPath": "/Users/stevengouws/projects/fe-utils-library",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "practice",
+		"rootPath": "/Users/stevengouws/projects/practice",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "development-docker",
+		"rootPath": "/Users/stevengouws/projects/development-docker",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-user-manager",
+		"rootPath": "/Users/stevengouws/projects/fe-user-manager",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-subscribe",
+		"rootPath": "/Users/stevengouws/projects/be-subscribe",
+		"paths": [],
+		"tags": [
+			"be"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-template",
+		"rootPath": "/Users/stevengouws/projects/be-template",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-user-manager",
+		"rootPath": "/Users/stevengouws/projects/be-user-manager",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-platform-packages",
+		"rootPath": "/Users/stevengouws/projects/be-platform-packages",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infrastructure-live-gitops",
+		"rootPath": "/Users/stevengouws/projects/infrastructure-live-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-manage",
+		"rootPath": "/Users/stevengouws/projects/fe-manage",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-discover",
+		"rootPath": "/Users/stevengouws/projects/fe-discover",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "component-library",
+		"rootPath": "/Users/stevengouws/projects/component-library",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-template",
+		"rootPath": "/Users/stevengouws/projects/fe-template",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "voxsmart-devops",
+		"rootPath": "/Users/stevengouws/projects/voxsmart-devops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "platform-e2e",
+		"rootPath": "/Users/stevengouws/projects/platform-e2e",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-discover",
+		"rootPath": "/Users/stevengouws/projects/be-discover",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infra-live-root",
+		"rootPath": "vscode-remote://dev-container+7b22686f737450617468223a222f55736572732f73746576656e676f7577732f70726f6a656374732f696e6672612d6c6976652d726f6f74222c226c6f63616c446f636b6572223a66616c73652c2273657474696e6773223a7b22636f6e74657874223a226465736b746f702d6c696e7578227d2c22636f6e66696746696c65223a7b22246d6964223a312c22667350617468223a222f55736572732f73746576656e676f7577732f70726f6a656374732f696e6672612d6c6976652d726f6f742f2e646576636f6e7461696e65722f646576636f6e7461696e65722e6a736f6e222c2265787465726e616c223a2266696c653a2f2f2f55736572732f73746576656e676f7577732f70726f6a656374732f696e6672612d6c6976652d726f6f742f2e646576636f6e7461696e65722f646576636f6e7461696e65722e6a736f6e222c2270617468223a222f55736572732f73746576656e676f7577732f70726f6a656374732f696e6672612d6c6976652d726f6f742f2e646576636f6e7461696e65722f646576636f6e7461696e65722e6a736f6e222c22736368656d65223a2266696c65227d7d/workspaces/infra-live-root",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "demo-k8s",
+		"rootPath": "/Users/stevengouws/projects/demo-k8s",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-manage",
+		"rootPath": "/Users/stevengouws/projects/be-manage",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fika-portal",
+		"rootPath": "/Users/stevengouws/obsidian-sync/VoxSmart/fika-portal",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "PROJECTS ROOT",
+		"rootPath": "/Users/stevengouws/projects",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infra-github-actions",
+		"rootPath": "/Users/stevengouws/projects/infra-github-actions",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-event-catalog",
+		"rootPath": "/Users/stevengouws/projects/be-event-catalog",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "CLONE: be-user-manager-clone",
+		"rootPath": "/Users/stevengouws/projects/duplicates-for-review-etc/be-user-manager-clone",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vsp",
+		"rootPath": "/Users/stevengouws/projects/vsp",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "telserver",
+		"rootPath": "/Users/stevengouws/projects/telserver",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vmserver",
+		"rootPath": "/Users/stevengouws/projects/vmserver",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "broker",
+		"rootPath": "/Users/stevengouws/projects/broker",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-capture",
+		"rootPath": "/Users/stevengouws/projects/fe-capture",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-demo",
+		"rootPath": "/Users/stevengouws/projects/fe-demo",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-capture-event-ingester",
+		"rootPath": "/Users/stevengouws/projects/be-capture-event-ingester",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vsp-end-to-end-tests",
+		"rootPath": "/Users/stevengouws/projects/vsp-end-to-end-tests",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "cmdb",
+		"rootPath": "/Users/stevengouws/projects/cmdb",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "tcap-tdlib",
+		"rootPath": "/Users/stevengouws/projects/tcap-tdlib",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-ui",
+		"rootPath": "/Users/stevengouws/projects/fe-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-vtr-ui",
+		"rootPath": "/Users/stevengouws/projects/vcs-vtr-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-ui (currently used in prod)",
+		"rootPath": "/Users/stevengouws/projects/vcs-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "dotfiles",
+		"rootPath": "/Users/stevengouws/dotfiles",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-be",
+		"rootPath": "/Users/stevengouws/projects/vcs-be",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-ui-2",
+		"rootPath": "/Users/stevengouws/projects/fe-ui-2",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vx1-component-library",
+		"rootPath": "/Users/stevengouws/projects/vx1-component-library",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-docs",
+		"rootPath": "/Users/stevengouws/projects/vcs-docs",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vs-infrastructure-live-vcs-gitops",
+		"rootPath": "/Users/stevengouws/projects/vs-infrastructure-live-vcs-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-gitops",
+		"rootPath": "/Users/stevengouws/projects/vcs-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-alerts-api",
+		"rootPath": "/Users/stevengouws/projects/be-alerts-api",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-messaging-gateway",
+		"rootPath": "/Users/stevengouws/projects/be-messaging-gateway",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-comms-svc",
+		"rootPath": "/Users/stevengouws/projects/be-comms-svc",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "source-all-repos",
+		"rootPath": "/Users/stevengouws/projects/source-all-repos",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "wham",
+		"rootPath": "/Users/stevengouws/projects/wham",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "github-vsp",
+		"rootPath": "/Users/stevengouws/projects/github-vsp",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	}
+]
