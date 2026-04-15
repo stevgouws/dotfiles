@@ -1,3 +1,5 @@
+local hyper = { "ctrl", "shift", "alt" }
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
   hs.notify.new({title="Hammerspoon", informativeText="Hello Wooooorld"}):send()
 end)
@@ -182,55 +184,83 @@ utils:bind("", "escape", function() utils:exit() end)
 utils:bind("", "return", function() utils:exit() end)
 
 -- Cleanshot X
+-- https://cleanshot.com/docs-api
 local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "c")
 
 -- Area
+-- Also global for ease of left hand use
+hs.hotkey.bind(hyper, "1", function()
+  hs.urlevent.openURL("cleanshot://capture-area")
+end)
+
 cleanshot_x:bind("", "a", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "1")
+  hs.urlevent.openURL("cleanshot://capture-area")
   setModeStatusBriefly("Area ✓")
 end)
 
--- Previous Area
-cleanshot_x:bind("", "p", function()
+-- Open from Clipboard
+cleanshot_x:bind("", "c", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "7")
-  setModeStatusBriefly("Previous Area ✓")
+  hs.urlevent.openURL("cleanshot://open-from-clipboard")
+  setModeStatusBriefly("Opening... ✓")
 end)
 
 -- Fullscreen
 cleanshot_x:bind("", "f", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "3")
+  hs.urlevent.openURL("cleanshot://capture-fullscreen")
   setModeStatusBriefly("Fullscreen ✓")
 end)
 
--- Window
-cleanshot_x:bind("", "w", function()
+-- Open History
+cleanshot_x:bind("", "h", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "4")
-  setModeStatusBriefly("Window ✓")
-end)
-
--- Timer
-cleanshot_x:bind("", "t", function()
-  cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "6")
-  setModeStatusBriefly("Timer ✓")
+  hs.urlevent.openURL("cleanshot://open-history")
+  setModeStatusBriefly("History ✓")
 end)
 
 -- OCR
 cleanshot_x:bind("", "o", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "5")
+  hs.urlevent.openURL("cleanshot://capture-text")
   setModeStatusBriefly("OCR ✓")
+end)
+
+-- Previous Area
+cleanshot_x:bind("", "p", function()
+  cleanshot_x:exit()
+  hs.urlevent.openURL("cleanshot://capture-previous-area")
+  setModeStatusBriefly("Previous Area ✓")
 end)
 
 -- Recording
 cleanshot_x:bind("", "r", function()
   cleanshot_x:exit()
-  hs.eventtap.keyStroke({"ctrl", "shift", "alt"}, "2")
+  hs.urlevent.openURL("cleanshot://record-screen")
   setModeStatusBriefly("Recording ✓")
+end)
+
+-- Recording
+cleanshot_x:bind("", "s", function()
+  cleanshot_x:exit()
+  hs.urlevent.openURL("cleanshot://open-settings")
+  setModeStatusBriefly("Settings ✓")
+end)
+
+
+-- Timer
+cleanshot_x:bind("", "t", function()
+  cleanshot_x:exit()
+  hs.urlevent.openURL("cleanshot://self-timer")
+  setModeStatusBriefly("Timer ✓")
+end)
+
+-- Window
+cleanshot_x:bind("", "w", function()
+  cleanshot_x:exit()
+  hs.urlevent.openURL("cleanshot://capture-window")
+  setModeStatusBriefly("Window ✓")
 end)
 
 function cleanshot_x:entered()
@@ -303,7 +333,7 @@ for key, entry in pairs(bookmarkMap) do
     bookmarks:exit()
     if entry.name == "Lucia Amazon" then
       local cmd = 'open -na "Google Chrome" --args --profile-directory="Profile 4" "' .. entry.url .. '"'
-      hs.execute(cmd)    
+      hs.execute(cmd)
     else
       hs.urlevent.openURLWithBundle(entry.url, "com.google.Chrome")
     end
