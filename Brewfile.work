@@ -1,4 +1,5 @@
 brew "act"
+brew "awscli"
 brew "dotnet@6"
 brew "dotnet@8"
 brew "helm"
