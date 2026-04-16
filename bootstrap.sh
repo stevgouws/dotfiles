@@ -83,6 +83,9 @@ run_brewfile "$PROFILE"
 echo "Linking dot files..."
 stow -d "$DOTFILES_DIR" */
 
+# install node
+nvm install --lts
+
 echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
 
@@ -105,6 +108,21 @@ osascript -e 'tell application "System Events" to tell appearance preferences to
 # Press and hold for VScode
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 
+echo "Disabling Chrome password manager in favour of Bitwarden..."
+sudo mkdir -p /Library/Managed\ Preferences
+sudo tee /Library/Managed\ Preferences/com.google.Chrome.plist >/dev/null <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PasswordManagerEnabled</key>
+    <false/>
+    <key>PasswordManagerPasskeysEnabled</key>
+    <false/>
+</dict>
+</plist>
+EOF
+
 # Maccy
 # Shortcut Hyper + h
 defaults write org.p0deje.Maccy KeyboardShortcuts_popup -string '{"carbonKeyCode":4,"carbonModifiers":6912}'
@@ -122,6 +140,27 @@ defaults write org.p0deje.Maccy showTitle -bool false
 # killall cfprefsd
 # killall Maccy 2>/dev/null
 # open -a Maccy
+
+# Cleanshot
+defaults write pl.maketheweb.cleanshotx afterScreenshotActions -array "1"
+defaults write pl.maketheweb.cleanshotx afterVideoActions -array "2"
+defaults write pl.maketheweb.cleanshotx annotateLastTextSize -int 30
+defaults write pl.maketheweb.cleanshotx captureWindowShadow -int 0
+defaults write pl.maketheweb.cleanshotx captureWithoutDesktopIcons -int 1
+defaults write pl.maketheweb.cleanshotx doNotDisturbWhileRecording -int 1
+defaults write pl.maketheweb.cleanshotx exportPath -string "$HOME/Downloads"
+defaults write pl.maketheweb.cleanshotx highlightClicks -int 1
+defaults write pl.maketheweb.cleanshotx keyboardOverlayDisplayAll -int 1
+defaults write pl.maketheweb.cleanshotx mediaNameTemplate -array "%y" "-" "%m" "-" "%d" " at " "%H" "." "%M" "." "%S"
+defaults write pl.maketheweb.cleanshotx playSounds -int 0
+defaults write pl.maketheweb.cleanshotx rememberRecordingArea -int 1
+defaults write pl.maketheweb.cleanshotx showKeystrokes -int 1
+defaults write pl.maketheweb.cleanshotx windowBackgroundPadding -int 0
+defaults write pl.maketheweb.cleanshotx activationKey -string "A685DF11-23BA41C4-BF1F25B9-FB8F6C78"
+
+killall "CleanShot X" 2>/dev/null
+sleep 2
+open "/Applications/CleanShot X.app"
 
 echo "Creating Obsidian folder..."
 mkdir -p ~/obsidian-sync
