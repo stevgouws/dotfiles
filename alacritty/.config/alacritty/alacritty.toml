@@ -60,3 +60,7 @@ chars = "\u001b[1;8L"
 import = [
     "~/.config/alacritty/themes/themes/catppuccin_macchiato.toml"
 ]
+
+[selection]
+# Needed to copy over ssh?
+save_to_clipboard = true
