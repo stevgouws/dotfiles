@@ -40,17 +40,6 @@ if [[ $PWD != $HOME/projects/practice ]]; then
   zinit light zsh-users/zsh-autosuggestions
 fi
 
-# Add in snippets
-# Find more: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
-zinit snippet OMZL::git.zsh
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
-zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
-zinit snippet OMZP::command-not-found
-
 # Load completions
 autoload -U compinit && compinit
 
