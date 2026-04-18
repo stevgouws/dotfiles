@@ -288,10 +288,16 @@ function bookmarks:exited()
   modeStatus:setTitle(nil)
 end
 
+
 -- Identify machine
 local machineName = hs.host.localizedName()
 -- (Optional) print to console once to confirm names
 print(machineName)
+
+bookmarks:bind("", "l", function()
+  bookmarks:exit()
+  hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-bookmarks")
+end)
 
 local sharedBookmarks = {
 }
@@ -300,7 +306,7 @@ local personalBookmarks = {
   b = { name = "Budget Totals", url = "https://docs.google.com/spreadsheets/d/19CYCpFj9xQOh8Z1J_8DdacgO3DJc69Ox-O6ijKqr920/edit?gid=628590374#gid=628590374" },
   a = { name = "Arbor", url = "https://kensington-primary-academy.uk.arbor.sc/?/guardians/home-ui/dashboard" },
   f = { name = "FNB", url = "https://www.fnb.co.za/" },
-  l = { name = "Lucia Amazon", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
+  q = { name = "Lucia Amazon", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
   n = { name = "Natwest", url = "https://www.onlinebanking.natwest.com/Default.aspx" },
   s = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
   t = { name = "Tax Free Childcare", url = "https://www.gov.uk/sign-in-childcare-account" },
