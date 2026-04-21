@@ -23,6 +23,32 @@ end
 myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.config/hammerspoon/", reloadConfig):start()
 hs.alert.show("Config loaded...")
 
+-- Traffic Light Status
+
+local trafficLightStatuses = {
+  RED    = "🔴 Do not disturb",
+  ORANGE = "🟠 Only if urgent",
+  GREEN  = "🟢 Ok to talk",
+  BLUE   = "🔵 Ok to joke around",
+}
+
+trafficLightStatus = hs.menubar.new(true, "traffic-light-status")
+trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
+
+local function buildTrafficLightMenu()
+  local menuItems = {}
+  for _, status in pairs(trafficLightStatuses) do
+    table.insert(menuItems, {
+      title = status,
+      fn = function() trafficLightStatus:setTitle(status) end,
+    })
+  end
+  return menuItems
+end
+
+trafficLightStatus:setMenu(buildTrafficLightMenu)
+
+
 -- Modes
 modeStatus = hs.menubar.new(true, "mode-status")
 -- modeStatus:setTitle(nil)
@@ -317,6 +343,7 @@ local personalBookmarks = {
 
 local workBookmarks = {
   b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217" },
+  c = { name = "Cezanne", url = "https://w3.cezanneondemand.com/CezanneHR/-/VoxSmart/view/9ebaad0a-8ad5-4d97-b2f1-e5d179149a81?ce=3&et=4d8970cb-6164-4162-b780-4574ff852be1&n=6c5063b4-8307-4f55-b968-ddc3e36e154d" },
 }
 
 local machineBookmarks = {}

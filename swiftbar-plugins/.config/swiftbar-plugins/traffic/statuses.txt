@@ -1,4 +1,0 @@
-red=🔴 Do not disturb
-orange=🟠 Only if urgent
-green=🟢 Ok to talk
-blue=🔵 Ok to joke around
