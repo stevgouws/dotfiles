@@ -48,6 +48,41 @@ end
 
 trafficLightStatus:setMenu(buildTrafficLightMenu)
 
+local trafficLight = hs.hotkey.modal.new({ "ctrl", "shift" }, "t")
+
+function trafficLight:entered()
+  modeStatus:setTitle("traffic light")
+end
+
+function trafficLight:exited()
+  hs.alert.closeAll()
+  modeStatus:setTitle(nil)
+end
+
+trafficLight:bind("", "r", function()
+  trafficLight:exit()
+  trafficLightStatus:setTitle(trafficLightStatuses.RED)
+end)
+
+trafficLight:bind("", "o", function()
+  trafficLight:exit()
+  trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
+end)
+
+trafficLight:bind("", "g", function()
+  trafficLight:exit()
+  trafficLightStatus:setTitle(trafficLightStatuses.GREEN)
+end)
+
+trafficLight:bind("", "b", function()
+  trafficLight:exit()
+  trafficLightStatus:setTitle(trafficLightStatuses.BLUE)
+end)
+
+-- exit keys
+trafficLight:bind("", "escape", function() trafficLight:exit() end)
+trafficLight:bind("", "return", function() trafficLight:exit() end)
+
 
 -- Modes
 modeStatus = hs.menubar.new(true, "mode-status")
