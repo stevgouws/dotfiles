@@ -36,13 +36,20 @@ matches:
 
   # And much more! For more information, visit the docs: https://espanso.org/docs/
   - trigger: "ttt"
-    replace: "{{current_time}} "
+    replace: "{{current_time}} - "
     vars:
       - name: current_time
         type: date
         params:
           format: "%H:%M"
 
+  - trigger: "dt;"
+    replace: "## {{date_time}}"
+    vars:
+      - name: date_time
+        type: date
+        params:
+          format: "%Y-%m-%d %a\n\n%H:%M - "
   - trigger: cc;
     replace: clear && clear
 #    force_mode: clipboard
