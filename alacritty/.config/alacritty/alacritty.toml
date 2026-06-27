@@ -1,9 +1,12 @@
 
 [window]
+title = ""
+dynamic_title = false
 
 # decorations = "None"
 startup_mode = "Maximized"
 # Override Mac doing option as special chars and turns option into Alt/Meta for Alacritty
+# Means you can't do Opt for special chars like #.
 option_as_alt = "Both"
 
 [font]
@@ -23,12 +26,29 @@ style  = "Italic"
 
 [keyboard]
 
-## Not working
-[[keyboard.bindings]]
-key = "v"
-mods = "Control|Option|Shift"
-action = "ToggleViMode"
+## Vi mode in alacritty - disabling in favour of copy mode in tmux
+## [[keyboard.bindings]]
+## key = "v"
+## mods = "Control|Option|Shift"
+## action = "ToggleViMode"
 
+# Ctrl+Option+Shift+V -> tmux prefix + [ -> enter tmux copy-mode
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Option|Shift"
+chars = "\u0013["
+
+# Ctrl+Option+Shift+S -> tmux prefix + s -> tmux list-sessions
+[[keyboard.bindings]]
+key = "S"
+mods = "Control|Alt|Shift"
+chars = "\u0013s"
+
+# Ctrl+Option+Shift+W -> tmux prefix + s -> tmux list-windows
+[[keyboard.bindings]]
+key = "W"
+mods = "Control|Alt|Shift"
+chars = "\u0013w"
 
 [[keyboard.bindings]]
 key = "k"
@@ -55,6 +75,65 @@ chars = "\u001b[1;8K"
 key = "l"
 mods = "Shift|Alt|Control"
 chars = "\u001b[1;8L"
+
+# Map Cmd+1 to Crtl+s 1 etc
+[[keyboard.bindings]]
+key = "Key1"
+mods = "Command"
+chars = "\u00131"
+
+[[keyboard.bindings]]
+key = "Key2"
+mods = "Command"
+chars = "\u00132"
+
+[[keyboard.bindings]]
+key = "Key3"
+mods = "Command"
+chars = "\u00133"
+
+[[keyboard.bindings]]
+key = "Key4"
+mods = "Command"
+chars = "\u00134"
+
+[[keyboard.bindings]]
+key = "Key5"
+mods = "Command"
+chars = "\u00135"
+
+[[keyboard.bindings]]
+key = "Key6"
+mods = "Command"
+chars = "\u00136"
+
+[[keyboard.bindings]]
+key = "Key7"
+mods = "Command"
+chars = "\u00137"
+
+[[keyboard.bindings]]
+key = "Key8"
+mods = "Command"
+chars = "\u00138"
+
+# Go to last window
+[[keyboard.bindings]]
+key = "Key9"
+mods = "Command"
+chars = "\u0013l"
+
+# Cmd+[ -> tmux prefix + p -> previous tmux window
+[[keyboard.bindings]]
+key = "["
+mods = "Command"
+chars = "\u0013p"
+
+# Cmd+] -> tmux prefix + n -> next tmux window
+[[keyboard.bindings]]
+key = "]"
+mods = "Command"
+chars = "\u0013n"
 
 [general]
 import = [
