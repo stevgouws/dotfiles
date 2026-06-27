@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+cols=$(tput cols)
+name_width=28
+branch_width=$((cols - name_width - 4))
+
+tmux list-sessions -F '#{session_name}' |
+while IFS= read -r session; do
+  path=$(tmux display-message -p -t "$session:" '#{pane_current_path}')
+  branch=$(git -C "$path" branch --show-current 2>/dev/null)
+
+  if [ -n "$branch" ]; then
+    printf "%-${name_width}.${name_width}s %${branch_width}.${branch_width}s\n" "$session" "$branch"
+  else
+    printf "%s\n" "$session"
+  fi
+done |
+fzf --layout=reverse |
+awk '{print $1}' |
+xargs -r tmux switch-client -t

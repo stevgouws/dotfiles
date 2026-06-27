@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSION="${1:-work}"
+
+if ! tmux has-session -t "=${SESSION}" 2>/dev/null; then
+  tmux new-session -d -s "$SESSION" -n dev
+  tmux new-window -t "=${SESSION}:2" -n test
+  tmux new-window -t "=${SESSION}:3" -n claude
+  tmux new-window -t "=${SESSION}:4" -n zsh
+  tmux new-window -t "=${SESSION}:5" -n e2e
+  tmux select-window -t "=${SESSION}:1"
+fi
+
+code .
+exec tmux attach -t "=${SESSION}"

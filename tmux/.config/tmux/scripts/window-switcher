@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+cols=$(tput cols)
+name_width=28
+branch_width=$((cols - name_width - 4))
+
+tmux list-windows -F '#{window_index}:#{window_name}:#{pane_current_path}' |
+while IFS=: read -r index name path; do
+  branch=$(git -C "$path" branch --show-current 2>/dev/null)
+
+  label="$index: $name"
+
+  if [ -n "$branch" ]; then
+    printf "%-${name_width}.${name_width}s %${branch_width}.${branch_width}s\n" "$label" "$branch"
+  else
+    printf "%s\n" "$label"
+  fi
+done |
+fzf --layout=reverse |
+cut -d: -f1 |
+xargs -r tmux select-window -t
