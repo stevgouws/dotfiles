@@ -38,17 +38,31 @@ key = "V"
 mods = "Control|Option|Shift"
 chars = "\u0013["
 
-# Ctrl+Option+Shift+S -> tmux prefix + s -> tmux list-sessions
+# Send a custom escape sequence when pressing Ctrl+Option+Shift+S.
+# tmux maps this sequence to User0, which opens the session switcher popup.
 [[keyboard.bindings]]
 key = "S"
 mods = "Control|Alt|Shift"
-chars = "\u0013s"
+chars = "\u001b[5;30000~"
 
-# Ctrl+Option+Shift+W -> tmux prefix + s -> tmux list-windows
+# Send a custom escape sequence when pressing Ctrl+Option+Shift+W.
+# tmux maps this sequence to User1, which opens the window switcher popup.
 [[keyboard.bindings]]
 key = "W"
 mods = "Control|Alt|Shift"
-chars = "\u0013w"
+chars = "\u001b[5;30001~"
+
+# # Ctrl+Option+Shift+S -> tmux prefix + s -> tmux list-sessions
+# [[keyboard.bindings]]
+# key = "S"
+# mods = "Control|Alt|Shift"
+# chars = "\u0013s"
+#
+# # Ctrl+Option+Shift+W -> tmux prefix + s -> tmux list-windows
+# [[keyboard.bindings]]
+# key = "W"
+# mods = "Control|Alt|Shift"
+# chars = "\u0013w"
 
 [[keyboard.bindings]]
 key = "k"
