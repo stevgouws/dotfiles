@@ -92,3 +92,8 @@ eval "$(zoxide init --cmd cd zsh)"
 echo "${fg[grey]}Loaded setup.zsh…${reset_color}"
 
 alias alacritty="/Applications/Alacritty.app/Contents/MacOS/alacritty"
+
+export PATH="$HOME/.config/scripts:$PATH"
+
+# Disable terminal flow control so Ctrl-S can be used as the tmux prefix instead of freezing output
+stty -ixon
