@@ -305,7 +305,7 @@ end)
 -- Recording
 cleanshot_x:bind("", "s", function()
   cleanshot_x:exit()
-  hs.urlevent.openURL("cleanshot://open-settings")
+  hs.urlevent.openURL("cleanshot://scrolling-capture")
   setModeStatusBriefly("Settings ✓")
 end)
 
