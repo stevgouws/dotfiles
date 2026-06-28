@@ -61,7 +61,7 @@ HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase # erase duplicates
 setopt appendhistory
-setopt sharehistory # share across instances
+# setopt sharehistory # share across instances
 setopt hist_ignore_space # in case you don't want sensitive info to be saved, prefix with space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
@@ -97,3 +97,9 @@ export PATH="$HOME/.config/scripts:$PATH"
 
 # Disable terminal flow control so Ctrl-S can be used as the tmux prefix instead of freezing output
 stty -ixon
+
+# Always start tmux for new shell
+if [[ -z "$TMUX_PANE" ]]; then
+  tmux new-session -A -s "${USER}"
+fi
+
