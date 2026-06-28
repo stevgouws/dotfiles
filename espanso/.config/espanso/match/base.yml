@@ -43,16 +43,9 @@ matches:
         params:
           format: "%H:%M"
 
-  - trigger: "dt;"
-    replace: "## {{date_time}}"
-    vars:
-      - name: date_time
-        type: date
-        params:
-          format: "%Y-%m-%d %a\n\n%H:%M - "
   - trigger: cc;
     replace: clear && clear
-#    force_mode: clipboard
+  #    force_mode: clipboard
   - trigger: id;
     replace: pnpm install && pnpm dev
     force_mode: clipboard
@@ -99,6 +92,8 @@ matches:
     replace: "git worktree list"
   - trigger: gwr
     replace: "git worktree remove"
+  - trigger: ts;
+    replace: "tmux source-file ~/.config/tmux/tmux.conf"
   - regex: \bp;
     replace: "clear && npx playwright test --project=chromium "
   - regex: \bv;
