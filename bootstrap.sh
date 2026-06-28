@@ -83,6 +83,11 @@ run_brewfile "$PROFILE"
 echo "Linking dot files..."
 stow -d "$DOTFILES_DIR" */
 
+echo "Installing TPM (Tmux Plugin Manager)..."
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 # install node
 nvm install --lts
 
