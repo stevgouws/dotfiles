@@ -90,6 +90,12 @@ key = "l"
 mods = "Shift|Alt|Control"
 chars = "\u001b[1;8L"
 
+# Cmd+K -> prefix + K -> clear screen and scrollback in tmux
+[[keyboard.bindings]]
+key = "k"
+mods = "Command"
+chars = "\u0013K"
+
 # Map Cmd+1 to Crtl+s 1 etc
 [[keyboard.bindings]]
 key = "Key1"
