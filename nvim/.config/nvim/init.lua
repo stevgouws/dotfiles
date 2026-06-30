@@ -61,7 +61,7 @@ vim.keymap.set("x", "p", function()
   return '"_d"' .. vim.v.register .. 'P'
 end, { expr = true, noremap = true, desc = "Paste in visual mode without overwriting the source register" })
 
-vim.keymap.set({ "n", "v" },"<leader>j", "J", { noremap = true, silent = true })
+vim.keymap.set({ "n", "v" }, "<M-j>", "J", { noremap = true, silent = true, desc = "Join lines (Cmd+J via Alacritty)" })
 vim.keymap.set({ "n", "v" }, "<leader>s", "s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>c", "cc", { noremap = true, silent = true })
 

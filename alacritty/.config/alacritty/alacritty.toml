@@ -90,6 +90,12 @@ key = "l"
 mods = "Shift|Alt|Control"
 chars = "\u001b[1;8L"
 
+# Cmd+J -> <M-j> -> join lines in nvim
+[[keyboard.bindings]]
+key = "j"
+mods = "Command"
+chars = "\u001bj"
+
 # Cmd+K -> prefix + K -> clear screen and scrollback in tmux
 [[keyboard.bindings]]
 key = "k"
