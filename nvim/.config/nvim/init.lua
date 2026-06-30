@@ -78,10 +78,33 @@ end, { desc = "Link VX1 Component Library", silent = true })
 vim.keymap.set("n", "<leader>lu", "/\"@voxsmartltd/frontend-utils\"<CR>Wci\"file:../../../fe-utils-library/dist<ESC>:w<CR>", { desc = "Link Utils Lib" })
 
 
-vim.keymap.set("n", "<leader>mo", "?test(\\|it(<CR>ea.only<ESC>", { desc = "Mark: Wrap current testcase in .only" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>mO", "?.only(<CR>dt(<ESC>", { desc = "Mark: Delete current testcase .only" })
-vim.keymap.set("n", "<leader>ms", "?test(\\|it(<CR>ea.skip<ESC>", { desc = "Mark: Wrap current testcase in .skip" }) -- need to double escape pipe
-vim.keymap.set("n", "<leader>mS", "?.skip(<CR>dt(<ESC>", { desc = "Mark: Delete current testcase .skip" })
+vim.keymap.set("n", "<leader>mo", function()
+  for _ = 1, vim.v.count1 do
+    vim.fn.search([[\v(test|it|describe)\(]], 'b')
+  end
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("ea.only<Esc>", true, false, true), "n", false)
+end, { desc = "Mark: Wrap current test/describe in .only (supports count)" })
+
+vim.keymap.set("n", "<leader>mO", function()
+  for _ = 1, vim.v.count1 do
+    vim.fn.search([[\v\.only\(]], 'b')
+  end
+  vim.cmd("normal! dt(")
+end, { desc = "Mark: Delete current .only (supports count)" })
+
+vim.keymap.set("n", "<leader>ms", function()
+  for _ = 1, vim.v.count1 do
+    vim.fn.search([[\v(test|it|describe)\(]], 'b')
+  end
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("ea.skip<Esc>", true, false, true), "n", false)
+end, { desc = "Mark: Wrap current test/describe in .skip (supports count)" })
+
+vim.keymap.set("n", "<leader>mS", function()
+  for _ = 1, vim.v.count1 do
+    vim.fn.search([[\v\.skip\(]], 'b')
+  end
+  vim.cmd("normal! dt(")
+end, { desc = "Mark: Delete current .skip (supports count)" })
 
 
 vim.keymap.set("n", "<leader>ta", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Types: ArgsType" })
@@ -161,7 +184,7 @@ vim.o.smartcase  = true
 -- Override weird Y not yanking whole line https://chatgpt.com/c/6890b23f-4700-8320-a68e-a9a446394ef9
 vim.keymap.del('n', 'Y')  -- clear the unwanted mapping
 vim.keymap.set('n', 'Y', 'yy', { noremap = true, silent = true, desc = 'Yank whole line' })
---
+
 ---- Leap: always show labels at the beginning of the match
 ---- https://github.com/ggandor/leap.nvim?tab=readme-ov-file
 ---- `on_beacons` hooks into `beacons.light_up_beacons`, the function
@@ -224,7 +247,7 @@ vim.keymap.set("n", "<leader>tt", function()
     end
   end
 
-  -- project root → session name
+  -- project root -> session name
   local root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]
   if not root or root == "" then
     root = vim.fn.getcwd()
