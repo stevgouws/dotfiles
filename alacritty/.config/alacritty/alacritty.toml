@@ -143,16 +143,18 @@ key = "Key9"
 mods = "Command"
 chars = "\u0013l"
 
-# Cmd+[ -> tmux prefix + p -> previous tmux window
+# Cmd+Shift+[ -> tmux prefix + p -> previous tmux window
+# Use "{" because Shift+[ produces {
 [[keyboard.bindings]]
-key = "["
-mods = "Command"
+key = "{"
+mods = "Command|Shift"
 chars = "\u0013p"
 
-# Cmd+] -> tmux prefix + n -> next tmux window
+# Cmd+Shift+] -> tmux prefix + n -> next tmux window
+# Use "}" because Shift+] produces }
 [[keyboard.bindings]]
-key = "]"
-mods = "Command"
+key = "}"
+mods = "Command|Shift"
 chars = "\u0013n"
 
 [general]
