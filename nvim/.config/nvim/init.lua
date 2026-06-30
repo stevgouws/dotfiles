@@ -10,21 +10,22 @@ vim.opt.splitright = true
 vim.opt.clipboard = "unnamed"
 vim.opt.gdefault = true
 
-vim.g.mapleader = " "
+-- vim.g.mapleader = " "
+vim.g.mapleader = ","
 
 -- Use OSC52 to yank over ssh
 
-vim.g.clipboard = {
-  name = 'osc52',
-  copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-  },
-  paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-  },
-}
+-- vim.g.clipboard = {
+  -- name = 'osc52',
+  -- copy = {
+    -- ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    -- ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  -- },
+  -- paste = {
+    -- ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    -- ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  -- },
+-- }
 
 if vim.g.vscode then
     -- VSCode extension

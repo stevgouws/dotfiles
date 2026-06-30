@@ -8,12 +8,13 @@ return {
    { "tpope/vim-repeat", event = "VeryLazy" },
    { "tpope/vim-abolish",
     event = "VeryLazy",
-    config = function()
-      -- coerce to dash/kebab case
-      vim.keymap.set({ "n", "x" }, "crk", "cr-", { remap = true, silent = true })
-      -- coerce to MixedCase/TitleCase
-      vim.keymap.set({ "n", "x" }, "crt", "crm", { remap = true, silent = true })
-    end,
+    -- config = function()
+    -- Cause these had visual mode too it added a delay to visual selection c deleting selection
+    --   -- coerce to dash/kebab case
+    --   vim.keymap.set({ "n", "x" }, "crk", "cr-", { remap = true, silent = true })
+    --   -- coerce to MixedCase/TitleCase
+    --   vim.keymap.set({ "n", "x" }, "crt", "crm", { remap = true, silent = true })
+    -- end,
    },
    {
      "ggandor/leap.nvim",
