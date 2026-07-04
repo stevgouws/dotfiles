@@ -1,16 +1,31 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+NO_ATTACH=false
+if [[ "${1:-}" == "--no-attach" ]]; then
+  NO_ATTACH=true
+  shift
+fi
+
 SESSION="${1:-work}"
 
 if ! tmux has-session -t "=${SESSION}" 2>/dev/null; then
   tmux new-session -d -s "$SESSION" -n dev
-  tmux new-window -t "=${SESSION}:2" -n test
+  tmux new-window -t "=${SESSION}:2" -n test -c "$PWD/packages/app"
   tmux new-window -t "=${SESSION}:3" -n claude
   tmux new-window -t "=${SESSION}:4" -n zsh
-  tmux new-window -t "=${SESSION}:5" -n e2e
+  tmux new-window -t "=${SESSION}:5" -n e2e -c "$PWD/packages/e2e"
   tmux select-window -t "=${SESSION}:1"
 fi
 
+if [[ "$NO_ATTACH" == true ]]; then
+  exit 0
+fi
+
 code .
-exec tmux attach -t "=${SESSION}"
+# If already in TMUX don't nest, just switch
+if [[ -n "${TMUX:-}" ]]; then
+  exec tmux switch-client -t "=${SESSION}"
+else
+  exec tmux attach -t "=${SESSION}"
+fi
