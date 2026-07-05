@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSION="${1:-dotfiles}"
+PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+PROJECT_TMUX_SETUP="$PROJECT_ROOT/.tmux-setup.sh"
+
+if [[ -e "$PROJECT_TMUX_SETUP" && ! -x "$PROJECT_TMUX_SETUP" ]]; then
+  echo "$PROJECT_TMUX_SETUP exists but is not executable" >&2
+  exit 1
+fi
+
+if ! tmux has-session -t "=${SESSION}" 2>/dev/null; then
+  tmux new-session -d -s "$SESSION" -c "$PROJECT_ROOT"
+
+  if [[ -x "$PROJECT_TMUX_SETUP" ]]; then
+    "$PROJECT_TMUX_SETUP" "$SESSION" "$PROJECT_ROOT"
+  fi
+fi
+
+code "$PROJECT_ROOT"
+# If already in TMUX don't nest, just switch
+if [[ -n "${TMUX:-}" ]]; then
+  exec tmux switch-client -t "=${SESSION}"
+else
+  exec tmux attach -t "=${SESSION}"
+fi
