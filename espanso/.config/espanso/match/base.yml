@@ -72,6 +72,9 @@ matches:
     replace: "git checkout "
   - trigger: gc-
     replace: "git checkout -"
+  - trigger: "gd;"
+    replace: "git checkout dev && git pull"
+    force_mode: clipboard
   - trigger: "gm;"
     replace: "git checkout main && git pull"
     force_mode: clipboard
