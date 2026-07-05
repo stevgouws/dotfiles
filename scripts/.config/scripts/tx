@@ -1,7 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SESSION="${1:-dotfiles}"
+RUN_CMD=""
+SESSION=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --run) RUN_CMD="$2"; shift 2 ;;
+    *)
+      if [[ -z "$SESSION" ]]; then
+        SESSION="$1"; shift
+      else
+        echo "Unknown argument: $1" >&2; exit 1
+      fi
+      ;;
+  esac
+done
+
+SESSION="${SESSION:-dotfiles}"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 PROJECT_TMUX_SETUP="$PROJECT_ROOT/.tmux-setup.sh"
 
@@ -15,6 +31,10 @@ if ! tmux has-session -t "=${SESSION}" 2>/dev/null; then
 
   if [[ -x "$PROJECT_TMUX_SETUP" ]]; then
     "$PROJECT_TMUX_SETUP" "$SESSION" "$PROJECT_ROOT"
+  fi
+
+  if [[ -n "$RUN_CMD" ]]; then
+    tmux send-keys -t "=${SESSION}:1" "$RUN_CMD" Enter
   fi
 fi
 

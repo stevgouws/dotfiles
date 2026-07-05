@@ -26,7 +26,9 @@ fi
 
 branch_name="${branch_name:-$name}"
 dir_name="$name"
-worktree_dir="$HOME/projects/fe-uiT/$dir_name"
+main_worktree="$(git rev-parse --show-toplevel)"
+project_name="$(basename "$main_worktree")"
+worktree_dir="$HOME/projects/worktrees/$project_name/$dir_name"
 
 # 1) Local branch already exists
 if git show-ref --verify --quiet "refs/heads/$branch_name"; then
@@ -46,14 +48,11 @@ fi
 
 cd "$worktree_dir"
 
-~/.config/scripts/tmux-session --no-attach "$dir_name"
+cp "$main_worktree/.tmux-setup.sh" . 2>/dev/null || true
+cp "$main_worktree/.worktree-setup.sh" . 2>/dev/null || true
 
-tmux send-keys -t "=${dir_name}:1" \
-  "pnpm install \
-  && pnpm local:init-app-config-and-dotenv-files \
-  && pnpm -r --filter '!@vcs-ui2/app' --filter '!@vcs-ui2/user-guides' run build \
-  && cp ~/projects/fe-ui/packages/e2e/.env.e2e packages/e2e/ \
-  && cp ~/projects/fe-ui/.env . \
-  && cp ~/projects/fe-ui/.env.iis ." Enter
-
-exec ~/.config/scripts/tmux-session "$dir_name"
+if [[ -x "$worktree_dir/.worktree-setup.sh" ]]; then
+  exec ~/.config/scripts/tx "$dir_name" --run "./.worktree-setup.sh"
+else
+  exec ~/.config/scripts/tx "$dir_name"
+fi
