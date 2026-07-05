@@ -92,6 +92,8 @@ matches:
     replace: "git worktree list"
   - trigger: gwr
     replace: "git worktree remove"
+  - trigger: ta;
+    replace: "tmux attach"
   - trigger: ts;
     replace: "tmux source-file ~/.config/tmux/tmux.conf"
   - regex: \bp;
@@ -147,8 +149,6 @@ matches:
     replace: "😆"
   - trigger: sw;
     replace: "😅"
-  - trigger: ta;
-    replace: "🎉"
   - trigger: th;
     replace: "🤔"
   - trigger: tu;
