@@ -1,0 +1,5 @@
+# Leading slash, so only if it's in root of repo, IE not in dotfiles/projects-setup/....etc
+/.tmux-setup.sh
+/.worktree-setup.sh
+
+**/.claude/settings.local.json
