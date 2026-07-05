@@ -100,6 +100,6 @@ stty -ixon
 
 # Always start tmux for new shell
 if [[ -z "$TMUX_PANE" ]]; then
-  tmux new-session -A -s "${USER}"
+  tmux new-session -A -s dotfiles -c "$HOME/dotfiles"
 fi
 
