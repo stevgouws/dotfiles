@@ -1,40 +1,59 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-branch="$1"
-dir_name="${branch##*/}"   # strip everything before the last /
-worktree_dir="$HOME/projects/fe-uiT/$dir_name"
+name=""
+branch_name=""
+base_branch="origin/main"
 
-# 1) Local branch exists
-if git show-ref --verify --quiet "refs/heads/$branch"; then
-  echo "Local branch '$branch' exists, adding worktree for it..."
-  git worktree add "$worktree_dir" "$branch"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --branch-name) branch_name="$2"; shift 2 ;;
+    --base-branch) base_branch="$2"; shift 2 ;;
+    *)
+      if [[ -z "$name" ]]; then
+        name="$1"; shift
+      else
+        echo "Unknown argument: $1" >&2; exit 1
+      fi
+      ;;
+  esac
+done
 
-# 2) Remote branch exists on origin (but not locally)
-elif git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-  echo "Remote branch 'origin/$branch' exists, creating local branch from it..."
-  git worktree add "$worktree_dir" -b "$branch" "origin/$branch"
-
-# 3) Brand new branch – create from origin/main
-else
-  echo "Branch '$branch' does not exist locally or on origin, creating from origin/main..."
-  git worktree add --no-track "$worktree_dir" -b "$branch" origin/main
+if [[ -z "$name" ]]; then
+  echo "Usage: gwa <name> [--branch-name <branch>] [--base-branch <branch>]" >&2
+  exit 1
 fi
 
-# Open new Alacritty window and run pnpm commands in it
-/Applications/Alacritty.app/Contents/MacOS/alacritty \
-  msg create-window \
-  --hold \
-  --title "$branch" \
-  --working-directory "$worktree_dir" \
-  --command zsh -lic "
-    set -euo pipefail
-    pnpm install
-    pnpm local:init-app-config-and-dotenv-files
-    pnpm -r --filter '!@vcs-ui2/app' --filter '!@vcs-ui2/user-guides' run build
-    cp \"$HOME/projects/fe-ui/packages/e2e/.env.e2e\" \"$worktree_dir/packages/e2e/\"
-    cp \"$HOME/projects/fe-ui/.env\" \"$worktree_dir/\"
-    cp \"$HOME/projects/fe-ui/.env.iis\" \"$worktree_dir/\"
-    code .
-    exec zsh -l
-  "
+branch_name="${branch_name:-$name}"
+dir_name="$name"
+worktree_dir="$HOME/projects/fe-uiT/$dir_name"
+
+# 1) Local branch already exists
+if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+  echo "Local branch '$branch_name' exists, adding worktree for it..."
+  git worktree add "$worktree_dir" "$branch_name"
+
+# 2) Remote branch exists on origin (but not locally)
+elif git ls-remote --exit-code --heads origin "$branch_name" >/dev/null 2>&1; then
+  echo "Remote branch 'origin/$branch_name' exists, creating local branch from it..."
+  git worktree add "$worktree_dir" -b "$branch_name" "origin/$branch_name"
+
+# 3) Brand new branch – create from base branch
+else
+  echo "Branch '$branch_name' does not exist locally or on origin, creating from $base_branch..."
+  git worktree add --no-track "$worktree_dir" -b "$branch_name" "$base_branch"
+fi
+
+cd "$worktree_dir"
+
+~/.config/scripts/tmux-session --no-attach "$dir_name"
+
+tmux send-keys -t "=${dir_name}:1" \
+  "pnpm install \
+  && pnpm local:init-app-config-and-dotenv-files \
+  && pnpm -r --filter '!@vcs-ui2/app' --filter '!@vcs-ui2/user-guides' run build \
+  && cp ~/projects/fe-ui/packages/e2e/.env.e2e packages/e2e/ \
+  && cp ~/projects/fe-ui/.env . \
+  && cp ~/projects/fe-ui/.env.iis ." Enter
+
+exec ~/.config/scripts/tmux-session "$dir_name"
