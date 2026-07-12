@@ -9,34 +9,10 @@ vim.opt.splitright = true
 
 vim.opt.clipboard = "unnamed"
 vim.opt.gdefault = true
-
--- vim.g.mapleader = " "
 vim.g.mapleader = ","
-
--- Use OSC52 to yank over ssh
-
--- vim.g.clipboard = {
-  -- name = 'osc52',
-  -- copy = {
-    -- ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    -- ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-  -- },
-  -- paste = {
-    -- ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    -- ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-  -- },
--- }
 
 if vim.g.vscode then
     -- VSCode extension
-    -- Auto-format on leaving insert mode in VSCode Neovim
-    -- vim.api.nvim_create_autocmd("InsertLeave", {
-    --   callback = function()
-    --     vim.cmd("call VSCodeNotify('editor.action.formatDocument')")
-    --   end
-    -- })
-  -- remap window focus for vscode too
-  -- local vscode = require("vscode")
 else
   -- ordinary Neovim
   vim.opt.relativenumber = true -- not needed VScode provides it anyway
@@ -109,39 +85,6 @@ end, { desc = "Mark: Delete current .skip (supports count)" })
 
 vim.keymap.set("n", "<leader>ta", "yiwkO<ESC>pb~Itype <ESC>$aArgs = {}<ESC>i<CR><ESC>O", { desc = "Types: ArgsType" })
 vim.keymap.set("n", "<leader>tp", "yiwkO<ESC>pbItype <ESC>$aProps = {}<ESC>i<CR><ESC>O", { desc = "Types: PropsType" })
-
--- Get current git branch name (fallback if not in a repo)
-local function git_branch()
-  local result = vim.fn.systemlist("git rev-parse --abbrev-ref HEAD")
-  if vim.v.shell_error ~= 0 or not result[1] or result[1] == "" then
-    return "no-branch"
-  end
-  return result[1]
-end
-
-vim.keymap.set("n", "<leader>rn", function()
-  local root = vim.fn.getcwd()        -- VSCode workspace root
-  local branch = git_branch()
-
-  vim.fn.jobstart({
-    "/Applications/Alacritty.app/Contents/MacOS/alacritty",
-    "msg",
-    "create-window",
-    "--title", branch,
-    "--working-directory", root,
-  }, {
-    detach = true,
-  })
-  -- 2) Bring Alacritty to the foreground
-  vim.fn.jobstart({
-    "osascript",
-    "-e",
-    'tell application "Alacritty" to activate',
-  }, {
-    detach = true,
-  })
-
-end, { silent = true })
 
 require("config.lazy")
 
@@ -218,53 +161,6 @@ require('leap').opts.preview_filter =
 
 -- Use the traversal keys to repeat the previous motion without explicitly invoking Leap:
 require('leap.user').set_repeat_keys('<enter>', '<backspace>')
-
-vim.keymap.set("n", "<leader>tt", function()
-  local function exists(path)
-    return vim.uv.fs_stat(path) ~= nil
-  end
-
-  local file = vim.fn.expand("%:p")
-  local dir = vim.fn.fnamemodify(file, ":h")
-  local name = vim.fn.fnamemodify(file, ":t")
-  local stem = vim.fn.fnamemodify(file, ":t:r")
-  local ext = vim.fn.fnamemodify(file, ":e")
-
-  local test_file = file
-
-  -- If not already a test file, look for .test or .spec
-  if not name:match("%.test%.[^.]+$") and not name:match("%.spec%.[^.]+$") then
-    local test_candidate = string.format("%s/%s.test.%s", dir, stem, ext)
-    local spec_candidate = string.format("%s/%s.spec.%s", dir, stem, ext)
-
-    if exists(test_candidate) then
-      test_file = test_candidate
-    elseif exists(spec_candidate) then
-      test_file = spec_candidate
-    else
-      vim.notify("No matching test file found for " .. name, vim.log.levels.WARN)
-      return
-    end
-  end
-
-  -- project root -> session name
-  local root = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]
-  if not root or root == "" then
-    root = vim.fn.getcwd()
-  end
-
-  local session = vim.fn.fnamemodify(root, ":t")
-
-  local cmd = string.format(
-    'tmux has-session -t %q 2>/dev/null || tmux new -ds %q; tmux send-keys -t %q %q C-m',
-    session,
-    session,
-    session,
-    "clear && clear && npx vitest run " .. test_file
-  )
-
-  os.execute(cmd)
-end)
 
 require("keymaps.test-runner")
 
