@@ -35,8 +35,8 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light Aloxaf/fzf-tab
 
-# Disable in ~/projects/special-repo
-if [[ $PWD != $HOME/projects/practice ]]; then
+# Disable autosuggestions in repos where history suggestions are noisy
+if [[ $PWD != $HOME/projects/practice && $PWD != $HOME/projects/practice/glob ]]; then
   zinit light zsh-users/zsh-autosuggestions
 fi
 
