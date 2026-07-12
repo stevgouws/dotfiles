@@ -266,6 +266,8 @@ vim.keymap.set("n", "<leader>tt", function()
   os.execute(cmd)
 end)
 
+require("keymaps.test-runner")
+
 -- open PR on remote
 vim.keymap.set("n", "<leader>rp", function()
   vim.fn.jobstart("gh pr view --web", { detach = true })
