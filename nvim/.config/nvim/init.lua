@@ -164,21 +164,4 @@ require('leap.user').set_repeat_keys('<enter>', '<backspace>')
 
 require("keymaps.leader-f")
 require("keymaps.leader-j")
-
--- open PR on remote
-vim.keymap.set("n", "<leader>rp", function()
-  vim.fn.jobstart("gh pr view --web", { detach = true })
-end, { desc = "Open PR in browser" })
-
-vim.keymap.set("n", "<leader>rc", function()
-  local word = vim.fn.expand("<cword>")
-
-  local target
-  if word:match("^[0-9a-fA-F]+$") then
-    target = word
-  else
-    target = "HEAD"
-  end
-
-  vim.fn.jobstart({ "gh", "browse", target }, { detach = true })
-end, { desc = "Open commit (cursor or HEAD) in browser" })
+require("keymaps.leader-r")
