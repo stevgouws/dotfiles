@@ -150,6 +150,13 @@ vim.keymap.set("n", "<leader>rp", function()
   open_with_gh(root, { "gh", "pr", "view", "--web" }, "Could not open pull request")
 end, { desc = "Remote: open pull request" })
 
+vim.keymap.set("n", "<leader>rP", function()
+  local root = repo_root()
+  if not root then return end
+
+  open_with_gh(root, { "gh", "pr", "list", "--web" }, "Could not open pull requests")
+end, { desc = "Remote: open pull requests" })
+
 vim.keymap.set("n", "<leader>rr", function()
   local root = repo_root()
   if not root then return end
