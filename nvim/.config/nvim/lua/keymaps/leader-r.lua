@@ -57,14 +57,22 @@ local function open_file_on_remote(start_line, end_line)
   if not root then return end
 
   local relative_path = vim.fs.relpath(root, filepath)
-  local commit = git_commit(root, "HEAD")
-  if not relative_path or not commit then
+  if not relative_path then
     vim.notify("Could not resolve file location", vim.log.levels.WARN)
     return
   end
 
+  local branch = vim.trim(vim.system(
+    { "git", "rev-parse", "--abbrev-ref", "HEAD" },
+    { cwd = root, text = true }
+  ):wait().stdout or "")
+  if branch == "" then
+    vim.notify("Could not determine current branch", vim.log.levels.WARN)
+    return
+  end
+
   vim.system(
-    { "gh", "browse", relative_path, "--commit=" .. commit, "--no-browser" },
+    { "gh", "browse", relative_path, "--branch=" .. branch, "--no-browser" },
     { cwd = root, text = true },
     vim.schedule_wrap(function(result)
       if result.code ~= 0 then
