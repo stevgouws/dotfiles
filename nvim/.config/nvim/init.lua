@@ -56,7 +56,7 @@ vim.keymap.set("n", "<leader>lu", "/\"@voxsmartltd/frontend-utils\"<CR>Wci\"file
 
 vim.keymap.set("n", "<leader>mo", function()
   for _ = 1, vim.v.count1 do
-    vim.fn.search([[\v(test|it|describe)\(]], 'b')
+    vim.fn.search([[\v(^|\W)\zs(test|it|describe)\(]], 'b')
   end
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("ea.only<Esc>", true, false, true), "n", false)
 end, { desc = "Mark: Wrap current test/describe in .only (supports count)" })
@@ -70,7 +70,7 @@ end, { desc = "Mark: Delete current .only (supports count)" })
 
 vim.keymap.set("n", "<leader>ms", function()
   for _ = 1, vim.v.count1 do
-    vim.fn.search([[\v(test|it|describe)\(]], 'b')
+    vim.fn.search([[\v(^|\W)\zs(test|it|describe)\(]], 'b')
   end
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("ea.skip<Esc>", true, false, true), "n", false)
 end, { desc = "Mark: Wrap current test/describe in .skip (supports count)" })
