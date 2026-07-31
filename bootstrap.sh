@@ -2,7 +2,14 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_DIR="$DOTFILES_DIR/logs"
+LOG_FILE="$LOG_DIR/bootstrap-$(date '+%Y%m%d-%H%M%S').log"
 PROFILE=""
+FAILED_STEPS=()
+
+mkdir -p "$LOG_DIR"
+exec > >(tee -a "$LOG_FILE") 2>&1
+echo "Logging this run to $LOG_FILE"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -48,7 +55,10 @@ run_brewfile() {
   fi
 
   echo "Installing $name packages..."
-  brew bundle --file="$file"
+  if ! brew bundle --file="$file"; then
+    echo "WARNING: Some $name packages failed to install; continuing bootstrap."
+    FAILED_STEPS+=("$name packages")
+  fi
 }
 
 clone_repos() {
@@ -88,7 +98,11 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# install node
+# Homebrew's nvm formula must be sourced before the nvm command is available.
+export NVM_DIR="$HOME/.nvm"
+mkdir -p "$NVM_DIR"
+# shellcheck source=/dev/null
+source "$(brew --prefix nvm)/nvm.sh"
 nvm install --lts
 
 echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
@@ -176,3 +190,11 @@ clone_repos base
 clone_repos "$PROFILE"
 
 echo "Bootstrap complete."
+
+if (( ${#FAILED_STEPS[@]} > 0 )); then
+  echo
+  echo "Bootstrap completed with failures:"
+  printf '  - %s\n' "${FAILED_STEPS[@]}"
+  echo "Re-run this command later to retry them; already completed work will be skipped."
+  exit 1
+fi
