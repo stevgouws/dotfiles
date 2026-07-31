@@ -74,7 +74,7 @@ clone_repos() {
   done < "$file"
 }
 
-# install_homebrew
+install_homebrew
 setup_brew_shellenv
 
 # run_brewfile base
