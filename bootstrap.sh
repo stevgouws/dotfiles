@@ -77,7 +77,7 @@ clone_repos() {
 install_homebrew
 setup_brew_shellenv
 
-# run_brewfile base
+run_brewfile base
 run_brewfile "$PROFILE"
 
 echo "Linking dot files..."
