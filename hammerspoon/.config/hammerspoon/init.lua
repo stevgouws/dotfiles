@@ -1,3 +1,8 @@
+-- Register Hammerspoon as a macOS login item.
+if not hs.autoLaunch() then
+  hs.autoLaunch(true)
+end
+
 local hyper = { "ctrl", "shift", "alt" }
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()

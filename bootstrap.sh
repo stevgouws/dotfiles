@@ -107,6 +107,8 @@ nvm install --lts
 
 echo "Changing Hammerspoon config path to ~/.config/hammerspoon/init.lua..."
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
+# Load the config so hs.autoLaunch(true) registers Hammerspoon as a login item.
+open -a Hammerspoon
 
 echo "Setting MacOSdefaults"
 defaults write com.apple.dock tilesize -int 24
