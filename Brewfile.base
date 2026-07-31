@@ -1,4 +1,4 @@
-tap "jandedobbeleer/oh-my-posh"
+tap "jandedobbeleer/oh-my-posh", trusted: { formula: "oh-my-posh" }
 brew "fd"
 brew "ffmpeg"
 brew "fzf"
