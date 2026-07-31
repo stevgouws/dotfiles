@@ -112,17 +112,25 @@ echo "Setting MacOSdefaults"
 defaults write com.apple.dock tilesize -int 24
 defaults write com.apple.dock orientation -string right
 defaults write com.apple.dock autohide -bool true
-killall Dock
 defaults write com.apple.finder AppleShowAllFiles -bool true
 # This sets the default for folders that do not already have their own saved Finder view settings.
 # Existing .DS_Store data can override it for specific folders.
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 killall Finder
+# Fastest repeat rate and shortest delay available in the macOS UI.
 defaults write -g KeyRepeat -int 2
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g com.apple.mouse.scaling -float 0.875
-killall SystemUIServer
+
+killall Dock 2>/dev/null || true
+killall SystemUIServer 2>/dev/null || true
+killall cfprefsd 2>/dev/null || true
+
+# Ensure Dark Mode is enabled (rather than toggling its current state).
 osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+
+# Make F1–F12 act as standard function keys
+defaults write -g com.apple.keyboard.fnState -bool true
 
 # Press and hold for VScode
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
