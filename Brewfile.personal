@@ -1,4 +1,5 @@
 cask "brave-browser"
+cask "codex"
 cask "readwise-ibooks"
 cask "whatsapp"
 cask "zoom"
