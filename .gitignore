@@ -1,2 +1,5 @@
 .DS_STORE
 logs/
+# Set up here instead of in projects-setup/ to avoid issues with stow ignore
+# it's own root.
+!/.tmux-setup.sh
