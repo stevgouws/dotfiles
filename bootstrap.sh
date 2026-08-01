@@ -123,12 +123,14 @@ killall Finder
 defaults write -g KeyRepeat -int 2
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g com.apple.mouse.scaling -float 0.875
+# Hide Spotlight from the menu bar; Spotlight search remains available.
+defaults write com.apple.Spotlight "NSStatusItem VisibleCC Item-0" -bool false
 
 killall Dock 2>/dev/null || true
 killall SystemUIServer 2>/dev/null || true
 killall cfprefsd 2>/dev/null || true
 
-# Ensure Dark Mode is enabled (rather than toggling its current state).
+# Ensure Dark Mode is enabled (rather than toggling its current state). (does't seem to work though).
 osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
 
 # Make F1–F12 act as standard function keys
@@ -165,10 +167,9 @@ defaults write org.p0deje.Maccy searchVisibility -string duringSearch
 defaults write org.p0deje.Maccy searchMode -string fuzzy
 defaults write org.p0deje.Maccy showTitle -bool false
 
-# Doesn't seem like I need these
-# killall cfprefsd
-# killall Maccy 2>/dev/null
-# open -a Maccy
+killall cfprefsd
+killall Maccy 2>/dev/null
+open -a Maccy
 
 # Cleanshot
 defaults write pl.maketheweb.cleanshotx afterScreenshotActions -array "1"
