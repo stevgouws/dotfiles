@@ -382,7 +382,7 @@ local personalBookmarks = {
 }
 
 local workBookmarks = {
-  b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217" },
+  b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217?assignee=712020%3A90fe3c8f-218e-4a28-aa4b-33bf6f1a448d" },
   c = { name = "Cezanne", url = "https://w3.cezanneondemand.com/CezanneHR/-/VoxSmart/view/9ebaad0a-8ad5-4d97-b2f1-e5d179149a81?ce=3&et=4d8970cb-6164-4162-b780-4574ff852be1&n=6c5063b4-8307-4f55-b968-ddc3e36e154d" },
 }
 
