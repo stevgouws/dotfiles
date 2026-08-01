@@ -3,7 +3,6 @@
 
 " Yank to system clipboard
 set clipboard=unnamed
-set gdefault
 
 " Have j and k navigate visual lines rather than logical ones
 nmap j gj
@@ -15,4 +14,3 @@ nnoremap J 6j
 
 vnoremap K 6k
 vnoremap J 6j
-
