@@ -391,7 +391,7 @@ local machineBookmarks = {}
 if machineName == "MacBook Pro" then
   machineBookmarks = personalBookmarks
 elseif machineName == "Steven’s MacBook Pro" then
-  machineBookmarks = workBookmarks
+  machineBookmarks = personalBookmarks
 elseif machineName == "Steven’s MacBook Air" then
   machineBookmarks = workBookmarks
 end
