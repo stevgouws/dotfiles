@@ -118,6 +118,9 @@ defaults write com.apple.finder AppleShowAllFiles -bool true
 # This sets the default for folders that do not already have their own saved Finder view settings.
 # Existing .DS_Store data can override it for specific folders.
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+# Prefer List view in macOS Open and Save file pickers.
+defaults write NSGlobalDomain NSNavPanelFileListModeForOpenMode2 -int 1
+defaults write NSGlobalDomain NSNavPanelFileLastListModeForOpenModeKey -int 1
 killall Finder
 # Fastest repeat rate and shortest delay available in the macOS UI.
 defaults write -g KeyRepeat -int 2

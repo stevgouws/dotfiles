@@ -10,7 +10,7 @@ else
   AGENT_WINDOW_NAME="codex"
 fi
 
-tmux rename-window -t "=${SESSION}:1" dev
+tmux rename-window -t "=${SESSION}:1" zsh
 tmux new-window -t "=${SESSION}:2" -n test "npx vitest"
 tmux new-window -t "=${SESSION}:3" -n "$AGENT_WINDOW_NAME"
 tmux new-window -t "=${SESSION}:4" -n zsh
