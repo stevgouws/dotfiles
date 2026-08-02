@@ -26,6 +26,11 @@ function reloadConfig(files)
   end
 end
 myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.config/hammerspoon/", reloadConfig):start()
+
+local _, workMacBookStatus = hs.execute("is-work-macbook", true)
+local isWorkMacBook = workMacBookStatus == true
+print("-----------> isWorkMacBook: " .. tostring(isWorkMacBook))
+
 hs.alert.show("Config loaded...")
 
 -- Traffic Light Status
@@ -355,12 +360,6 @@ function bookmarks:exited()
 end
 
 
--- Identify machine
-local machineName = hs.host.localizedName()
--- (Optional) print to console once to confirm names
-print(machineName)
-
-
 local sharedBookmarks = {
   l = { name = "List", action = function()
     hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-bookmarks")
@@ -388,12 +387,11 @@ local workBookmarks = {
 
 local machineBookmarks = {}
 
-if machineName == "MacBook Pro" then
-  machineBookmarks = personalBookmarks
-elseif machineName == "Steven’s MacBook Pro" then
-  machineBookmarks = personalBookmarks
-elseif machineName == "Steven’s MacBook Air" then
+
+if isWorkMacBook then
   machineBookmarks = workBookmarks
+else
+  machineBookmarks = personalBookmarks
 end
 
 -- Merge shared + machine-specific

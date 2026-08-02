@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+[[ "$(scutil --get ComputerName)" == "Steven’s MacBook Air" ]]
