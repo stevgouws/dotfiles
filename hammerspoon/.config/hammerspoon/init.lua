@@ -152,6 +152,35 @@ local function setModeStatusBriefly(status)
   end)
 end
 
+-- Finder
+local finder = hs.hotkey.modal.new({ "ctrl", "shift" }, "f")
+local homeDirectory = os.getenv("HOME")
+
+local function openFolder(path)
+  return function()
+    finder:exit()
+    hs.execute("/usr/bin/open " .. string.format("%q", path))
+  end
+end
+
+function finder:entered()
+  modeStatus:setTitle("finder")
+end
+
+function finder:exited()
+  hs.alert.closeAll()
+  modeStatus:setTitle(nil)
+end
+
+finder:bind("", "a", openFolder(homeDirectory .. "/Library/Mobile Documents/com~apple~CloudDocs/admin-docs"))
+finder:bind("", "d", openFolder(homeDirectory .. "/Downloads"))
+finder:bind("", "h", openFolder(homeDirectory))
+finder:bind("", "i", openFolder(homeDirectory .. "/Library/Mobile Documents/com~apple~CloudDocs"))
+
+-- exit keys
+finder:bind("", "escape", function() finder:exit() end)
+finder:bind("", "return", function() finder:exit() end)
+
 -- Raycast
 local raycast = hs.hotkey.modal.new({ "ctrl", "shift" }, "r")
 
