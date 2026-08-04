@@ -45,7 +45,18 @@ autoload -U compinit && compinit
 
 zinit cdreplay -q
 
+# Use Neovim when terminal programs need a text editor.
+export EDITOR=nvim
+export VISUAL=nvim
+
 # Keybindings
+# Open the current command line in $VISUAL (Ctrl-X, then Ctrl-E). Mimic behaviour of Bash/readline.
+# Make the edit-command-line function available for lazy loading.
+autoload -Uz edit-command-line
+# Register that function as a Zsh Line Editor widget.
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
 # Allow forward/backward search to filter by partial history completion
 bindkey '^n' history-search-forward
 bindkey '^p' history-search-backward
@@ -102,4 +113,3 @@ stty -ixon
 # if [[ -z "$TMUX_PANE" ]]; then
 #   tmux new-session -A -s dotfiles -c "$HOME/dotfiles"
 # fi
-
