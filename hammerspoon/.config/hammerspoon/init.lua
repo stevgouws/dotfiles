@@ -3,7 +3,8 @@ if not hs.autoLaunch() then
   hs.autoLaunch(true)
 end
 
-local hyper = { "ctrl", "shift", "alt" }
+local globalLeader = { "ctrl", "alt" }
+local meh = { "ctrl", "shift", "alt" }
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
   hs.notify.new({title="Hammerspoon", informativeText="Hello Wooooorld"}):send()
@@ -58,7 +59,7 @@ end
 
 trafficLightStatus:setMenu(buildTrafficLightMenu)
 
-local trafficLight = hs.hotkey.modal.new({ "ctrl", "shift" }, "t")
+local trafficLight = hs.hotkey.modal.new(globalLeader, "t")
 
 function trafficLight:entered()
   modeStatus:setTitle("traffic light")
@@ -100,17 +101,17 @@ modeStatus = hs.menubar.new(true, "mode-status")
 
 local isToShowing = false
 
-local function onlyCtrlShift(flags)
+local function onlyCtrlAlt(flags)
     return flags.ctrl
-       and flags.shift
+       and flags.alt
        and not flags.cmd
-       and not flags.alt
+       and not flags.shift
        and not flags.fn
 end
 
 local function showMode()
     if not isToShowing then
-        modeStatus:setTitle("⌃⇧")
+        modeStatus:setTitle("⌃⌥")
         isToShowing = true
     end
 end
@@ -125,7 +126,7 @@ end
 hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, function(e)
     local flags = e:getFlags()
 
-    if onlyCtrlShift(flags) then
+    if onlyCtrlAlt(flags) then
         showMode()
     else
         hideMode()
@@ -137,8 +138,8 @@ end):start()
 hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
     local flags = e:getFlags()
 
-    -- Hide when another key is pressed while ctrl+shift are down
-    if flags.ctrl and flags.shift then
+    -- Hide when another key is pressed while ctrl+alt are down
+    if flags.ctrl and flags.alt then
         hideMode()
     end
 
@@ -153,7 +154,7 @@ local function setModeStatusBriefly(status)
 end
 
 -- Finder
-local finder = hs.hotkey.modal.new({ "ctrl", "shift" }, "f")
+local finder = hs.hotkey.modal.new(globalLeader, "f")
 local homeDirectory = os.getenv("HOME")
 
 local function openFolder(path)
@@ -182,7 +183,7 @@ finder:bind("", "escape", function() finder:exit() end)
 finder:bind("", "return", function() finder:exit() end)
 
 -- Raycast
-local raycast = hs.hotkey.modal.new({ "ctrl", "shift" }, "r")
+local raycast = hs.hotkey.modal.new(globalLeader, "r")
 
 function raycast:entered()
   modeStatus:setTitle("raycast")
@@ -238,7 +239,7 @@ raycast:bind("", "escape", function() raycast:exit() end)
 raycast:bind("", "return", function() raycast:exit() end)
 
 -- Utils
-local utils = hs.hotkey.modal.new({ "ctrl", "shift" }, "u")
+local utils = hs.hotkey.modal.new(globalLeader, "u")
 
 utils:bind("", "b", function()
   utils:exit()
@@ -285,11 +286,11 @@ utils:bind("", "return", function() utils:exit() end)
 
 -- Cleanshot X
 -- https://cleanshot.com/docs-api
-local cleanshot_x = hs.hotkey.modal.new({ "ctrl", "shift" }, "c")
+local cleanshot_x = hs.hotkey.modal.new(globalLeader, "c")
 
 -- Area
 -- Also global for ease of left hand use
-hs.hotkey.bind(hyper, "1", function()
+hs.hotkey.bind(meh, "1", function()
   hs.urlevent.openURL("cleanshot://capture-area")
 end)
 
@@ -377,7 +378,7 @@ cleanshot_x:bind("", "escape", function() cleanshot_x:exit() end)
 cleanshot_x:bind("", "return", function() cleanshot_x:exit() end)
 
 -- Bookmarks
-local bookmarks = hs.hotkey.modal.new({ "ctrl", "shift" }, "b")
+local bookmarks = hs.hotkey.modal.new(globalLeader, "b")
 
 function bookmarks:entered()
   modeStatus:setTitle("bookmarks")
