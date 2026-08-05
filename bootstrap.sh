@@ -98,6 +98,12 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+echo "Installing tmux plugins..."
+if ! ~/.tmux/plugins/tpm/bin/install_plugins; then
+  echo "WARNING: Some tmux plugins failed to install; continuing bootstrap."
+  FAILED_STEPS+=("tmux plugins")
+fi
+
 # Homebrew's nvm formula must be sourced before the nvm command is available.
 export NVM_DIR="$HOME/.nvm"
 mkdir -p "$NVM_DIR"
