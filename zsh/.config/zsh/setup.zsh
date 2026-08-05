@@ -50,6 +50,11 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 # Keybindings
+# Use Emacs-style line editing explicitly. When $EDITOR/$VISUAL contains "vi"
+# (for example, nvim), Zsh can otherwise start in the viins keymap, where
+# Alt+T is not bound to transpose-words.
+bindkey -e
+
 # Open the current command line in $VISUAL (Ctrl-X, then Ctrl-E). Mimic behaviour of Bash/readline.
 # Make the edit-command-line function available for lazy loading.
 autoload -Uz edit-command-line
