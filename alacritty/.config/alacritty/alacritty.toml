@@ -77,6 +77,11 @@ mods = "Shift"
 mode = "Vi"
 action = "ScrollHalfPageDown"
 
+# Send a custom escape sequence for Alt+Shift+K.
+[[keyboard.bindings]]
+key = "K"
+mods = "Alt|Shift"
+chars = "\u001b[5;30002~"
 
 # Map Ctrl+Shift+Alt+k to actually send that instead of just ctrl k
 [[keyboard.bindings]]
