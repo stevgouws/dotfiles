@@ -3,7 +3,7 @@ if not hs.autoLaunch() then
   hs.autoLaunch(true)
 end
 
-local globalLeader = { "ctrl", "alt" }
+local globalLeader = { "ctrl", "shift" }
 local meh = { "ctrl", "shift", "alt" }
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
