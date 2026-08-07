@@ -139,7 +139,8 @@ killall Dock 2>/dev/null || true
 killall SystemUIServer 2>/dev/null || true
 killall cfprefsd 2>/dev/null || true
 
-# Ensure Dark Mode is enabled (rather than toggling its current state). (does't seem to work though).
+# Disable automatic appearance switching and ensure Dark Mode is enabled.
+defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool false
 osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
 
 # Make F1–F12 act as standard function keys
