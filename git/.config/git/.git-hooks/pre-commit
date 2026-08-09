@@ -4,7 +4,20 @@ set -euo pipefail
 branch="$(git rev-parse --abbrev-ref HEAD)"
 repo_name="$(basename "$(git rev-parse --show-toplevel)")"
 
-if [[ "$branch" == "main" && "$repo_name" != "dotfiles" && "$repo_name" != "practice" ]]; then
+ignored_repos=(
+  "dotfiles"
+  "practice"
+  "automate-all-the-things"
+  "aatot"
+)
+
+for ignored_repo in "${ignored_repos[@]}"; do
+  if [[ "$repo_name" == "$ignored_repo" ]]; then
+    exit 0
+  fi
+done
+
+if [[ "$branch" == "main" ]]; then
   echo "❌ Commit blocked: you’re on branch 'main' (repo: $repo_name)." >&2
   exit 1
 fi
