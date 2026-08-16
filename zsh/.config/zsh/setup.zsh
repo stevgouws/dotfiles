@@ -65,6 +65,10 @@ bindkey '^X^E' edit-command-line
 # Allow forward/backward search to filter by partial history completion
 bindkey '^n' history-search-forward
 bindkey '^p' history-search-backward
+
+# Forward-delete key (fn+Delete) isn't bound by default without oh-my-zsh's
+# key-bindings module, so it self-inserts a literal "~" instead of deleting.
+bindkey '^[[3~' delete-char
 # zsh-autosuggest
 ## ctrl+shift+option+k
 bindkey $'\e[1;8K' autosuggest-execute
