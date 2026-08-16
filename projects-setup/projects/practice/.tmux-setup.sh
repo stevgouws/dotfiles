@@ -4,11 +4,12 @@ set -euo pipefail
 SESSION="$1"
 ROOT="$2"
 
-if is-work-macbook; then
-  AGENT_WINDOW_NAME="claude"
-else
-  AGENT_WINDOW_NAME="codex"
-fi
+AGENT_WINDOW_NAME="claude"
+# if is-work-macbook; then
+#   AGENT_WINDOW_NAME="claude"
+# else
+#   AGENT_WINDOW_NAME="codex"
+# fi
 
 tmux rename-window -t "=${SESSION}:1" zsh
 tmux new-window -t "=${SESSION}:2" -n test "npx vitest"
