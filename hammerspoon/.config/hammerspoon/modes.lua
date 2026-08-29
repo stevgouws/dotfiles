@@ -5,68 +5,24 @@ function M.setup(opts)
   local globalLeader = opts.globalLeader
   local isWorkMacBook = opts.isWorkMacBook
 
-  -- Traffic Light Status
-
-  local trafficLightStatuses = {
-    RED    = "🔴 Do not disturb",
-    ORANGE = "🟠 Only if urgent",
-    GREEN  = "🟢 Ok to talk",
-    BLUE   = "🔵 Ok to joke around",
-  }
-
-  local trafficLightStatus = hs.menubar.new(true, "traffic-light-status")
-  trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
-
-  local function buildTrafficLightMenu()
-    local menuItems = {}
-    for _, status in pairs(trafficLightStatuses) do
-      table.insert(menuItems, {
-        title = status,
-        fn = function() trafficLightStatus:setTitle(status) end,
-      })
-    end
-    return menuItems
-  end
-
-  trafficLightStatus:setMenu(buildTrafficLightMenu)
-
-  local trafficLight = hs.hotkey.modal.new(globalLeader, "t")
-
   -- Modes
   local modeStatus = hs.menubar.new(true, "mode-status")
 
-  function trafficLight:entered()
-    modeStatus:setTitle("traffic light")
+  local function bindModeStatus(modal, name)
+    function modal:entered()
+      modeStatus:setTitle(name)
+    end
+
+    function modal:exited()
+      hs.alert.closeAll()
+      modeStatus:setTitle(nil)
+    end
   end
 
-  function trafficLight:exited()
-    hs.alert.closeAll()
-    modeStatus:setTitle(nil)
+  local function bindExitKeys(modal)
+    modal:bind("", "escape", function() modal:exit() end)
+    modal:bind("", "return", function() modal:exit() end)
   end
-
-  trafficLight:bind("", "r", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.RED)
-  end)
-
-  trafficLight:bind("", "o", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
-  end)
-
-  trafficLight:bind("", "g", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.GREEN)
-  end)
-
-  trafficLight:bind("", "b", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.BLUE)
-  end)
-
-  -- exit keys
-  trafficLight:bind("", "escape", function() trafficLight:exit() end)
-  trafficLight:bind("", "return", function() trafficLight:exit() end)
 
   local isToShowing = false
 
@@ -122,6 +78,57 @@ function M.setup(opts)
     end)
   end
 
+  -- Traffic Light Status
+
+  local trafficLightStatuses = {
+    RED    = "🔴 Do not disturb",
+    ORANGE = "🟠 Only if urgent",
+    GREEN  = "🟢 Ok to talk",
+    BLUE   = "🔵 Ok to joke around",
+  }
+
+  local trafficLightStatus = hs.menubar.new(true, "traffic-light-status")
+  trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
+
+  local function buildTrafficLightMenu()
+    local menuItems = {}
+    for _, status in pairs(trafficLightStatuses) do
+      table.insert(menuItems, {
+        title = status,
+        fn = function() trafficLightStatus:setTitle(status) end,
+      })
+    end
+    return menuItems
+  end
+
+  trafficLightStatus:setMenu(buildTrafficLightMenu)
+
+  local trafficLight = hs.hotkey.modal.new(globalLeader, "t")
+
+  bindModeStatus(trafficLight, "traffic light")
+
+  trafficLight:bind("", "r", function()
+    trafficLight:exit()
+    trafficLightStatus:setTitle(trafficLightStatuses.RED)
+  end)
+
+  trafficLight:bind("", "o", function()
+    trafficLight:exit()
+    trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
+  end)
+
+  trafficLight:bind("", "g", function()
+    trafficLight:exit()
+    trafficLightStatus:setTitle(trafficLightStatuses.GREEN)
+  end)
+
+  trafficLight:bind("", "b", function()
+    trafficLight:exit()
+    trafficLightStatus:setTitle(trafficLightStatuses.BLUE)
+  end)
+
+  bindExitKeys(trafficLight)
+
   -- Finder
   local finder = hs.hotkey.modal.new(globalLeader, "f")
   local homeDirectory = os.getenv("HOME")
@@ -133,69 +140,37 @@ function M.setup(opts)
     end
   end
 
-  function finder:entered()
-    modeStatus:setTitle("finder")
-  end
-
-  function finder:exited()
-    hs.alert.closeAll()
-    modeStatus:setTitle(nil)
-  end
+  bindModeStatus(finder, "finder")
 
   finder:bind("", "a", openFolder(homeDirectory .. "/Library/Mobile Documents/com~apple~CloudDocs/admin-docs"))
   finder:bind("", "d", openFolder(homeDirectory .. "/Downloads"))
   finder:bind("", "h", openFolder(homeDirectory))
   finder:bind("", "i", openFolder(homeDirectory .. "/Library/Mobile Documents/com~apple~CloudDocs"))
 
-  -- exit keys
-  finder:bind("", "escape", function() finder:exit() end)
-  finder:bind("", "return", function() finder:exit() end)
+  bindExitKeys(finder)
 
   -- Raycast
   local raycast = hs.hotkey.modal.new(globalLeader, "r")
 
-  function raycast:entered()
-    modeStatus:setTitle("raycast")
+  bindModeStatus(raycast, "raycast")
+
+  local raycastUrls = {
+    f = "raycast://extensions/raycast/file-search/search-files",
+    b = "raycast://extensions/Codely/google-chrome/search-bookmarks",
+    t = "raycast://extensions/Codely/google-chrome/search-tab",
+    s = "raycast://extensions/raycast/snippets/search-snippets",
+    k = "raycast://extensions/eluce2/list-keyboard-maestro-macros/list?arguments=%7B%22name%22%3A%22%22%7D",
+    e = "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols",
+  }
+
+  for key, url in pairs(raycastUrls) do
+    raycast:bind("", key, function()
+      raycast:exit()
+      hs.urlevent.openURL(url)
+    end)
   end
 
-  function raycast:exited()
-    modeStatus:setTitle(nil)
-    hs.alert.closeAll()
-  end
-
-  raycast:bind("", "f", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/raycast/file-search/search-files")
-  end)
-
-  raycast:bind("", "b", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-bookmarks")
-  end)
-
-  raycast:bind("", "t", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/Codely/google-chrome/search-tab")
-  end)
-
-  raycast:bind("", "s", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/raycast/snippets/search-snippets")
-  end)
-
-  raycast:bind("", "k", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/eluce2/list-keyboard-maestro-macros/list?arguments=%7B%22name%22%3A%22%22%7D")
-  end)
-
-  raycast:bind("", "e", function()
-    raycast:exit()
-    hs.urlevent.openURL("raycast://extensions/raycast/emoji-symbols/search-emoji-symbols")
-  end)
-
-  -- exit keys
-  raycast:bind("", "escape", function() raycast:exit() end)
-  raycast:bind("", "return", function() raycast:exit() end)
+  bindExitKeys(raycast)
 
   -- Utils
   local utils = hs.hotkey.modal.new(globalLeader, "u")
@@ -205,14 +180,7 @@ function M.setup(opts)
     hs.execute("open /System/Library/PreferencePanes/Bluetooth.prefPane")
   end)
 
-  function utils:entered()
-    modeStatus:setTitle("utils")
-  end
-
-  function utils:exited()
-    hs.alert.closeAll()
-    modeStatus:setTitle(nil)
-  end
+  bindModeStatus(utils, "utils")
 
   local function toKebabCase()
     local text = hs.pasteboard.getContents()
@@ -238,9 +206,7 @@ function M.setup(opts)
     toKebabCase()
   end)
 
-  -- exit keys
-  utils:bind("", "escape", function() utils:exit() end)
-  utils:bind("", "return", function() utils:exit() end)
+  bindExitKeys(utils)
 
   -- Cleanshot X
   -- https://cleanshot.com/docs-api
@@ -252,99 +218,34 @@ function M.setup(opts)
     hs.urlevent.openURL("cleanshot://capture-area")
   end)
 
-  cleanshot_x:bind("", "a", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://capture-area")
-    setModeStatusBriefly("Area ✓")
-  end)
+  local cleanshotActions = {
+    a = { url = "cleanshot://capture-area", label = "Area ✓" },
+    c = { url = "cleanshot://open-from-clipboard", label = "Opening... ✓" },
+    f = { url = "cleanshot://capture-fullscreen", label = "Fullscreen ✓" },
+    h = { url = "cleanshot://open-history", label = "History ✓" },
+    o = { url = "cleanshot://capture-text", label = "OCR ✓" },
+    p = { url = "cleanshot://capture-previous-area", label = "Previous Area ✓" },
+    r = { url = "cleanshot://record-screen", label = "Recording ✓" },
+    s = { url = "cleanshot://scrolling-capture", label = "Settings ✓" },
+    t = { url = "cleanshot://self-timer", label = "Timer ✓" },
+    w = { url = "cleanshot://capture-window", label = "Window ✓" },
+  }
 
-  -- Open from Clipboard
-  cleanshot_x:bind("", "c", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://open-from-clipboard")
-    setModeStatusBriefly("Opening... ✓")
-  end)
-
-  -- Fullscreen
-  cleanshot_x:bind("", "f", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://capture-fullscreen")
-    setModeStatusBriefly("Fullscreen ✓")
-  end)
-
-  -- Open History
-  cleanshot_x:bind("", "h", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://open-history")
-    setModeStatusBriefly("History ✓")
-  end)
-
-  -- OCR
-  cleanshot_x:bind("", "o", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://capture-text")
-    setModeStatusBriefly("OCR ✓")
-  end)
-
-  -- Previous Area
-  cleanshot_x:bind("", "p", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://capture-previous-area")
-    setModeStatusBriefly("Previous Area ✓")
-  end)
-
-  -- Recording
-  cleanshot_x:bind("", "r", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://record-screen")
-    setModeStatusBriefly("Recording ✓")
-  end)
-
-  -- Scrolling capture
-  cleanshot_x:bind("", "s", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://scrolling-capture")
-    setModeStatusBriefly("Settings ✓")
-  end)
-
-  -- Timer
-  cleanshot_x:bind("", "t", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://self-timer")
-    setModeStatusBriefly("Timer ✓")
-  end)
-
-  -- Window
-  cleanshot_x:bind("", "w", function()
-    cleanshot_x:exit()
-    hs.urlevent.openURL("cleanshot://capture-window")
-    setModeStatusBriefly("Window ✓")
-  end)
-
-  function cleanshot_x:entered()
-    modeStatus:setTitle("cleanshot")
+  for key, action in pairs(cleanshotActions) do
+    cleanshot_x:bind("", key, function()
+      cleanshot_x:exit()
+      hs.urlevent.openURL(action.url)
+      setModeStatusBriefly(action.label)
+    end)
   end
 
-  function cleanshot_x:exited()
-    hs.alert.closeAll()
-    modeStatus:setTitle(nil)
-  end
-
-  -- exit keys
-  cleanshot_x:bind("", "escape", function() cleanshot_x:exit() end)
-  cleanshot_x:bind("", "return", function() cleanshot_x:exit() end)
+  bindModeStatus(cleanshot_x, "cleanshot")
+  bindExitKeys(cleanshot_x)
 
   -- Bookmarks
   local bookmarks = hs.hotkey.modal.new(globalLeader, "b")
 
-  function bookmarks:entered()
-    modeStatus:setTitle("bookmarks")
-  end
-
-  function bookmarks:exited()
-    hs.alert.closeAll()
-    modeStatus:setTitle(nil)
-  end
+  bindModeStatus(bookmarks, "bookmarks")
 
   local sharedBookmarks = {
     l = { name = "List", action = function()
@@ -395,9 +296,7 @@ function M.setup(opts)
     end)
   end
 
-  -- exit keys
-  bookmarks:bind("", "escape", function() bookmarks:exit() end)
-  bookmarks:bind("", "return", function() bookmarks:exit() end)
+  bindExitKeys(bookmarks)
 
   return {
     modeStatus = modeStatus,
