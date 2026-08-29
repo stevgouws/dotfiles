@@ -1,5 +1,38 @@
 local M = {}
 
+local function hexColor(hex)
+  hex = hex:gsub("#", "")
+  return {
+    red   = tonumber(hex:sub(1, 2), 16) / 255,
+    green = tonumber(hex:sub(3, 4), 16) / 255,
+    blue  = tonumber(hex:sub(5, 6), 16) / 255,
+    alpha = 1,
+  }
+end
+
+local citron    = hexColor("#8CA80F")
+local cobalt    = hexColor("#2757C8")
+local amber     = hexColor("#E08A00")
+local cyan      = hexColor("#0093AE")
+local magenta   = hexColor("#C3237F")
+local vermilion = hexColor("#DC3A22")
+local emerald   = hexColor("#10985A")
+local violet    = hexColor("#7B3ACF")
+
+-- Colour of the screen-edge border shown while each mode is active.
+-- Add/edit an entry here to change or add a mode's colour; omit a mode to
+-- skip the border for it.
+local MODE_BORDER_COLORS = {
+  ["traffic light"] = citron,
+  finder            = cobalt,
+  raycast           = amber,
+  utils             = cyan,
+  cleanshot         = magenta,
+  bookmarks         = vermilion,
+}
+
+local BORDER_WIDTH = 4
+
 function M.setup(opts)
   opts = opts or {}
   local globalLeader = opts.globalLeader
@@ -8,14 +41,48 @@ function M.setup(opts)
   -- Modes
   local modeStatus = hs.menubar.new(true, "mode-status")
 
+  local screenBorder = nil
+
+  local function hideScreenBorder()
+    if screenBorder then
+      screenBorder:delete()
+      screenBorder = nil
+    end
+  end
+
+  local function showScreenBorder(color)
+    hideScreenBorder()
+    local screen = hs.screen.mainScreen():fullFrame()
+    screenBorder = hs.canvas.new({
+      x = screen.x + screen.w - BORDER_WIDTH,
+      y = screen.y,
+      w = BORDER_WIDTH,
+      h = screen.h,
+    })
+    screenBorder:appendElements({
+      type = "rectangle",
+      action = "fill",
+      fillColor = color,
+    })
+    screenBorder:level(hs.canvas.windowLevels.overlay)
+    screenBorder:clickActivating(false)
+    screenBorder:show()
+  end
+
   local function bindModeStatus(modal, name)
+    local color = MODE_BORDER_COLORS[name]
+
     function modal:entered()
       modeStatus:setTitle(name)
+      if color then
+        showScreenBorder(color)
+      end
     end
 
     function modal:exited()
       hs.alert.closeAll()
       modeStatus:setTitle(nil)
+      hideScreenBorder()
     end
   end
 
