@@ -31,7 +31,7 @@ local MODE_BORDER_COLORS = {
   bookmarks         = vermilion,
 }
 
-local BORDER_WIDTH = 4
+local BORDER_WIDTH = 8
 
 function M.setup(opts)
   opts = opts or {}
@@ -53,16 +53,18 @@ function M.setup(opts)
   local function showScreenBorder(color)
     hideScreenBorder()
     local screen = hs.screen.mainScreen():fullFrame()
-    screenBorder = hs.canvas.new({
-      x = screen.x + screen.w - BORDER_WIDTH,
-      y = screen.y,
-      w = BORDER_WIDTH,
-      h = screen.h,
+    screenBorder = hs.canvas.new({ x = screen.x, y = screen.y, w = screen.w, h = screen.h })
+    screenBorder:appendElements({
+      type = "rectangle",
+      action = "fill",
+      fillColor = color,
+      frame = { x = 0, y = 0, w = screen.w, h = BORDER_WIDTH },
     })
     screenBorder:appendElements({
       type = "rectangle",
       action = "fill",
       fillColor = color,
+      frame = { x = 0, y = screen.h - BORDER_WIDTH, w = screen.w, h = BORDER_WIDTH },
     })
     screenBorder:level(hs.canvas.windowLevels.overlay)
     screenBorder:clickActivating(false)
