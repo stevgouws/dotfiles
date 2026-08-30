@@ -71,8 +71,8 @@ function M.setup(opts)
     screenBorder:show()
   end
 
-  local function bindModeStatus(modal, name)
-    local color = MODE_BORDER_COLORS[name]
+  local function bindModeStatus(modal, name, color)
+    color = color or MODE_BORDER_COLORS[name]
 
     function modal:entered()
       modeStatus:setTitle(name)
@@ -327,7 +327,10 @@ function M.setup(opts)
     a = { name = "Arbor", url = "https://kensington-primary-academy.uk.arbor.sc/?/guardians/home-ui/dashboard" },
     f = { name = "FNB", url = "https://www.fnb.co.za/" },
     n = { name = "Natwest", url = "https://www.onlinebanking.natwest.com/Default.aspx" },
-    s = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
+    s = { name = "s", group = {
+      t = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
+      a = { name = "Santander", url = "https://particulares.bancosantander.es/oneweb/" },
+    } },
     t = { name = "Tax Free Childcare", url = "https://www.gov.uk/sign-in-childcare-account" },
     x = { name = "Amex", url = "https://www.americanexpress.com/en-gb/account/login" },
     q = { name = "Lucia Amazon", action = function()
@@ -354,16 +357,38 @@ function M.setup(opts)
     bookmarkMap[k] = v
   end
 
-  for key, entry in pairs(bookmarkMap) do
-    bookmarks:bind("", key, function()
-      bookmarks:exit()
-      if entry.action then
-        entry.action()
-      else
-        hs.urlevent.openURLWithBundle(entry.url, "com.google.Chrome")
-      end
-    end)
+  local function triggerBookmark(entry)
+    if entry.action then
+      entry.action()
+    else
+      hs.urlevent.openURLWithBundle(entry.url, "com.google.Chrome")
+    end
   end
+
+  -- Nested groups keep the top-level mode's border colour throughout.
+  local bookmarksBorderColor = MODE_BORDER_COLORS.bookmarks
+
+  local function bindBookmarkEntries(modal, entries, statusPrefix)
+    for key, entry in pairs(entries) do
+      if entry.group then
+        local subModal = hs.hotkey.modal.new()
+        modal:bind("", key, function()
+          modal:exit()
+          subModal:enter()
+        end)
+        bindModeStatus(subModal, statusPrefix .. " " .. key, bookmarksBorderColor)
+        bindBookmarkEntries(subModal, entry.group, statusPrefix .. " " .. key)
+        bindExitKeys(subModal)
+      else
+        modal:bind("", key, function()
+          modal:exit()
+          triggerBookmark(entry)
+        end)
+      end
+    end
+  end
+
+  bindBookmarkEntries(bookmarks, bookmarkMap, "bookmarks")
 
   bindExitKeys(bookmarks)
 
