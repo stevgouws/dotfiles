@@ -3,8 +3,19 @@ local function copy(value, label)
   vim.notify("Copied " .. label .. ": " .. value, vim.log.levels.INFO)
 end
 
-vim.keymap.set("n", "<leader>fa", function()
+-- Diff buffers (e.g. from gitsigns/fugitive) name themselves
+-- "git:/real/path/to/file?{...json...}" instead of a plain path.
+-- Strip that wrapping so copies always point at the real file.
+local function resolve_filepath()
   local filepath = vim.fn.expand("%:p")
+  if filepath:match("^git:/") then
+    filepath = filepath:gsub("^git:", ""):gsub("%?.*$", "")
+  end
+  return filepath
+end
+
+vim.keymap.set("n", "<leader>fa", function()
+  local filepath = resolve_filepath()
   if filepath == "" then
     vim.notify("Current buffer has no filepath", vim.log.levels.WARN)
     return
@@ -14,7 +25,7 @@ vim.keymap.set("n", "<leader>fa", function()
 end, { desc = "File: copy absolute path" })
 
 vim.keymap.set("n", "<leader>ff", function()
-  local filename = vim.fn.expand("%:t")
+  local filename = vim.fn.fnamemodify(resolve_filepath(), ":t")
   if filename == "" then
     vim.notify("Current buffer has no filename", vim.log.levels.WARN)
     return
@@ -24,7 +35,7 @@ vim.keymap.set("n", "<leader>ff", function()
 end, { desc = "File: copy filename" })
 
 vim.keymap.set("n", "<leader>fr", function()
-  local filepath = vim.fn.expand("%:p")
+  local filepath = resolve_filepath()
   if filepath == "" then
     vim.notify("Current buffer has no filepath", vim.log.levels.WARN)
     return
@@ -46,7 +57,7 @@ vim.keymap.set("n", "<leader>fr", function()
 end, { desc = "File: copy relative path" })
 
 local function copy_path_with_lines(mode)
-  local filepath = vim.fn.expand("%:p")
+  local filepath = resolve_filepath()
   if filepath == "" then
     vim.notify("Current buffer has no filepath", vim.log.levels.WARN)
     return
