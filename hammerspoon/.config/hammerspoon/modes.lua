@@ -1,4 +1,5 @@
 local M = {}
+local twilio = require("bookmarks-twilio")
 
 local function hexColor(hex)
   hex = hex:gsub("#", "")
@@ -72,10 +73,13 @@ function M.setup(opts)
   end
 
   local function bindModeStatus(modal, name, color)
-    color = color or MODE_BORDER_COLORS[name]
+    if type(name) == "string" then
+      color = color or MODE_BORDER_COLORS[name]
+    end
 
     function modal:entered()
-      modeStatus:setTitle(name)
+      local title = type(name) == "function" and name() or name
+      modeStatus:setTitle(title)
       if color then
         showScreenBorder(color)
       end
@@ -342,6 +346,9 @@ function M.setup(opts)
   local workBookmarks = {
     b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217?assignee=712020%3A90fe3c8f-218e-4a28-aa4b-33bf6f1a448d" },
     c = { name = "Cezanne", url = "https://w3.cezanneondemand.com/CezanneHR/-/VoxSmart/view/9ebaad0a-8ad5-4d97-b2f1-e5d179149a81?ce=3&et=4d8970cb-6164-4162-b780-4574ff852be1&n=6c5063b4-8307-4f55-b968-ddc3e36e154d" },
+    d = { name = "Data Dog", url = "https://app.datadoghq.eu/logs" },
+    g = { name = "Github", url = "https://github.com/orgs/VoxSmartLtd/repositories" },
+    t = twilio.bookmarks(modeStatus),
   }
 
   local machineBookmarks
@@ -376,8 +383,14 @@ function M.setup(opts)
           modal:exit()
           subModal:enter()
         end)
-        bindModeStatus(subModal, statusPrefix .. " " .. key, bookmarksBorderColor)
-        bindBookmarkEntries(subModal, entry.group, statusPrefix .. " " .. key)
+        local subStatus
+        if type(entry.name) == "function" then
+          subStatus = entry.name
+        else
+          subStatus = entry.name or (statusPrefix .. " " .. key)
+        end
+        bindModeStatus(subModal, subStatus, bookmarksBorderColor)
+        bindBookmarkEntries(subModal, entry.group, subStatus)
         bindExitKeys(subModal)
       else
         modal:bind("", key, function()

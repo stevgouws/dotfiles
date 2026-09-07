@@ -3,3 +3,5 @@ logs/
 # Set up here instead of in projects-setup/ to avoid issues with stow ignore
 # it's own root.
 !/.tmux-setup.sh
+# Machine-local Twilio account SIDs, read by hammerspoon/bookmarks-twilio.lua
+hammerspoon/.config/hammerspoon/twilio_sids.lua
