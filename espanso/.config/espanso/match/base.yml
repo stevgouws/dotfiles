@@ -43,6 +43,8 @@ matches:
         params:
           format: "%H:%M"
 
+  - regex: \bc;
+    replace: "code ."
   - trigger: cc;
     replace: clear && clear
   #    force_mode: clipboard
@@ -97,6 +99,8 @@ matches:
     replace: "git worktree remove"
   - trigger: ta;
     replace: "tmux attach"
+  - trigger: tn;
+    replace: "tmux neww -t :2 -n test && tmux neww -t :3 -n claude && tmux neww -t :4 -n zsh"
   - trigger: ts;
     replace: "tmux source-file ~/.config/tmux/tmux.conf"
   - regex: \bp;
