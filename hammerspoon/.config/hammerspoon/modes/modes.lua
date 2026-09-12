@@ -1,5 +1,5 @@
 local M = {}
-local twilio = require("bookmarks-twilio")
+local twilio = require("modes.bookmarks-twilio")
 
 local function hexColor(hex)
   hex = hex:gsub("#", "")

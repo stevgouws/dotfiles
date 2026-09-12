@@ -34,7 +34,7 @@ print("-----------> isWorkMacBook: " .. tostring(isWorkMacBook))
 
 hs.alert.show("Config loaded...")
 
-require("modes").setup({
+require("modes.modes").setup({
   globalLeader = globalLeader,
   meh = meh,
   isWorkMacBook = isWorkMacBook,
