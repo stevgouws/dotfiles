@@ -77,7 +77,7 @@ matches:
     replace: "git checkout main && git pull"
     force_mode: clipboard
   - trigger: "gr;"
-    replace: "git rebase origin/main"
+    replace: "git fetch origin && git rebase origin/main"
     force_mode: clipboard
   - trigger: "grm;"
     replace: "git rebase origin/main"
