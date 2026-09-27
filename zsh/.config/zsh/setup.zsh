@@ -95,11 +95,13 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
+export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH" # use GNU grep instead of BSD(mac) grep  
+
 # Aliases
 alias ls='ls --color'
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias fgrep='fgrep -F --color=auto'
+alias egrep='egrep -E --color=auto'
 alias vim='nvim'
 alias c='clear'
 alias l='ls -la'
