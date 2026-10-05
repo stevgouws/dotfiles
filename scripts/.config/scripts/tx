@@ -20,6 +20,9 @@ done
 SESSION="${SESSION:-dotfiles}"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 PROJECT_TMUX_SETUP="$PROJECT_ROOT/.tmux-setup.sh"
+if [[ ! -e "$PROJECT_TMUX_SETUP" ]]; then
+  PROJECT_TMUX_SETUP="$HOME/.config/tmux/default-tmux-setup.sh"
+fi
 
 if [[ -e "$PROJECT_TMUX_SETUP" && ! -x "$PROJECT_TMUX_SETUP" ]]; then
   echo "$PROJECT_TMUX_SETUP exists but is not executable" >&2
