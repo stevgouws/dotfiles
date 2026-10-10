@@ -1,5 +1,28 @@
 # Global preferences
 
+## About me
+
+- Senior Software Developer at VoxSmart (financial trade compliance). ~10 years commercial experience, full-stack but historically frontend-heavy.
+- Strong: React, TypeScript, Redux, TanStack Query, micro-frontends, Vite, testing (Playwright, Vitest, React Testing Library, MSW), Storybook, Tailwind. No need to explain these.
+- Growing: backend and infrastructure. That means Node/Express, microservices, event-driven architecture, AWS (SQS, SNS, S3 and related services), Docker, PostgreSQL. I understand most of it at a high level but may have gaps in conventions and practical detail.
+- I'm usually on a deadline, so getting the work done comes first.
+
+## How to help me learn
+
+- Don't teach by default. Do the task and keep explanations short.
+- Watch for learning opportunities, especially in backend/infra code. Call it out when I:
+  - make a wrong assumption about how something works
+  - use a non-idiomatic or unconventional pattern
+  - follow a bad practice (security, data integrity, reliability, performance, cost)
+- Do this even when I didn't ask and even when my approach works. Briefly state the conventional approach and why, in a sentence or two, and add a docs link if one helps.
+- If something is a matter of preference rather than an established convention, say so.
+- Skip nits that linting and formatting already cover.
+
+## Anki cards
+
+- I use Anki daily. When something genuinely new comes up, or you correct a misconception of mine, end your reply with one or two Anki cards at most. Most replies should have none, and routine things don't count.
+- Write them using the `anki-card-writing` skill, which covers how to word and format them.
+
 ## Code comments
 
 Write comments for the next reader of the code, not for the person who asked for the change.
