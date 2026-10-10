@@ -327,9 +327,18 @@ function M.setup(opts)
   }
 
   local personalBookmarks = {
-    b = { name = "Budget Totals", url = "https://docs.google.com/spreadsheets/d/19CYCpFj9xQOh8Z1J_8DdacgO3DJc69Ox-O6ijKqr920/edit?gid=628590374#gid=628590374" },
-    a = { name = "Arbor", url = "https://kensington-primary-academy.uk.arbor.sc/?/guardians/home-ui/dashboard" },
+    a = { name = "a", group = {
+      r = { name = "Arbor", url = "https://kensington-primary-academy.uk.arbor.sc/?/guardians/home-ui/dashboard" },
+      m = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
+      l = { name = "Lucia Amazon", action = function()
+        hs.execute('open -na "Google Chrome" --args --profile-directory="Profile 1" "https://www.amazon.co.uk/cpe/yourpayments/transactions"')
+      end },
+    } },
     f = { name = "FNB", url = "https://www.fnb.co.za/" },
+    g = { name = "G-sheets", group = {
+      b = { name = "Budget Totals", url = "https://docs.google.com/spreadsheets/d/19CYCpFj9xQOh8Z1J_8DdacgO3DJc69Ox-O6ijKqr920/edit?gid=628590374#gid=628590374" },
+      c = { name = "Club Health", url = "https://docs.google.com/spreadsheets/d/1vdJEllNRlVDN4eA--DkQsskznob92o3JzN_yvgkuqJ4/edit?gid=0#gid=0" },
+    } },
     n = { name = "Natwest", url = "https://www.onlinebanking.natwest.com/Default.aspx" },
     s = { name = "s", group = {
       t = { name = "Standard Bank", url = "https://onlinebanking.standardbank.co.za/#/landing-page" },
@@ -337,10 +346,6 @@ function M.setup(opts)
     } },
     t = { name = "Tax Free Childcare", url = "https://www.gov.uk/sign-in-childcare-account" },
     x = { name = "Amex", url = "https://www.americanexpress.com/en-gb/account/login" },
-    q = { name = "Lucia Amazon", action = function()
-      hs.execute('open -na "Google Chrome" --args --profile-directory="Profile 4" "https://www.amazon.co.uk/cpe/yourpayments/transactions"')
-    end },
-    z = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
   }
 
   local workBookmarks = {

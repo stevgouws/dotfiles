@@ -7,6 +7,21 @@
 - Growing: backend and infrastructure. That means Node/Express, microservices, event-driven architecture, AWS (SQS, SNS, S3 and related services), Docker, PostgreSQL. I understand most of it at a high level but may have gaps in conventions and practical detail.
 - I'm usually on a deadline, so getting the work done comes first.
 
+## Currently reading
+
+Reference these when relevant to the work, but don't assume I know material past my progress point.
+
+- Building Microservices, 2nd ed. (Sam Newman): 6%
+- Designing Data-Intensive Applications, 2nd ed. (Kleppmann, Riccomini): 7%
+- The Design of Web APIs (Arnaud Lauret): 42%
+- Effective TypeScript, 2nd ed. (Dan Vanderkam): halfway through ch. 3
+- The Pragmatic Programmer, 20th Anniversary ed. (Thomas, Hunt): 16%
+- Effective Shell (Dave Kerr): 35%
+- Linux Command Line and Shell Scripting Bible, 4th ed. (Blum, Bresnahan): 15%
+- Practical Vim, 2nd ed. (Drew Neil): 27%
+
+Finished: Simplicity (Dave Thomas), tmux 3 (Brian P. Hogan).
+
 ## How to help me learn
 
 - Don't teach by default. Do the task and keep explanations short.
