@@ -25,6 +25,7 @@ Every rule below serves one goal. The card should be simple, unambiguous and rec
 - Each cloze number tests one fact. Its answer is as short as possible: a term, flag, number or short phrase.
 - If an answer runs to a whole clause, find the key term inside it and cloze that instead.
 - When splitting, keep the existence fact, not just the detail. "Why X happens" is no use if the user forgets that X happens at all.
+- For CLI commands, keep the tool name outside the cloze and cloze only the subcommand or flag: `<code>aws {{c1::s3 sync}}</code>`, not `{{c1::<code>aws s3 sync</code>}}`.
 
 ### Cloze numbering (rules 5, 17)
 - **Default:** a single `c1`.

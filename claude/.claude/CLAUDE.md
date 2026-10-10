@@ -22,6 +22,10 @@ Reference these when relevant to the work, but don't assume I know material past
 
 Finished: Simplicity (Dave Thomas), tmux 3 (Brian P. Hogan).
 
+## Editing Claude config
+
+- `~/.claude` is managed from my dotfiles. Make global Claude edits (CLAUDE.md, skills, settings, etc.) in `~/dotfiles/claude/.claude`, not in `~/.claude`.
+
 ## How to help me learn
 
 - Don't teach by default. Do the task and keep explanations short.
