@@ -1,0 +1,29 @@
+# Custom delta features. Stack on top of a base theme in the main config, e.g.
+#   features = catppuccin-macchiato macchiato-vivid
+# Later features override earlier ones.
+
+[delta "macchiato-vivid"]
+	# Deeper, more saturated line backgrounds than stock Catppuccin so the
+	# pastel syntax colours keep their contrast instead of blending in.
+	minus-style = syntax "#3b1f2e"
+	minus-emph-style = bold syntax "#6e2a44"
+	minus-non-emph-style = syntax "#3b1f2e"
+	plus-style = syntax "#1f3b2c"
+	plus-emph-style = bold syntax "#2a6e46"
+	plus-non-emph-style = syntax "#1f3b2c"
+	# Brighter, bolder chrome
+	file-style = bold "#f4dbd6"
+	file-decoration-style = "#8087a2" ul
+	hunk-header-style = file line-number syntax
+	hunk-header-decoration-style = "#8087a2" box
+	line-numbers-minus-style = bold "#ed8796"
+	line-numbers-plus-style = bold "#a6da95"
+	line-numbers-left-style = "#8087a2"
+	line-numbers-right-style = "#8087a2"
+	line-numbers-zero-style = "#6e738d"
+	# Moved-code colours (colorMoved) with the same treatment
+	map-styles = \
+		bold purple => syntax "#3d2f5c", \
+		bold blue => syntax "#2c3d5c", \
+		bold cyan => syntax "#2c4d5c", \
+		bold yellow => syntax "#5c4a2c"

@@ -4,3 +4,21 @@
 [core]
         editor = nvim
 	hooksPath = "~/.config/git/.git-hooks"
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[include]
+	path = ~/.config/git/catppuccin-delta.gitconfig
+[include]
+	path = ~/.config/git/delta-custom.gitconfig
+	# path = ~/.config/git/themes.gitconfig
+[delta]
+	features = catppuccin-macchiato macchiato-vivid
+	# features = arctic-fox
+	navigate = true
+	line-numbers = false
+	tabs = 2
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	colorMoved = default
