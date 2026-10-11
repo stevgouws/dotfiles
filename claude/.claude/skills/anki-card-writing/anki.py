@@ -4,6 +4,8 @@
   anki.py add                      reads a JSON list of cards from stdin:
       [{"deck": "Main::HTTP", "cloze": "...", "back": "...", "ref": "...", "tags": ["books::..."]}]
       Only "deck" and "cloze" are required. Every note also gets the "added-by-claude" tag.
+  anki.py gui                      reads a one-card JSON list from stdin and opens it in
+      Anki's Add window, so the user can edit it there and click Add themselves.
   anki.py read <action> [params]   runs one AnkiConnect action from READ_ONLY_ACTIONS,
       e.g. anki.py read findNotes '{"query": "tag:added-by-claude"}'
 
@@ -63,28 +65,42 @@ def call(action, key, **params):
     return reply["result"]
 
 
+def to_note(card):
+    return {
+        "deckName": card["deck"],
+        "modelName": "Cloze",
+        "fields": {
+            "Cloze": card["cloze"],
+            "Back": card.get("back", ""),
+            "Ref": card.get("ref", ""),
+        },
+        "tags": ["added-by-claude", *card.get("tags", [])],
+    }
+
+
 def add():
     cards = json.load(sys.stdin)
     key = api_key()
     failed = False
     for card in cards:
-        note = {
-            "deckName": card["deck"],
-            "modelName": "Cloze",
-            "fields": {
-                "Cloze": card["cloze"],
-                "Back": card.get("back", ""),
-                "Ref": card.get("ref", ""),
-            },
-            "tags": ["added-by-claude", *card.get("tags", [])],
-        }
         try:
-            note_id = call("addNote", key, note=note)
+            note_id = call("addNote", key, note=to_note(card))
             print(f"added {note_id} to {card['deck']}")
         except RuntimeError as error:
             failed = True
             print(f"failed ({card['deck']}): {error}\n  {card['cloze']}")
     sys.exit(1 if failed else 0)
+
+
+def open_in_add_window():
+    cards = json.load(sys.stdin)
+    if len(cards) != 1:
+        sys.exit("gui takes exactly one card: Anki's Add window holds a single note.")
+    try:
+        call("guiAddCards", api_key(), note=to_note(cards[0]))
+    except RuntimeError as error:
+        sys.exit(f"AnkiConnect error: {error}")
+    print("opened in Anki's Add window")
 
 
 def read(action, params_json="{}"):
@@ -101,6 +117,8 @@ def main():
     match sys.argv[1:]:
         case ["add"]:
             add()
+        case ["gui"]:
+            open_in_add_window()
         case ["read", action]:
             read(action)
         case ["read", action, params_json]:

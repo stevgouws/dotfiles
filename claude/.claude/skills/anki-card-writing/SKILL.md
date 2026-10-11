@@ -91,7 +91,7 @@ EOF
 ```
 
 - Pass any deck change the user asked for.
-- Every note is tagged `added-by-claude`. Add `"tags": ["books::<Book-Title>"]` when the card comes from one of the user's books, matching their existing tags (e.g. `books::A-Philosophy-Of-Software-Design`).
+- Every note is tagged `added-by-claude::cli` (or `added-by-claude::gui` when opened in Anki's Add window). Add `"tags": ["books::<Book-Title>"]` when the card comes from one of the user's books, matching their existing tags (e.g. `books::A-Philosophy-Of-Software-Design`).
 - Report what was added, or the error. A duplicate error means the card already exists, so tell the user rather than retrying.
 
 ### Reading
