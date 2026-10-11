@@ -124,3 +124,10 @@ stty -ixon
 # if [[ -z "$TMUX_PANE" ]]; then
 #   tmux new-session -A -s dotfiles -c "$HOME/dotfiles"
 # fi
+
+# Tab width: `tabs` sets the terminal tab stops (cat, unpaged output);
+# less expands tabs itself and ignores terminal stops, so set -x too.
+# Only when output goes to a terminal: piped or captured output would otherwise get the escape codes.
+[[ -t 1 ]] && tabs -2
+export LESS="-R -x2"
+
