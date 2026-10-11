@@ -101,10 +101,12 @@ function M.bookmarks(anchorMenubar)
       return "Twilio" .. (active and (" " .. active) or "")
     end,
     group = {
+      c = { name = "Change Account",   action = function() pickAccount(anchorMenubar) end },
+      d = { name = "Debugger",         action = openConsole("debugger/event-logs") },
       l = { name = "Logs",             action = openConsole("messaging-logs/all") },
       t = { name = "Templates",        action = openConsole("templates/messaging/your-templates") },
+      s = { name = "Support Tickets",  action = openConsole("support-center/ticket-history") },
       w = { name = "Whatsapp Senders", action = openConsole("senders-hub/list/whatsapp") },
-      c = { name = "Change Account",   action = function() pickAccount(anchorMenubar) end },
     },
   }
 end
