@@ -15,7 +15,7 @@ Every rule below serves one goal. The card should be simple, unambiguous and rec
 ## Before writing
 
 - **Is it worth a card?** (rule 20) Card concepts, conventions, behaviours and the reasons behind them, meaning things that will change how the user writes or designs code. Skip trivia, anything that takes seconds to look up, and anything obvious to a senior frontend developer.
-- **Is it understood?** (rules 1–2) The card comes after the explanation in the reply, not instead of it. If the reply didn't explain the idea, the card is premature.
+- **Is it understood?** (rules 1–2) The card comes after the explanation in the reply, not instead of it. If the reply didn't explain the idea, the card is premature. This applies to cards about the current work. When the user just asks for a card, skip the explanation and pick a topic they already know well enough to card.
 - **Basics are fine.** (rule 3) A simple foundational fact the user just got wrong is worth carding: cheap to review, costly to forget.
 - **Misconceptions:** card the correct fact, never the wrong belief.
 
@@ -90,8 +90,9 @@ Write the cards with the Write tool to a JSON file in the session's scratchpad d
 [{"deck": "Main::AWS", "cloze": "In AWS SNS→SQS, …", "back": "…", "ref": "https://…"}]
 ```
 
-- **"Add it"**: `python3 ~/.claude/skills/anki-card-writing/anki.py add <scratchpad>/cards.json` adds every card in the file.
-- **"Open it in Anki"**: `python3 ~/.claude/skills/anki-card-writing/anki.py gui <scratchpad>/cards.json` opens a single card in Anki's Add window, where the user edits it and clicks Add. The file must hold exactly one card, so open several cards one at a time, waiting for the user between each.
+- **Default ("add it", "open it", "gui")**: `python3 ~/.claude/skills/anki-card-writing/anki.py gui <scratchpad>/cards.json` opens a single card in Anki's Add window, where the user edits it and clicks Add. The file must hold exactly one card, so open several cards one at a time, waiting for the user between each.
+- **Only when the user says "cli"**: `python3 ~/.claude/skills/anki-card-writing/anki.py add <scratchpad>/cards.json` adds every card in the file directly, without the Add window.
+- After opening or adding cards, reply with only a confirmation line, such as "✔ Opened in Anki" or "✔ Added 2 cards". Don't add anything else: no summary of the card, no explanation of the topic and no reminder to click Add. The user reads the card in Anki.
 - Pass any deck change the user asked for.
 - Every note is tagged `added-by-claude::cli` (or `added-by-claude::gui` when opened in Anki's Add window). Add `"tags": ["books::<Book-Title>"]` when the card comes from one of the user's books, matching their existing tags (e.g. `books::A-Philosophy-Of-Software-Design`).
 - Report what was added, or the error. A duplicate error means the card already exists, so tell the user rather than retrying.
