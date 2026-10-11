@@ -329,7 +329,8 @@ function M.setup(opts)
   local personalBookmarks = {
     a = { name = "a", group = {
       r = { name = "Arbor", url = "https://kensington-primary-academy.uk.arbor.sc/?/guardians/home-ui/dashboard" },
-      m = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
+      z = { name = "Amazon Transactions", url = "https://www.amazon.co.uk/cpe/yourpayments/transactions" },
+      x = { name = "Amex Transactions", url = "https://global.americanexpress.com/activity/recent" },
       l = { name = "Lucia Amazon", action = function()
         hs.execute('open -na "Google Chrome" --args --profile-directory="Profile 1" "https://www.amazon.co.uk/cpe/yourpayments/transactions"')
       end },
