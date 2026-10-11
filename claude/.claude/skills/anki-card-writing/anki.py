@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """The only way Claude talks to Anki: add new notes, or run read-only lookups.
 
-  anki.py add                      reads a JSON list of cards from stdin:
+  anki.py add <cards.json>         adds every card in a JSON file:
       [{"deck": "Main::HTTP", "cloze": "...", "back": "...", "ref": "...", "tags": ["books::..."]}]
-      Only "deck" and "cloze" are required. Every note also gets the "added-by-claude" tag.
-  anki.py gui                      reads a one-card JSON list from stdin and opens it in
-      Anki's Add window, so the user can edit it there and click Add themselves.
-  anki.py read <action> [params]   runs one AnkiConnect action from READ_ONLY_ACTIONS,
-      e.g. anki.py read findNotes '{"query": "tag:added-by-claude"}'
+      Only "deck" and "cloze" are required. Every note also gets the "added-by-claude::cli" tag.
+  anki.py gui <cards.json>         opens a one-card JSON file in Anki's Add window, so the
+      user can edit it there and click Add themselves. The note gets the "added-by-claude::gui" tag.
+  anki.py read <action> [name=value ...]
+      runs one AnkiConnect action from READ_ONLY_ACTIONS. Values that parse as JSON are
+      sent as JSON, anything else as a string, e.g.
+        anki.py read findNotes query="tag:added-by-claude"
+        anki.py read notesInfo notes=[1786808321430]
+
+Cards come from a file rather than the command line so the command stays short and
+plain. Card text full of braces and quotes makes Claude Code ask for approval each time.
 
 Nothing here can change or delete existing notes. Keep it that way: actions that
 edit, delete, move, tag or suspend are deliberately left out of READ_ONLY_ACTIONS.
@@ -65,7 +71,12 @@ def call(action, key, **params):
     return reply["result"]
 
 
-def to_note(card):
+def load_cards(path):
+    with open(path, encoding="utf-8") as file:
+        return json.load(file)
+
+
+def to_note(card, added_via):
     return {
         "deckName": card["deck"],
         "modelName": "Cloze",
@@ -74,17 +85,16 @@ def to_note(card):
             "Back": card.get("back", ""),
             "Ref": card.get("ref", ""),
         },
-        "tags": ["added-by-claude", *card.get("tags", [])],
+        "tags": [f"added-by-claude::{added_via}", *card.get("tags", [])],
     }
 
 
-def add():
-    cards = json.load(sys.stdin)
+def add(cards):
     key = api_key()
     failed = False
     for card in cards:
         try:
-            note_id = call("addNote", key, note=to_note(card))
+            note_id = call("addNote", key, note=to_note(card, "cli"))
             print(f"added {note_id} to {card['deck']}")
         except RuntimeError as error:
             failed = True
@@ -92,22 +102,34 @@ def add():
     sys.exit(1 if failed else 0)
 
 
-def open_in_add_window():
-    cards = json.load(sys.stdin)
+def open_in_add_window(cards):
     if len(cards) != 1:
         sys.exit("gui takes exactly one card: Anki's Add window holds a single note.")
     try:
-        call("guiAddCards", api_key(), note=to_note(cards[0]))
+        call("guiAddCards", api_key(), note=to_note(cards[0], "gui"))
     except RuntimeError as error:
         sys.exit(f"AnkiConnect error: {error}")
     print("opened in Anki's Add window")
 
 
-def read(action, params_json="{}"):
+def parse_params(pairs):
+    params = {}
+    for pair in pairs:
+        name, has_equals, value = pair.partition("=")
+        if not has_equals:
+            sys.exit(f"Expected name=value, got '{pair}'")
+        try:
+            params[name] = json.loads(value)
+        except json.JSONDecodeError:
+            params[name] = value
+    return params
+
+
+def read(action, params):
     if action not in READ_ONLY_ACTIONS:
         sys.exit(f"'{action}' isn't allowed. Read-only actions: {', '.join(sorted(READ_ONLY_ACTIONS))}")
     try:
-        result = call(action, api_key(), **json.loads(params_json))
+        result = call(action, api_key(), **params)
     except RuntimeError as error:
         sys.exit(f"AnkiConnect error: {error}")
     print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -115,14 +137,12 @@ def read(action, params_json="{}"):
 
 def main():
     match sys.argv[1:]:
-        case ["add"]:
-            add()
-        case ["gui"]:
-            open_in_add_window()
-        case ["read", action]:
-            read(action)
-        case ["read", action, params_json]:
-            read(action, params_json)
+        case ["add", path]:
+            add(load_cards(path))
+        case ["gui", path]:
+            open_in_add_window(load_cards(path))
+        case ["read", action, *pairs]:
+            read(action, parse_params(pairs))
         case _:
             sys.exit(__doc__)
 

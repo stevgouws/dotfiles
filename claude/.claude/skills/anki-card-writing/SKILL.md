@@ -82,25 +82,27 @@ Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-del
 
 ### Adding
 
-Show the cards first. Add them only when the user asks ("add it", "add both"), since added cards skip their review. Then pipe them as JSON to `anki.py add`, using a quoted heredoc so the shell leaves quotes and HTML alone:
+Show the cards first. Add them only when the user asks, since added cards skip their review.
 
-```sh
-python3 ~/.claude/skills/anki-card-writing/anki.py add <<'EOF'
+Write the cards with the Write tool to a JSON file in the session's scratchpad directory, then pass the file's path to the script. Never put card text in the command itself: its braces and quotes make Claude Code ask the user to approve every run.
+
+```json
 [{"deck": "Main::AWS", "cloze": "In AWS SNS→SQS, …", "back": "…", "ref": "https://…"}]
-EOF
 ```
 
+- **"Add it"**: `python3 ~/.claude/skills/anki-card-writing/anki.py add <scratchpad>/cards.json` adds every card in the file.
+- **"Open it in Anki"**: `python3 ~/.claude/skills/anki-card-writing/anki.py gui <scratchpad>/cards.json` opens a single card in Anki's Add window, where the user edits it and clicks Add. The file must hold exactly one card, so open several cards one at a time, waiting for the user between each.
 - Pass any deck change the user asked for.
 - Every note is tagged `added-by-claude::cli` (or `added-by-claude::gui` when opened in Anki's Add window). Add `"tags": ["books::<Book-Title>"]` when the card comes from one of the user's books, matching their existing tags (e.g. `books::A-Philosophy-Of-Software-Design`).
 - Report what was added, or the error. A duplicate error means the card already exists, so tell the user rather than retrying.
 
 ### Reading
 
-`anki.py read <action> [params-json]` runs one read-only AnkiConnect action, e.g. to list decks or check whether a similar card already exists:
+`anki.py read <action> [name=value ...]` runs one read-only AnkiConnect action, e.g. to list decks or check whether a similar card already exists. Values that parse as JSON are sent as JSON, anything else as a string:
 
 ```sh
-python3 ~/.claude/skills/anki-card-writing/anki.py read findNotes '{"query": "deck:Main::HTTP encode"}'
-python3 ~/.claude/skills/anki-card-writing/anki.py read notesInfo '{"notes": [1786808321430]}'
+python3 ~/.claude/skills/anki-card-writing/anki.py read findNotes query="deck:Main::HTTP encode"
+python3 ~/.claude/skills/anki-card-writing/anki.py read notesInfo notes=[1786808321430]
 ```
 
 Running it with an action that isn't allowed prints the allowed list.
