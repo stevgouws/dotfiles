@@ -5,3 +5,6 @@ logs/
 !/.tmux-setup.sh
 # Machine-local Twilio account SIDs, read by hammerspoon/bookmarks-twilio.lua
 hammerspoon/.config/hammerspoon/twilio_sids.lua
+# Synced and managed by Claude Code from the claude.ai account
+claude/.claude/skills/synced/
+claude/.claude/skills/.trash/
