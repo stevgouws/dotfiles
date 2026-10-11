@@ -50,11 +50,19 @@ Write comments for the next reader of the code, not for the person who asked for
 - Do not restate what the code visibly does (`// increment counter`, `# loop over users`).
 - Do not record conversation context, task history, or the fact that something was changed (`// added per request`, `// updated to fix bug`, `// previously used X`). That belongs in the commit message or PR.
 - Do not describe past state unless it is still relevant to understanding the current code, e.g. a workaround that must stay until an upstream fix lands.
+- A gotcha belongs in a comment only if someone could still hit it with the current code. If the code already handles it, say why the code does what it does, not what went wrong without it. Test: would the comment make sense to someone who never saw the old version?
 - When editing existing code, remove or update comments that your change has made stale.
+- If I have edited a comment you wrote, keep my wording. Do not revert it to your earlier version on a later change. If you think my comment is incorrect, vague, or misleading, ask me about it rather than rewriting it.
 
 ### Style
 
-- Write in plain language that someone new to the topic understands on first read. Avoid jargon, spec or protocol terms and insider shorthand unless the comment explains them.
+- Write in plain language that someone new to the topic understands on first read. Avoid jargon, spec or protocol terms and insider shorthand unless the comment explains them. Common programming terms every developer knows (TTL, cache, retry, timeout, HMAC) are fine as is.
 - Explain the effect in everyday terms, with a concrete example where it helps, rather than describing the mechanism.
 - Keep comments short, but never so terse they need decoding. Understandable beats compact.
 - If code needs a long comment to be understood, prefer making the code clearer first: small well-named helpers and descriptive variable names, then a brief comment for whatever is still non-obvious.
+- Describe a reusable unit (class, module, helper) in terms of what it does, not who currently calls it. Mention a caller only as an example ("e.g. ...") when it explains a design choice, so the comment stays true if the unit is reused elsewhere.
+- When editing existing code, remove or update comments that your change has made stale.
+
+## Git
+
+Never stage or commit unless explicitly asked. I stage changes myself as I go, so the unstaged diff in my editor is always exactly your latest work and is easy to review. Running `git add` would mix your changes into what I have already reviewed.

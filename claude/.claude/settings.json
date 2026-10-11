@@ -2,12 +2,17 @@
   "permissions": {
     "defaultMode": "auto",
     "blockReadsOutsideWorkingDirectories": true,
-    "additionalDirectories": ["/Users/stevgouws/dotfiles/claude/.claude/skills"],
+    "additionalDirectories": [
+      "/Users/stevgouws/dotfiles/claude/.claude/skills"
+    ],
     "deny": [
       "Bash(security find-generic-password:*)",
       "Edit(~/dotfiles/claude/.claude/skills/anki-card-writing/anki.py)",
       "Edit(~/.claude/skills/anki-card-writing/anki.py)"
     ]
+  },
+  "network": {
+    "allowedDomains": ["api.github.com", "github.com"]
   },
   "worktree": {
     "baseRef": "fresh"
