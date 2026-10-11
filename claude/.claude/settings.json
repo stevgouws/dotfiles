@@ -1,8 +1,18 @@
 {
-  "model": "claude-fable-5-1[1m]",
-  "sandbox": {
-    "enabled": true
+  "permissions": {
+    "defaultMode": "auto",
+    "blockReadsOutsideWorkingDirectories": true,
+    "additionalDirectories": ["/Users/stevgouws/dotfiles/claude/.claude/skills"],
+    "deny": [
+      "Bash(security find-generic-password:*)",
+      "Edit(~/dotfiles/claude/.claude/skills/anki-card-writing/anki.py)",
+      "Edit(~/.claude/skills/anki-card-writing/anki.py)"
+    ]
+  },
+  "worktree": {
+    "baseRef": "fresh"
   },
   "effortLevel": "medium",
-  "theme": "auto"
+  "theme": "dark",
+  "editorMode": "normal"
 }
