@@ -162,6 +162,19 @@ matches:
   - regex: \bx;
     replace: "❌"
 
+  - trigger: "bern;"
+    image_path: "/Users/steven.gouws/fp.png"
+
+  - trigger: "srv;"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: choice
+        params:
+          values:
+            - "`comms-svc"
+            - "`onboarding-svc"
+
   - trigger: ":quote"
     replace: "{{output}}"
     vars:
