@@ -56,6 +56,14 @@ Never cloze an unordered list (e.g. the fields of a message as `c1`–`c5`). Car
 - When either would do, card the stable concept rather than the volatile number.
 - Docs links go in the Ref field, never in the card text.
 
+### Keyboard shortcuts
+Keep them terse: the shortcut as `c1` in `<code>`, written as plain lowercase text (`cmd+up`, not `⌘↑`), and the action as `c2`. Leave out hints and qualifiers. Tag the note `keyboard-shortcuts::<app>`, e.g. `keyboard-shortcuts::slack`.
+
+```
+Deck: Main::Default
+In Slack, <code>{{c1::cmd+up}}</code>&nbsp;is to {{c2::edit previous message}}
+```
+
 ## Format
 
 Write a line `**Anki**`, then each card in its own fenced code block. Use one line per field, named after the fields of the user's `Cloze` note type:
@@ -67,11 +75,45 @@ Back: Without it, the body is JSON with <code>Message</code>, <code>MessageId</c
 Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-delivery.html
 ```
 
-- **Deck** is the closest existing topic subdeck under `Main::` (e.g. `Main::AWS`, `Main::HTTP`, `Main::Javascript::Typescript`, `Main::System Design`). Use `Main::Default` when nothing fits. Never invent a deck; if unsure what exists, run `anki.py read deckNames`.
+- **Deck** is the closest topic subdeck from [Decks](#decks). Use `Main::Default` when nothing fits. Never invent a deck. If none fits, run `anki.py read deckNames` first in case the user has added one since the list was written.
 - The line after Deck is the **Cloze** field. **Back** and **Ref** are optional; leave out any line with nothing useful in it.
 - The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`. Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
 - **Back** holds one short thing worth reading after grading: a tiny code example, the reason, or a caveat.
 - **Ref** holds a docs URL, or a book name with chapter or item.
+
+### Decks
+
+The `Main::` topic subdecks, as of October 2026. Other top-level decks (`Personal`, `Zoe`, `Suspended`, `x_…`) aren't for cards written here.
+
+```
+Main::.NET, Main::Accessibility, Main::AI, Main::Alerting & Monitoring,
+Main::Applescript, Main::ArgoCD, Main::AWS, Main::Bash, Main::C#,
+Main::Command Line, Main::Computer Science, Main::CSS, Main::Data Processing,
+Main::Default, Main::Design, Main::Design Patterns, Main::Docker, Main::Figma,
+Main::Fika, Main::Firebase, Main::Git, Main::Google Optimize,
+Main::Google Sheets, Main::HTML, Main::HTTP, Main::Java, Main::Javascript,
+Main::Javascript::Jasmine, Main::Javascript::Jest, Main::Javascript::NodeJS,
+Main::Javascript::Playwright, Main::Javascript::React,
+Main::Javascript::React::Next.js, Main::Javascript::React::React Native,
+Main::Javascript::React::React Testing Library,
+Main::Javascript::React::Tanstack Query, Main::Javascript::Typescript,
+Main::Javascript::Vitest, Main::Kubernetes, Main::Language Comparisons,
+Main::Linux, Main::MUI, Main::Networking, Main::Personal, Main::Python,
+Main::Regex, Main::Security, Main::Software Design and Architecture, Main::SQL,
+Main::SQL::Drizzle, Main::SQL::PostgreSQL, Main::System Design, Main::Testing,
+Main::tmux, Main::Vim, Main::VoxSmart, Main::Windows, Main::Wordpress,
+Main::Zitadel
+```
+
+### Tags
+
+Add only these two kinds of tag; the user adds any others in Anki. Tags are freeform, so a misspelt tag silently starts a new one rather than failing.
+
+- `books::<Book-Title>` for cards from one of the user's books. The spellings are inconsistent, so copy them exactly:
+  `books::A-Philosophy-Of-Software-Design`, `books::Building-Microservices-2nd-Edition`, `books::Designing-Data-Intensive-Applications`, `books::Effective-Shell`, `books::Effective-TypeScript`, `books::head-first-java`, `books::LearnDockerInaMonthOfLunches`, `books::Linux-Command-Line-And-Shell-Scripting-Bible-v4`, `books::NodeJS-The-Comprehensive_Guide_To_Server_Side_JavaScript_Programming`, `books::Practical-VIM`, `books::React-Application-Architecture-For-Production`, `books::the-design-of-web-apis`, `books::The-Pragmatic-Programmer-2nd-Edition`, `books::tmux3_Productive_Mouse_Free_Development`, `books::web-application-security-2nd-edition`
+- `keyboard-shortcuts::<app>`, lowercase and hyphenated (e.g. `keyboard-shortcuts::slack`, `keyboard-shortcuts::cleanshot-x`).
+
+For a book not listed here, or an app whose shortcut tag you have not seen, run `anki.py read getTags` and match the existing spelling before inventing a tag.
 
 ## Talking to Anki
 
@@ -94,7 +136,7 @@ Write the cards with the Write tool to a JSON file in the session's scratchpad d
 - **Only when the user says "cli"**: `python3 ~/.claude/skills/anki-card-writing/anki.py add <scratchpad>/cards.json` adds every card in the file directly, without the Add window.
 - After opening or adding cards, reply with only a confirmation line, such as "✔ Opened in Anki" or "✔ Added 2 cards". Don't add anything else: no summary of the card, no explanation of the topic and no reminder to click Add. The user reads the card in Anki.
 - Pass any deck change the user asked for.
-- Every note is tagged `added-by-claude::cli` (or `added-by-claude::gui` when opened in Anki's Add window). Add `"tags": ["books::<Book-Title>"]` when the card comes from one of the user's books, matching their existing tags (e.g. `books::A-Philosophy-Of-Software-Design`).
+- Every note is tagged `added-by-claude::cli` (or `added-by-claude::gui` when opened in Anki's Add window). Add any further tags from [Tags](#tags) as `"tags": [...]`.
 - Report what was added, or the error. A duplicate error means the card already exists, so tell the user rather than retrying.
 
 ### Reading
