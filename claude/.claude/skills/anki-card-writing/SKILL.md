@@ -87,6 +87,7 @@ Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-del
 - The line after Deck is the **Cloze** field. **Back** and **Ref** are optional; leave out any line with nothing useful in it.
 - The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`. Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
 - **Back** holds one short thing worth reading after grading: a tiny code example, the reason, or a caveat.
+- **Showing output in a code example:** put the output on the same line as the code, after the language's comment marker (`#` for shell, `//` for JS/TS), not after an arrow: `<code>printf 'a\nb\na\n' | uniq # a b a</code>`.
 - **Ref** holds a docs URL, or a book name with chapter or item, that the card's fact comes from directly.
 
 ### Decks
@@ -171,7 +172,7 @@ Back: <code>cmd 2&gt;&amp;1 | …</code> pipes both.
 ```
 ```
 In TypeScript, {{c2::numeric}} enums create a {{c1::reverse mapping}} at runtime.
-Back: <code>enum E { A, B }</code> → <code>Object.values(E)</code> is <code>["A", "B", 0, 1]</code>
+Back: <code>enum E { A, B }<br>Object.values(E) // ["A", "B", 0, 1]</code>
 ```
 
 ### Bad → fixed
