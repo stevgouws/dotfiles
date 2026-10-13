@@ -28,8 +28,9 @@ URL:
 ---
 ## Waiting for
 
-- [ ] **<what>** #waiting-for <who or which ticket/PR, with link>
-	- <details>
+- [ ] **<short title>** #waiting-for <who or which ticket/PR, with link> to <do what>.
+	- <what we'll do once it's unblocked, and why it matters>
+	- <precedent, file paths, values, questions to ask>
 
 ## Todo
 
@@ -62,6 +63,13 @@ URL:
 ### Section rules
 
 - **Waiting for:** blockers owned by someone else. Tag each with `#waiting-for` and link the PR or ticket. Remove an item once it's resolved, and move any lasting outcome into Decided.
+  - Keep the top line to one short sentence: a bold title, the tag, and who or what we're waiting on (e.g. `- [ ] **CSV download route** #waiting-for Istvan to confirm the route.`). Put all detail in nested bullets underneath, so the item collapses to that one line in Obsidian.
+  - Example:
+
+    ```markdown
+    - [ ] **Permission check on the connectivity endpoint** #waiting-for [PR #202](https://github.com/VoxSmartLtd/vsp/pull/202) merged.
+    	- Then make `UserConnectivityReportServlet` only answer users with `connectivity` / `access_screen`, e.g. by returning `UiSection.CONNECTIVITY` from `getUiSection()` like `UserListServlet`. Without it, anyone logged in can call the endpoint.
+    ```
 - **Todo:** checkbox tasks grouped under `###` headings. Include the file paths, existing code to copy and open questions needed to pick the task up cold. Don't tick a task when you finish the code: the user reviews and commits it first, and ticks it or asks you to.
 - **Before release:** must happen before the feature ships, but isn't building the feature.
 - **Mention on PR:** things a reviewer should know that aren't obvious from the diff, especially changes to shared code outside the ticket's scope (e.g. a fix to a shared table component). One or two short sentences each: what changed and why. Checkboxes, ticked once it's in the PR description.
