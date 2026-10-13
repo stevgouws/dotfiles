@@ -39,7 +39,9 @@ Every rule below serves one goal. The card should be simple, unambiguous and rec
 - The rest of the sentence must not give the answer away.
 
 ### Only one answer fits (rules 11, 16)
-- Open with a short context phrase, as the user's deck does: "In the shell,", "In TypeScript,", "In AWS SNS/SQS,", "In PostgreSQL,". The card is reviewed alone, in a mixed deck.
+- Open with a short context phrase, as the user's deck does: "In TypeScript,", "In AWS SNS/SQS,", "In PostgreSQL,". The card is reviewed alone, in a mixed deck.
+- Skip the context phrase for shell commands. A card that starts with the command is clear without "In the shell,":
+  `<code>cp {{c1::-n}}</code> is to {{c2::not overwrite if exists}}`
 - Read the sentence with the blank. Could another reasonable answer fit? If so, add a qualifier until only one does.
 
 ### Optimise wording (rules 12–13)
@@ -51,10 +53,16 @@ Every rule below serves one goal. The card should be simple, unambiguous and rec
 ### Lists (rules 9–10)
 Never cloze an unordered list (e.g. the fields of a message as `c1`–`c5`). Card the one member that matters, or list the members in Back as reference, not as recall.
 
+### Shell commands: macOS and Linux
+The user works on macOS, which has BSD versions of tools like `cp`, `sed` and `date`, and sometimes on Linux servers, which have GNU versions. Their flags and wording differ.
+- Check the macOS man page (`man <cmd>`) before writing the card, and use the names and behaviour it describes.
+- Card what works on both where possible. When something exists on only one, say which in Back, e.g. "<code>--no-clobber</code> long form only on GNU".
+
 ### Volatile facts and sources (rules 18–19)
 - Limits, defaults, quotas, pricing and versions change. Stamp them outside the cloze: "(2025)", "(Node 22)".
 - When either would do, card the stable concept rather than the volatile number.
 - Docs links go in the Ref field, never in the card text.
+- Only cite a source the card's fact comes from directly. If the wording or detail came from elsewhere (e.g. a GNU-only name on a card citing the macOS man page), leave Ref out rather than cite something that doesn't say it.
 
 ### Keyboard shortcuts
 Keep them terse: the shortcut as `c1` in `<code>`, written as plain lowercase text (`cmd+up`, not `⌘↑`), and the action as `c2`. Leave out hints and qualifiers. Tag the note `keyboard-shortcuts::<app>`, e.g. `keyboard-shortcuts::slack`.
@@ -79,7 +87,7 @@ Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-del
 - The line after Deck is the **Cloze** field. **Back** and **Ref** are optional; leave out any line with nothing useful in it.
 - The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`. Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
 - **Back** holds one short thing worth reading after grading: a tiny code example, the reason, or a caveat.
-- **Ref** holds a docs URL, or a book name with chapter or item.
+- **Ref** holds a docs URL, or a book name with chapter or item, that the card's fact comes from directly.
 
 ### Decks
 
@@ -154,7 +162,7 @@ Running it with an action that isn't allowed prints the allowed list.
 
 ### Good
 ```
-In the shell, {{c1::<code>uniq</code>}} filters out duplicate lines.
+{{c1::<code>uniq</code>}} filters out duplicate lines.
 Back: Only <i>adjacent</i> duplicates, hence <code>sort | uniq</code>.
 ```
 ```
@@ -182,7 +190,8 @@ Back: <code>enum E { A, B }</code> → <code>Object.values(E)</code> is <code>["
 - [ ] Each cloze tests one fact, with the shortest possible answer?
 - [ ] At most `c1` and `c2`, with no list split into clozes?
 - [ ] Key term clozed, not a filler or yes/no word?
-- [ ] Opens with a context phrase, and only one answer fits?
+- [ ] Opens with a context phrase (not needed for shell commands), and only one answer fits?
+- [ ] Shell command checked against the macOS man page, with GNU/BSD differences in Back?
 - [ ] Fresh, short sentence rather than a pasted passage?
 - [ ] HTML (not markdown), `<code>` on identifiers, special characters escaped?
-- [ ] Volatile facts stamped; docs link in Ref?
+- [ ] Volatile facts stamped; Ref only if the fact comes straight from it?
