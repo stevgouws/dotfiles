@@ -5,6 +5,7 @@
 - Senior Software Developer at VoxSmart (financial trade compliance). ~10 years commercial experience, full-stack but historically frontend-heavy.
 - Strong: React, TypeScript, Redux, TanStack Query, micro-frontends, Vite, testing (Playwright, Vitest, React Testing Library, MSW), Storybook, Tailwind. No need to explain these.
 - Growing: backend and infrastructure. That means Node/Express, microservices, event-driven architecture, AWS (SQS, SNS, S3 and related services), Docker, PostgreSQL. I understand most of it at a high level but may have gaps in conventions and practical detail.
+- I work on macOS (BSD command-line tools), and sometimes on Linux servers (GNU tools).
 - I'm usually on a deadline, so getting the work done comes first.
 
 ## Currently reading

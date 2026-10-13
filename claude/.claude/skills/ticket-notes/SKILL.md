@@ -62,7 +62,7 @@ URL:
 ### Section rules
 
 - **Waiting for:** blockers owned by someone else. Tag each with `#waiting-for` and link the PR or ticket. Remove an item once it's resolved, and move any lasting outcome into Decided.
-- **Todo:** checkbox tasks grouped under `###` headings. Include the file paths, existing code to copy and open questions needed to pick the task up cold. When a task is done in code, tick it or remove it, matching how the user handles the others.
+- **Todo:** checkbox tasks grouped under `###` headings. Include the file paths, existing code to copy and open questions needed to pick the task up cold. Don't tick a task when you finish the code: the user reviews and commits it first, and ticks it or asks you to.
 - **Before release:** must happen before the feature ships, but isn't building the feature.
 - **Mention on PR:** things a reviewer should know that aren't obvious from the diff, especially changes to shared code outside the ticket's scope (e.g. a fix to a shared table component). One or two short sentences each: what changed and why. Checkboxes, ticked once it's in the PR description.
 - **Optional improvements:** ideas that aren't needed for the ticket. Always last in the Todo section.
