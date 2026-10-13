@@ -62,7 +62,7 @@ URL:
 
 ### Section rules
 
-- **Waiting for:** blockers owned by someone else. Tag each with `#waiting-for` and link the PR or ticket. Remove an item once it's resolved, and move any lasting outcome into Decided.
+- **Waiting for:** blockers owned by someone else. Tag each with `#waiting-for` and link the PR or ticket. Once an item is resolved, don't tick it: remove it, and move any lasting outcome into Decided.
   - Keep the top line to one short sentence: a bold title, the tag, and who or what we're waiting on (e.g. `- [ ] **CSV download route** #waiting-for Istvan to confirm the route.`). Put all detail in nested bullets underneath, so the item collapses to that one line in Obsidian.
   - Example:
 
