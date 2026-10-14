@@ -12,5 +12,6 @@ tmux new-window -t "=${SESSION}:3" -n claude "claude"
 tmux new-window -t "=${SESSION}:4" -n zsh
 tmux new-window -t "=${SESSION}:5" -n e2e
 
-tmux split-window -h -t "=${SESSION}:3"
+tmux split-window -h -t "=${SESSION}:3" -c "$ROOT"
+tmux select-pane -t "=${SESSION}:3.1"
 tmux select-window -t "=${SESSION}:1"
