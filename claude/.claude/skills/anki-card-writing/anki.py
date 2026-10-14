@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """The only way Claude talks to Anki: add new notes, or run read-only lookups.
 
-  anki.py add <cards.json>         adds every card in a JSON file:
-      [{"deck": "Main::HTTP", "cloze": "...", "back": "...", "ref": "...", "tags": ["books::..."]}]
-      Only "deck" and "cloze" are required. Every note also gets the "added-by-claude::cli" tag.
+  anki.py add <cards.json>         adds every card in a JSON file. Each card picks its note
+      type with "type" (default "cloze"):
+        {"deck": "Main::HTTP", "cloze": "...", "back": "...", "ref": "...", "tags": ["books::..."]}
+        {"type": "log", "deck": "Main::Javascript", "question": "...", "answer": "...", "back": "...", "ref": "..."}
+      "deck" and the type's main fields are required ("cloze", or "question" and "answer").
+      Every note also gets the "added-by-claude::cli" tag.
   anki.py gui <cards.json>         opens a one-card JSON file in Anki's Add window, so the
       user can edit it there and click Add themselves. The note gets the "added-by-claude::gui" tag.
   anki.py read <action> [name=value ...]
@@ -46,6 +49,21 @@ READ_ONLY_ACTIONS = {
     "cardsToNotes",
 }
 
+# The note types cards can be added as. For each: the Anki note type's name, and which card
+# key fills which of its fields. Keys listed in "required" must be in the card.
+NOTE_TYPES = {
+    "cloze": {
+        "model": "Cloze",
+        "fields": {"Cloze": "cloze", "Back": "back", "Ref": "ref"},
+        "required": ["cloze"],
+    },
+    "log": {
+        "model": "What does this log out?",
+        "fields": {"Code_Question": "question", "Code_Answer": "answer", "Back": "back", "Ref": "ref"},
+        "required": ["question", "answer"],
+    },
+}
+
 
 def api_key():
     result = subprocess.run(
@@ -73,20 +91,30 @@ def call(action, key, **params):
 
 def load_cards(path):
     with open(path, encoding="utf-8") as file:
-        return json.load(file)
+        cards = json.load(file)
+    for card in cards:
+        note_type = NOTE_TYPES.get(card.get("type", "cloze"))
+        if note_type is None:
+            sys.exit(f"Unknown card type '{card['type']}'. Types: {', '.join(NOTE_TYPES)}")
+        missing = [key for key in ["deck", *note_type["required"]] if not card.get(key)]
+        if missing:
+            sys.exit(f"Card is missing {', '.join(missing)}: {json.dumps(card, ensure_ascii=False)}")
+    return cards
 
 
 def to_note(card, added_via):
+    note_type = NOTE_TYPES[card.get("type", "cloze")]
     return {
         "deckName": card["deck"],
-        "modelName": "Cloze",
-        "fields": {
-            "Cloze": card["cloze"],
-            "Back": card.get("back", ""),
-            "Ref": card.get("ref", ""),
-        },
+        "modelName": note_type["model"],
+        "fields": {field: card.get(key, "") for field, key in note_type["fields"].items()},
         "tags": [f"added-by-claude::{added_via}", *card.get("tags", [])],
     }
+
+
+def summary(card):
+    note_type = NOTE_TYPES[card.get("type", "cloze")]
+    return card[note_type["required"][0]]
 
 
 def add(cards):
@@ -98,7 +126,7 @@ def add(cards):
             print(f"added {note_id} to {card['deck']}")
         except RuntimeError as error:
             failed = True
-            print(f"failed ({card['deck']}): {error}\n  {card['cloze']}")
+            print(f"failed ({card['deck']}): {error}\n  {summary(card)}")
     sys.exit(1 if failed else 0)
 
 
