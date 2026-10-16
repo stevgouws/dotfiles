@@ -77,6 +77,23 @@ URL:
 - **Decided:** settled decisions, so they aren't reopened. Name who decided where known. When a decision changes, update it in place rather than adding a contradicting one.
 - **Dated sections:** meeting notes and research findings, headed `## YYYY-MM-DD - <topic>` with an absolute date, newest first, after Decided. Keep them as a record; don't rewrite them when things change later, update Decided or Todo instead.
 
+### Tagging people
+
+- When a task involves someone (to discuss with them, ask them, or hand to them), tag them inline where their name falls in the sentence: `- [ ] Discuss with #Istvan before finishing:`. Don't add the tag as an extra word at the end of the line.
+- Use only these tags:
+
+  | Tag | Person |
+  |---|---|
+  | `#Istvan` | Istvan Karady |
+  | `#DJ` | Daniel Joyce |
+  | `#Stu` | Stu Park |
+  | `#SteveB` | Steve Blything |
+  | `#DM` | Dan Mudd |
+  | `#Bernardo` | Bernardo Abreu |
+
+- For anyone else, write their name without a tag and ask the user whether to add a tag for them. Don't make one up: Obsidian tags are freeform, so a new spelling silently starts a separate tag.
+- This is separate from `#waiting-for` on Waiting for items, which stays as it is.
+
 ## Tech-debt notes
 
 "Log it as tech-debt" (or similar) means: create a new note in the tickets folder for a problem found while working on something else, with no Jira ticket yet.
