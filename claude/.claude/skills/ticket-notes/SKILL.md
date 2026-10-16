@@ -1,6 +1,6 @@
 ---
 name: ticket-notes
-description: Structure and update the user's per-ticket markdown notes (todos, decisions, waiting-for items, PR notes, meeting notes). Use when asked to add a todo, decision, or "mention on PR" item to a ticket note, create a note for a ticket, or when the user refers to "the ticket", "the note", "Obsidian", "in Obsidian" or an Obsidian file.
+description: Structure and update the user's per-ticket markdown notes (todos, decisions, waiting-for items, PR notes, meeting notes). Use when asked to add a todo, decision, or "mention on PR" item to a ticket note, create a note for a ticket, log something as tech debt ("log it as tech-debt", "add a tech-debt ticket"), add screenshots to a note, or when the user refers to "the ticket", "the note", "Obsidian", "in Obsidian" or an Obsidian file.
 ---
 
 # Ticket notes
@@ -76,6 +76,32 @@ URL:
 - **Optional improvements:** ideas that aren't needed for the ticket. Always last in the Todo section.
 - **Decided:** settled decisions, so they aren't reopened. Name who decided where known. When a decision changes, update it in place rather than adding a contradicting one.
 - **Dated sections:** meeting notes and research findings, headed `## YYYY-MM-DD - <topic>` with an absolute date, newest first, after Decided. Keep them as a record; don't rewrite them when things change later, update Decided or Todo instead.
+
+## Tech-debt notes
+
+"Log it as tech-debt" (or similar) means: create a new note in the tickets folder for a problem found while working on something else, with no Jira ticket yet.
+
+- Name it `<PROJECT>- - <short title>.md`, leaving the key blank until a Jira ticket exists (e.g. `SRC- - Fall back to English for missing VSP translations.md`). Take the project from the current ticket.
+- Add `tech-debt` to the tags and leave `URL` empty:
+
+  ```markdown
+  ---
+  tags:
+    - ticket
+    - tech-debt
+  URL:
+    -
+  ---
+  ```
+- Start with a short intro, before any section: the problem in one or two sentences, then where it was found (linked ticket or PR, and the date), then the evidence as bullets (file paths, counts, examples). It should make the case for the work to someone who wasn't there.
+- Then the usual sections from [Structure](#structure), typically Waiting for (e.g. someone deciding whether it's worth doing) and Todo (the proposed fix, its trade-offs, and any cleanup it allows).
+- If the current ticket's note mentions the problem, link the new note from it only when asked.
+
+## Screenshots
+
+- Copy the image into `~/obsidian-sync/VoxSmart/_assets/` with a descriptive name, prefixed with the date (e.g. `2026-10-16 missing-translations-widget-menu-zh.png`). Use `cp -n` so an existing file isn't overwritten.
+- Embed it with `![[<file name>]]` next to the text it supports. Add `|400` for tall or narrow images, e.g. `![[<file name>|400]]`.
+- Update the text the screenshot proves, e.g. change "not yet confirmed" to "confirmed in the browser" with the date.
 
 ## Writing style
 
