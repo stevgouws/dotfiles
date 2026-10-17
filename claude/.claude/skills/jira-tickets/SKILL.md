@@ -33,5 +33,5 @@ The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassi
 
 ## After creating
 
-- Report each new ticket's key as a link, and what was set (assignee, status, sprint).
+- Report each new ticket with its key and full URL written out in plain text, e.g. `SRC-2507: https://voxsmart.atlassian.net/browse/SRC-2507`, and what was set (assignee, status, sprint). A markdown link like `[SRC-2507](…)` hides the URL in the terminal.
 - If there's a ticket note for the parent (see the `ticket-notes` skill), update its todo to link the new tickets instead of describing the work again.
