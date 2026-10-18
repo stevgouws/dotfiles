@@ -33,15 +33,16 @@ Every rule below serves one goal. The card should be simple, unambiguous and rec
   `In SQS, the {{c1::visibility timeout}} is how long a received message stays {{c2::hidden from other consumers}}.`
 - **Paired contrast:** give both halves the same number so they're recalled together:
   `JavaScript default parameters are evaluated when the function is {{c1::called}}, not when it's {{c1::defined}}.`
-- At most two cloze numbers per note. Never one number per list item.
+- At most three cloze numbers per note. Never one number per list item.
 - Don't cloze "not", "always", "never" or anything with a yes/no answer. Rephrase the fact positively.
 - Add a hint when the type of answer is unclear: `{{c1::30 seconds::duration}}`.
 - The rest of the sentence must not give the answer away.
 
 ### Only one answer fits (rules 11, 16)
 - Open with a short context phrase, as the user's deck does: "In TypeScript,", "In AWS SNS/SQS,", "In PostgreSQL,". The card is reviewed alone, in a mixed deck.
-- Skip the context phrase for shell commands. A card that starts with the command is clear without "In the shell,":
+- Skip the context phrase for shell commands, including `git`. A card that starts with the command is clear without "In the shell," or "In Git,":
   `<code>cp {{c1::-n}}</code> is to {{c2::not overwrite if exists}}`
+  `<code>git stash push &lt;path&gt;</code> still stashes {{c1::all staged files}}.`
 - Read the sentence with the blank. Could another reasonable answer fit? If so, add a qualifier until only one does.
 
 ### Optimise wording (rules 12–13)
@@ -189,9 +190,9 @@ Back: <code>enum E { A, B }<br>Object.values(E) // ["A", "B", 0, 1]</code>
 
 - [ ] Worth remembering, and explained in the reply?
 - [ ] Each cloze tests one fact, with the shortest possible answer?
-- [ ] At most `c1` and `c2`, with no list split into clozes?
+- [ ] At most `c1` to `c3`, with no list split into clozes?
 - [ ] Key term clozed, not a filler or yes/no word?
-- [ ] Opens with a context phrase (not needed for shell commands), and only one answer fits?
+- [ ] Opens with a context phrase (not needed for shell or `git` commands), and only one answer fits?
 - [ ] Shell command checked against the macOS man page, with GNU/BSD differences in Back?
 - [ ] Fresh, short sentence rather than a pasted passage?
 - [ ] HTML (not markdown), `<code>` on identifiers, special characters escaped?
