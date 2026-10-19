@@ -86,7 +86,7 @@ Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-del
 
 - **Deck** is the closest topic subdeck from [Decks](#decks). Use `Main::Default` when nothing fits. Never invent a deck. If none fits, run `anki.py read deckNames` first in case the user has added one since the list was written.
 - The line after Deck is the **Cloze** field. **Back** and **Ref** are optional; leave out any line with nothing useful in it.
-- The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`. Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
+- The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`, and also the names of repos, services and internal systems (e.g. `<code>VSP</code>`, `<code>vs-vsp-chart</code>`, `<code>live-gitops</code>`). Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
 - **Back** holds one short thing worth reading after grading: a tiny code example, the reason, or a caveat.
 - **Showing output in a code example:** put the output on the same line as the code, after the language's comment marker (`#` for shell, `//` for JS/TS), not after an arrow: `<code>printf 'a\nb\na\n' | uniq # a b a</code>`.
 - **Ref** holds a docs URL, or a book name with chapter or item, that the card's fact comes from directly.
@@ -160,6 +160,15 @@ python3 ~/.claude/skills/anki-card-writing/anki.py read notesInfo notes=[1786808
 
 Running it with an action that isn't allowed prints the allowed list.
 
+#### Keep requests to a minimum
+
+Every `anki.py` run asks the user for a password, so make as few as possible.
+
+- **Don't look for duplicates by default.** If a card already exists, the user will usually recognise it. Only search when they ask, or when you need something from Anki to do the task (e.g. an exact tag spelling or a deck added since the list above).
+- **When you do need to read, do it in one go:** one `findNotes` with every term joined by `or` (e.g. `query="helm or argocd or \"feature flag\""`), then one `notesInfo` with all the IDs it returns. Print every non-empty field, since notes use different field names (`Cloze`, `Text`, `Front`), and reading only one shows some notes as blank.
+- **Never re-run a request just to see more of its result.** Get everything you need the first time.
+- **If Anki is slow, wait** for that request to finish instead of moving on and asking again later. If it can't be reached, say so and carry on without it. It likely means the user hasn't typed the password yet.
+
 ## Examples
 
 ### Good
@@ -195,5 +204,5 @@ Back: <code>enum E { A, B }<br>Object.values(E) // ["A", "B", 0, 1]</code>
 - [ ] Opens with a context phrase (not needed for shell or `git` commands), and only one answer fits?
 - [ ] Shell command checked against the macOS man page, with GNU/BSD differences in Back?
 - [ ] Fresh, short sentence rather than a pasted passage?
-- [ ] HTML (not markdown), `<code>` on identifiers, special characters escaped?
+- [ ] HTML (not markdown), `<code>` on identifiers and repo/service names, special characters escaped?
 - [ ] Volatile facts stamped; Ref only if the fact comes straight from it?
