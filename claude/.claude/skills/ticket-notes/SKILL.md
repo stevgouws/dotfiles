@@ -90,6 +90,7 @@ URL:
   | `#SteveB` | Steve Blything |
   | `#DM` | Dan Mudd |
   | `#Bernardo` | Bernardo Abreu |
+  | `#Gustavo` | Gustavo |
 
 - For anyone else, write their name without a tag and ask the user whether to add a tag for them. Don't make one up: Obsidian tags are freeform, so a new spelling silently starts a separate tag.
 - This is separate from `#waiting-for` on Waiting for items, which stays as it is.
