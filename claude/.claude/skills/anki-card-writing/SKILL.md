@@ -59,6 +59,15 @@ The user works on macOS, which has BSD versions of tools like `cp`, `sed` and `d
 - Check the macOS man page (`man <cmd>`) before writing the card, and use the names and behaviour it describes.
 - Card what works on both where possible. When something exists on only one, say which in Back, e.g. "<code>--no-clobber</code> long form only on GNU".
 
+### Short and long flags
+- **Flag with both a short and a long form:** cloze the short flag and give the long one, one card per flag, even when several flags of one command come up together:
+  `<code>claude {{c1::-c}}</code> is short for <code>--continue</code>`
+- **Short flag with no long form on macOS:** cloze the flag and what it does:
+  `<code>cp {{c1::-n}}</code> is to {{c2::not overwrite if exists}}`
+- **Short flag whose letter abbreviates a word:** use "stands for" and cloze the word:
+  `The <code>-v</code> flag in <code>ssh -vT git@github.com</code> stands for <code>{{c1::verbose}}</code>`
+- If the flag has a long form only on GNU, mention it in Back, e.g. "<code>--no-clobber</code> long form only on GNU".
+
 ### Volatile facts and sources (rules 18–19)
 - Limits, defaults, quotas, pricing and versions change. Stamp them outside the cloze: "(2025)", "(Node 22)".
 - When either would do, card the stable concept rather than the volatile number.
@@ -81,7 +90,7 @@ Write a line `**Anki**`, then each card in its own fenced code block. Use one li
 Deck: Main::AWS
 In AWS SNS→SQS, <code>raw_message_delivery = true</code> delivers the message body {{c1::without the SNS envelope}}.
 Back: Without it, the body is JSON with <code>Message</code>, <code>MessageId</code>, <code>TopicArn</code>, etc.
-Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-delivery.html
+Ref: <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-delivery.html">https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-delivery.html</a>
 ```
 
 - **Deck** is the closest topic subdeck from [Decks](#decks). Use `Main::Default` when nothing fits. Never invent a deck. If none fits, run `anki.py read deckNames` first in case the user has added one since the list was written.
@@ -89,7 +98,7 @@ Ref: https://docs.aws.amazon.com/sns/latest/dg/sns-large-payload-raw-message-del
 - The fields are HTML, not markdown. Wrap commands, flags, identifiers, config keys and resource names in `<code>…</code>`, and also the names of repos, services and internal systems (e.g. `<code>VSP</code>`, `<code>vs-vsp-chart</code>`, `<code>live-gitops</code>`). Use `<br>` for line breaks. Inside code, escape `<`, `>` and `&` as `&lt;`, `&gt;` and `&amp;`.
 - **Back** holds one short thing worth reading after grading: a tiny code example, the reason, or a caveat.
 - **Showing output in a code example:** put the output on the same line as the code, after the language's comment marker (`#` for shell, `//` for JS/TS), not after an arrow: `<code>printf 'a\nb\na\n' | uniq # a b a</code>`.
-- **Ref** holds a docs URL, or a book name with chapter or item, that the card's fact comes from directly.
+- **Ref** holds a docs URL, or a book name with chapter or item, that the card's fact comes from directly. Wrap a URL in a link so it's clickable: `<a href="URL">URL</a>`.
 
 ### Decks
 
