@@ -62,8 +62,18 @@ Write comments for the next reader of the code, not for the person who asked for
 - Keep comments short, but never so terse they need decoding. Understandable beats compact.
 - If code needs a long comment to be understood, prefer making the code clearer first: small well-named helpers and descriptive variable names, then a brief comment for whatever is still non-obvious.
 - Describe a reusable unit (class, module, helper) in terms of what it does, not who currently calls it. Mention a caller only as an example ("e.g. ...") when it explains a design choice, so the comment stays true if the unit is reused elsewhere.
+- Write comments on functions, components, classes and other declarations as docblocks (`/** ... */` in JS/TS, Javadoc in Java, docstrings in Python), not line comments, so the editor shows them on hover at the call site. Line comments are for notes inside a function body.
 - When editing existing code, remove or update comments that your change has made stale.
+
+## React components
+
+- Declare components with `function Name() {}`, not `const Name = () => {}`.
+- When a file has several components, order them from the outside in: the outermost wrapper (usually the exported component) at the top, then each component it renders, with more detail further down. A reader can then go top to bottom from the overview into the detail.
 
 ## Git
 
 Never stage or commit unless explicitly asked. I stage changes myself as I go, so the unstaged diff in my editor is always exactly your latest work and is easy to review. Running `git add` would mix your changes into what I have already reviewed.
+
+## Posting to GitHub
+
+Never post anything to GitHub on my behalf (PR or issue comments, reviews, PR descriptions or edits, new PRs or issues) until I've seen the exact final text and approved it. Being asked to "add a comment" isn't approval: show the final wording, with real values in place of any placeholders, and wait for my go-ahead.
