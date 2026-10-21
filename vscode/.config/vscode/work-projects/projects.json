@@ -1,410 +1,434 @@
 [
-  {
-    "name": "fe-host-banana",
-    "rootPath": "~/projects/fe-host",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-subscribe",
-    "rootPath": "~/projects/fe-subscribe",
-    "paths": [],
-    "tags": ["fe"],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-utils-library",
-    "rootPath": "~/projects/fe-utils-library",
-    "paths": [],
-    "tags": ["fe"],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "practice",
-    "rootPath": "~/projects/practice",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "development-docker",
-    "rootPath": "~/projects/development-docker",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-user-manager",
-    "rootPath": "~/projects/fe-user-manager",
-    "paths": [],
-    "tags": ["fe"],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-subscribe",
-    "rootPath": "~/projects/be-subscribe",
-    "paths": [],
-    "tags": ["be"],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-template",
-    "rootPath": "~/projects/be-template",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-user-manager",
-    "rootPath": "~/projects/be-user-manager",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-platform-packages",
-    "rootPath": "~/projects/be-platform-packages",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "infrastructure-live-gitops",
-    "rootPath": "~/projects/infrastructure-live-gitops",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-manage",
-    "rootPath": "~/projects/fe-manage",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-discover",
-    "rootPath": "~/projects/fe-discover",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "component-library",
-    "rootPath": "~/projects/component-library",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-template",
-    "rootPath": "~/projects/fe-template",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "voxsmart-devops",
-    "rootPath": "~/projects/voxsmart-devops",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "platform-e2e",
-    "rootPath": "~/projects/platform-e2e",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "infra-live-root",
-    "rootPath": "~/projects/infra-live-root",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "demo-k8s",
-    "rootPath": "~/projects/demo-k8s",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-manage",
-    "rootPath": "~/projects/be-manage",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fika-portal",
-    "rootPath": "~/obsidian-sync/VoxSmart/fika-portal",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "PROJECTS ROOT",
-    "rootPath": "~/projects",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "infra-github-actions",
-    "rootPath": "~/projects/infra-github-actions",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-event-catalog",
-    "rootPath": "~/projects/be-event-catalog",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "CLONE: be-user-manager-clone",
-    "rootPath": "~/projects/duplicates-for-review-etc/be-user-manager-clone",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vsp",
-    "rootPath": "~/projects/vsp",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "telserver",
-    "rootPath": "~/projects/telserver",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vmserver",
-    "rootPath": "~/projects/vmserver",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "broker",
-    "rootPath": "~/projects/broker",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-capture",
-    "rootPath": "~/projects/fe-capture",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-demo",
-    "rootPath": "~/projects/fe-demo",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-capture-event-ingester",
-    "rootPath": "~/projects/be-capture-event-ingester",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vsp-end-to-end-tests",
-    "rootPath": "~/projects/vsp-end-to-end-tests",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "cmdb",
-    "rootPath": "~/projects/cmdb",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "tcap-tdlib",
-    "rootPath": "~/projects/tcap-tdlib",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-ui",
-    "rootPath": "~/projects/fe-ui",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vcs-vtr-ui",
-    "rootPath": "~/projects/vcs-vtr-ui",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vcs-ui (currently used in prod)",
-    "rootPath": "~/projects/vcs-ui",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "dotfiles",
-    "rootPath": "~/dotfiles",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vcs-be",
-    "rootPath": "~/projects/vcs-be",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "fe-ui-2",
-    "rootPath": "~/projects/fe-ui-2",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vx1-component-library",
-    "rootPath": "~/projects/vx1-component-library",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vcs-docs",
-    "rootPath": "~/projects/vcs-docs",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vs-infrastructure-live-vcs-gitops",
-    "rootPath": "~/projects/vs-infrastructure-live-vcs-gitops",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "vcs-gitops",
-    "rootPath": "~/projects/vcs-gitops",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-alerts-api",
-    "rootPath": "~/projects/be-alerts-api",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-messaging-gateway",
-    "rootPath": "~/projects/be-messaging-gateway",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "be-comms-svc",
-    "rootPath": "~/projects/be-comms-svc",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "source-all-repos",
-    "rootPath": "~/projects/source-all-repos",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "wham",
-    "rootPath": "~/projects/wham",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  },
-  {
-    "name": "github-vsp",
-    "rootPath": "~/projects/github-vsp",
-    "paths": [],
-    "tags": [],
-    "enabled": true,
-    "profile": ""
-  }
+	{
+		"name": "fe-host-banana",
+		"rootPath": "~/projects/fe-host",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-subscribe",
+		"rootPath": "~/projects/fe-subscribe",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-utils-library",
+		"rootPath": "~/projects/fe-utils-library",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "practice",
+		"rootPath": "~/projects/practice",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "development-docker",
+		"rootPath": "~/projects/development-docker",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-user-manager",
+		"rootPath": "~/projects/fe-user-manager",
+		"paths": [],
+		"tags": [
+			"fe"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-subscribe",
+		"rootPath": "~/projects/be-subscribe",
+		"paths": [],
+		"tags": [
+			"be"
+		],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-template",
+		"rootPath": "~/projects/be-template",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-user-manager",
+		"rootPath": "~/projects/be-user-manager",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-platform-packages",
+		"rootPath": "~/projects/be-platform-packages",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infrastructure-live-gitops",
+		"rootPath": "~/projects/infrastructure-live-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-manage",
+		"rootPath": "~/projects/fe-manage",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-discover",
+		"rootPath": "~/projects/fe-discover",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "component-library",
+		"rootPath": "~/projects/component-library",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-template",
+		"rootPath": "~/projects/fe-template",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "voxsmart-devops",
+		"rootPath": "~/projects/voxsmart-devops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "platform-e2e",
+		"rootPath": "~/projects/platform-e2e",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infra-live-root",
+		"rootPath": "~/projects/infra-live-root",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "demo-k8s",
+		"rootPath": "~/projects/demo-k8s",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-manage",
+		"rootPath": "~/projects/be-manage",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fika-portal",
+		"rootPath": "~/obsidian-sync/VoxSmart/fika-portal",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "PROJECTS ROOT",
+		"rootPath": "~/projects",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "infra-github-actions",
+		"rootPath": "~/projects/infra-github-actions",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-event-catalog",
+		"rootPath": "~/projects/be-event-catalog",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "CLONE: be-user-manager-clone",
+		"rootPath": "~/projects/duplicates-for-review-etc/be-user-manager-clone",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vsp",
+		"rootPath": "~/projects/vsp",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "telserver",
+		"rootPath": "~/projects/telserver",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vmserver",
+		"rootPath": "~/projects/vmserver",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "broker",
+		"rootPath": "~/projects/broker",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-capture",
+		"rootPath": "~/projects/fe-capture",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-demo",
+		"rootPath": "~/projects/fe-demo",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-capture-event-ingester",
+		"rootPath": "~/projects/be-capture-event-ingester",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vsp-end-to-end-tests",
+		"rootPath": "~/projects/vsp-end-to-end-tests",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "cmdb",
+		"rootPath": "~/projects/cmdb",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "tcap-tdlib",
+		"rootPath": "~/projects/tcap-tdlib",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-ui",
+		"rootPath": "~/projects/fe-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-vtr-ui",
+		"rootPath": "~/projects/vcs-vtr-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-ui (currently used in prod)",
+		"rootPath": "~/projects/vcs-ui",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "dotfiles",
+		"rootPath": "~/dotfiles",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-be",
+		"rootPath": "~/projects/vcs-be",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "fe-ui-2",
+		"rootPath": "~/projects/fe-ui-2",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vx1-component-library",
+		"rootPath": "~/projects/vx1-component-library",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-docs",
+		"rootPath": "~/projects/vcs-docs",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vs-infrastructure-live-vcs-gitops",
+		"rootPath": "~/projects/vs-infrastructure-live-vcs-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vcs-gitops",
+		"rootPath": "~/projects/vcs-gitops",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-alerts-api",
+		"rootPath": "~/projects/be-alerts-api",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-messaging-gateway",
+		"rootPath": "~/projects/be-messaging-gateway",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-comms-svc",
+		"rootPath": "~/projects/be-comms-svc",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "source-all-repos",
+		"rootPath": "~/projects/source-all-repos",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "wham",
+		"rootPath": "~/projects/wham",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "github-vsp",
+		"rootPath": "~/projects/github-vsp",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "vibe-chart",
+		"rootPath": "/Users/steven.gouws/projects/vibe-chart",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	},
+	{
+		"name": "be-onboarding-svc",
+		"rootPath": "/Users/steven.gouws/projects/be-onboarding-svc",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
+	}
 ]
