@@ -60,8 +60,8 @@ The user works on macOS, which has BSD versions of tools like `cp`, `sed` and `d
 - Card what works on both where possible. When something exists on only one, say which in Back, e.g. "<code>--no-clobber</code> long form only on GNU".
 
 ### Short and long flags
-- **Flag with both a short and a long form:** cloze the short flag and give the long one, one card per flag, even when several flags of one command come up together:
-  `<code>claude {{c1::-c}}</code> is short for <code>--continue</code>`
+- **Flag with both a short and a long form:** show the short flag and cloze the long one, one card per flag, even when several flags of one command come up together. Recalling the long form is the real test: guessing `-c` from `--continue` is trivial, the other way round is not.
+  `<code>claude -c</code> is short for <code>{{c1::--continue}}</code>`
 - **Short flag with no long form on macOS:** cloze the flag and what it does:
   `<code>cp {{c1::-n}}</code> is to {{c2::not overwrite if exists}}`
 - **Short flag whose letter abbreviates a word:** use "stands for" and cloze the word:
