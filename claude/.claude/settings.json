@@ -3,7 +3,11 @@
     "defaultMode": "auto",
     "additionalDirectories": [
       "/Users/stevgouws/dotfiles/claude/.claude/skills",
+      "/Users/steven.gouws/dotfiles/claude/.claude/skills",
       "/Users/steven.gouws/obsidian-sync/VoxSmart/tickets/"
+    ],
+    "allow": [
+      "Bash(gh pr create:*)"
     ],
     "deny": [
       "Bash(security find-generic-password:*)",
