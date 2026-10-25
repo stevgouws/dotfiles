@@ -1,5 +1,6 @@
 local M = {}
 local twilio = require("modes.bookmarks-twilio")
+local modeU = require("modes.mode-u")
 
 local function hexColor(hex)
   hex = hex:gsub("#", "")
@@ -246,40 +247,12 @@ function M.setup(opts)
   bindExitKeys(raycast)
 
   -- Utils
-  local utils = hs.hotkey.modal.new(globalLeader, "u")
-
-  utils:bind("", "b", function()
-    utils:exit()
-    hs.execute("open /System/Library/PreferencePanes/Bluetooth.prefPane")
-  end)
-
-  bindModeStatus(utils, "utils")
-
-  local function toKebabCase()
-    local text = hs.pasteboard.getContents()
-    if not text then return end
-
-    -- convert to kebab-case
-    local kebab = text
-      :gsub("([a-z0-9])([A-Z])", "%1-%2") -- camelCase → camel-Case
-      :gsub("[%s_]+", "-")               -- spaces/underscores → -
-      :gsub("[^%w%-]", "")               -- remove non-word chars
-      :gsub("%-+", "-")                  -- collapse multiple -
-      :gsub("^%-", "")                   -- trim leading -
-      :gsub("%-$", "")                   -- trim trailing -
-      :lower()
-
-    hs.pasteboard.setContents(kebab)
-    hs.eventtap.keyStroke({ "cmd" }, "v")
-    setModeStatusBriefly("Kebab ✓")
-  end
-
-  utils:bind("", "k", function()
-    utils:exit()
-    toKebabCase()
-  end)
-
-  bindExitKeys(utils)
+  local utils = modeU.setup({
+    globalLeader = globalLeader,
+    bindModeStatus = bindModeStatus,
+    bindExitKeys = bindExitKeys,
+    setModeStatusBriefly = setModeStatusBriefly,
+  })
 
   -- Cleanshot X
   -- https://cleanshot.com/docs-api
