@@ -10,10 +10,6 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
   hs.notify.new({title="Hammerspoon", informativeText="Hello Wooooorld"}):send()
 end)
 
-hs.hotkey.bind({"cmd", "shift", "ctrl", "alt"}, "l", function()
-    hs.caffeinate.systemSleep()
-end)
-
 -- auto reload config when changed
 function reloadConfig(files)
   doReload = false
@@ -33,6 +29,8 @@ local isWorkMacBook = workMacBookStatus == true
 print("-----------> isWorkMacBook: " .. tostring(isWorkMacBook))
 
 hs.alert.show("Config loaded...")
+
+require("hyper").setup()
 
 require("modes.modes").setup({
   globalLeader = globalLeader,
