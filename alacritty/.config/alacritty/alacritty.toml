@@ -8,6 +8,12 @@ startup_mode = "Maximized"
 # Override Mac doing option as special chars and turns option into Alt/Meta for Alacritty
 # Means you can't do Opt for special chars like #.
 option_as_alt = "Both"
+# Spreads leftover space (window size not a multiple of cell size) evenly around the grid
+dynamic_padding = true
+
+[window.padding]
+x = 8
+y = 0
 
 [font]
 size = 16.5
