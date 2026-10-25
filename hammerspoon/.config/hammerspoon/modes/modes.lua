@@ -209,7 +209,7 @@ function M.setup(opts)
   local function openFolder(path)
     return function()
       finder:exit()
-      hs.execute("/usr/bin/open " .. string.format("%q", path))
+      hs.open(path)
     end
   end
 
