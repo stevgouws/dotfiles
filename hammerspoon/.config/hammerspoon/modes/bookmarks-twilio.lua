@@ -10,6 +10,8 @@ local SIDS_MODULE = "twilio_sids"
 local STATE_DIR = os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")
 local STATE_FILE = STATE_DIR .. "/twilio_active_account"
 
+local ACTIVE_ACCOUNTS_URL = "https://1console.twilio.com/user/accounts?datatable=%257B%2522pagination%2522%253A%257B%2522pageSize%2522%253A10%252C%2522pageToken%2522%253A%2522%2522%257D%252C%2522filtering%2522%253A%257B%2522filters%2522%253A%257B%2522status%2522%253A%257B%2522selections%2522%253A%257B%2522active%2522%253Atrue%257D%257D%257D%257D%257D"
+
 local cache = { accounts = nil, active = nil }
 
 local function loadAccounts()
@@ -68,11 +70,21 @@ function M.url(path)
   return "https://1console.twilio.com/account/" .. acct.sid .. "/us1/" .. path
 end
 
+local function openInChrome(url)
+  hs.urlevent.openURLWithBundle(url, "com.google.Chrome")
+end
+
+--- Opens a console page that belongs to the active account, e.g. its logs.
 local function openConsole(path)
   return function()
     local url = M.url(path)
-    if url then hs.urlevent.openURLWithBundle(url, "com.google.Chrome") end
+    if url then openInChrome(url) end
   end
+end
+
+--- Opens a console page that isn't tied to any account, e.g. the account list.
+local function openURL(url)
+  return function() openInChrome(url) end
 end
 
 -- Pops a menu of accounts under the given menubar item and switches to the
@@ -101,6 +113,7 @@ function M.bookmarks(anchorMenubar)
       return "Twilio" .. (active and (" " .. active) or "")
     end,
     group = {
+      a = { name = "Accounts",         action = openURL(ACTIVE_ACCOUNTS_URL) },
       c = { name = "Change Account",   action = function() pickAccount(anchorMenubar) end },
       d = { name = "Debugger",         action = openConsole("debugger/event-logs") },
       l = { name = "Logs",             action = openConsole("messaging-logs/all") },
