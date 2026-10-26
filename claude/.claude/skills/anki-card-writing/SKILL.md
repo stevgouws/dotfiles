@@ -82,6 +82,13 @@ Deck: Main::Default
 In Slack, <code>{{c1::cmd+up}}</code>&nbsp;is to {{c2::edit previous message}}
 ```
 
+**Hammerspoon modes** (shortcuts starting with `mode+`): skip the context phrase, since `mode+` already says where it applies. Tag `keyboard-shortcuts::hammerspoon`.
+
+```
+Deck: Main::Default
+<code>{{c1::mode+t u}}</code>&nbsp;is to {{c2::show/change user accounts}}
+```
+
 ## Format
 
 Write a line `**Anki**`, then each card in its own fenced code block. Use one line per field, named after the fields of the user's `Cloze` note type:
