@@ -133,11 +133,12 @@ Main::Zitadel
 
 ### Tags
 
-Add only these two kinds of tag; the user adds any others in Anki. Tags are freeform, so a misspelt tag silently starts a new one rather than failing.
+Add only these kinds of tag; the user adds any others in Anki. Tags are freeform, so a misspelt tag silently starts a new one rather than failing.
 
 - `books::<Book-Title>` for cards from one of the user's books. The spellings are inconsistent, so copy them exactly:
   `books::A-Philosophy-Of-Software-Design`, `books::Building-Microservices-2nd-Edition`, `books::Designing-Data-Intensive-Applications`, `books::Effective-Shell`, `books::Effective-TypeScript`, `books::head-first-java`, `books::LearnDockerInaMonthOfLunches`, `books::Linux-Command-Line-And-Shell-Scripting-Bible-v4`, `books::NodeJS-The-Comprehensive_Guide_To_Server_Side_JavaScript_Programming`, `books::Practical-VIM`, `books::React-Application-Architecture-For-Production`, `books::the-design-of-web-apis`, `books::The-Pragmatic-Programmer-2nd-Edition`, `books::tmux3_Productive_Mouse_Free_Development`, `books::web-application-security-2nd-edition`
 - `keyboard-shortcuts::<app>`, lowercase and hyphenated (e.g. `keyboard-shortcuts::slack`, `keyboard-shortcuts::cleanshot-x`).
+- `AI::Claude` for cards about Claude itself or its tools (Claude Code, the Claude API, Claude apps).
 
 For a book not listed here, or an app whose shortcut tag you have not seen, run `anki.py read getTags` and match the existing spelling before inventing a tag.
 
