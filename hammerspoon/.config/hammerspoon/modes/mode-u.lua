@@ -14,6 +14,56 @@ function M.setup(opts)
 
   bindModeStatus(utils, "utils")
 
+  -- Traffic Light Status
+
+  local trafficLightStatuses = {
+    RED    = "🔴 Do not disturb",
+    ORANGE = "🟠 Only if urgent",
+    GREEN  = "🟢 Ok to talk",
+    BLUE   = "🔵 Ok to joke around",
+  }
+
+  local trafficLightStatus = hs.menubar.new(true, "traffic-light-status")
+  trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
+
+  local function buildTrafficLightMenu()
+    local menuItems = {}
+    for _, status in pairs(trafficLightStatuses) do
+      table.insert(menuItems, {
+        title = status,
+        fn = function() trafficLightStatus:setTitle(status) end,
+      })
+    end
+    return menuItems
+  end
+
+  trafficLightStatus:setMenu(buildTrafficLightMenu)
+
+  local trafficLight = hs.hotkey.modal.new()
+
+  bindModeStatus(trafficLight, "traffic light")
+
+  utils:bind("", "t", function()
+    utils:exit()
+    trafficLight:enter()
+  end)
+
+  local trafficLightKeys = {
+    r = trafficLightStatuses.RED,
+    o = trafficLightStatuses.ORANGE,
+    g = trafficLightStatuses.GREEN,
+    b = trafficLightStatuses.BLUE,
+  }
+
+  for key, status in pairs(trafficLightKeys) do
+    trafficLight:bind("", key, function()
+      trafficLight:exit()
+      trafficLightStatus:setTitle(status)
+    end)
+  end
+
+  bindExitKeys(trafficLight)
+
   local function toKebabCase()
     local text = hs.pasteboard.getContents()
     if not text then return end

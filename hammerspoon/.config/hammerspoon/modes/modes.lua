@@ -152,57 +152,6 @@ function M.setup(opts)
     end)
   end
 
-  -- Traffic Light Status
-
-  local trafficLightStatuses = {
-    RED    = "🔴 Do not disturb",
-    ORANGE = "🟠 Only if urgent",
-    GREEN  = "🟢 Ok to talk",
-    BLUE   = "🔵 Ok to joke around",
-  }
-
-  local trafficLightStatus = hs.menubar.new(true, "traffic-light-status")
-  trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
-
-  local function buildTrafficLightMenu()
-    local menuItems = {}
-    for _, status in pairs(trafficLightStatuses) do
-      table.insert(menuItems, {
-        title = status,
-        fn = function() trafficLightStatus:setTitle(status) end,
-      })
-    end
-    return menuItems
-  end
-
-  trafficLightStatus:setMenu(buildTrafficLightMenu)
-
-  local trafficLight = hs.hotkey.modal.new(globalLeader, "t")
-
-  bindModeStatus(trafficLight, "traffic light")
-
-  trafficLight:bind("", "r", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.RED)
-  end)
-
-  trafficLight:bind("", "o", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.ORANGE)
-  end)
-
-  trafficLight:bind("", "g", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.GREEN)
-  end)
-
-  trafficLight:bind("", "b", function()
-    trafficLight:exit()
-    trafficLightStatus:setTitle(trafficLightStatuses.BLUE)
-  end)
-
-  bindExitKeys(trafficLight)
-
   -- Finder
   local finder = hs.hotkey.modal.new(globalLeader, "f")
   local homeDirectory = os.getenv("HOME")
@@ -386,7 +335,6 @@ function M.setup(opts)
 
   return {
     modeStatus = modeStatus,
-    trafficLight = trafficLight,
     finder = finder,
     raycast = raycast,
     utils = utils,
