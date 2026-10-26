@@ -1,5 +1,6 @@
 local M = {}
 local twilio = require("modes.bookmarks-twilio")
+local modeT = require("modes.mode-t")
 local modeU = require("modes.mode-u")
 
 local function hexColor(hex)
@@ -31,6 +32,7 @@ local MODE_BORDER_COLORS = {
   utils             = cyan,
   cleanshot         = magenta,
   bookmarks         = vermilion,
+  twilio            = violet,
 }
 
 local BORDER_WIDTH = 8
@@ -203,6 +205,20 @@ function M.setup(opts)
     setModeStatusBriefly = setModeStatusBriefly,
   })
 
+  -- Twilio
+  local twilioMode = nil
+  if isWorkMacBook then
+    twilioMode = modeT.setup({
+      globalLeader = globalLeader,
+      modeStatus = modeStatus,
+      bindModeStatus = bindModeStatus,
+      bindExitKeys = bindExitKeys,
+      -- bindModeStatus only looks up colours for plain-text mode names, and
+      -- this mode's name is a function (it shows the active account).
+      borderColor = MODE_BORDER_COLORS.twilio,
+    })
+  end
+
   -- Cleanshot X
   -- https://cleanshot.com/docs-api
   local cleanshot_x = hs.hotkey.modal.new(globalLeader, "c")
@@ -338,6 +354,7 @@ function M.setup(opts)
     finder = finder,
     raycast = raycast,
     utils = utils,
+    twilio = twilioMode,
     cleanshot_x = cleanshot_x,
     bookmarks = bookmarks,
   }
