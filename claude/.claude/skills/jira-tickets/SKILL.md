@@ -13,6 +13,10 @@ The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassi
 - Read the parent ticket and its existing subtasks first, and match how they're written.
 - Ask about anything the wording depends on and you can't settle from the ticket or the conversation, e.g. assignee, or an open product question. Put those questions in the same message as the draft.
 
+## Wording
+
+Write titles and descriptions in my voice using the `jira-ticket-voice` skill ([[jira-ticket-voice]]). That's the default. Only use its formal style (user story, Gherkin acceptance criteria) when I ask for a more formal ticket.
+
 ## Titles
 
 - Subtasks follow the parent feature's naming: `<Area>: <Feature> - <Part>`, e.g. `FE: Current User Activity - Users List`, `FE: Current User Activity - User Change Log`.
@@ -20,7 +24,7 @@ The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassi
 
 ## Descriptions
 
-- Short and plain: what the user sees or what the code must do, then what it depends on.
+- Size and shape per `jira-ticket-voice`. For subtasks: what the user sees or what the code must do, then what it depends on.
 - Whenever the description mentions another ticket, link it, using `<KEY>: <summary>` as the link text: `[SRC-2445: Implement backend API to serve invite & reminder screen for a user](https://voxsmart.atlassian.net/browse/SRC-2445)`, not a bare `SRC-2445`. Jira doesn't turn bare keys in a description into links. Fetch the ticket for its current summary rather than writing it from memory.
 - When two new tickets refer to each other, create the first without the cross-reference, create the second referencing the first, then edit the first to add the second's key. Never leave a placeholder like `SRC-XXXX` in a created ticket.
 - Leave out decisions or details the user has ruled out (e.g. a field that was dropped from the design), even if the prototype still shows them.

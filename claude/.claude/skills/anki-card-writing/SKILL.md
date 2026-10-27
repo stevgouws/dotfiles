@@ -58,6 +58,11 @@ Never cloze an unordered list (e.g. the fields of a message as `c1`–`c5`). Car
 The user works on macOS, which has BSD versions of tools like `cp`, `sed` and `date`, and sometimes on Linux servers, which have GNU versions. Their flags and wording differ.
 - Check the macOS man page (`man <cmd>`) before writing the card, and use the names and behaviour it describes.
 - Card what works on both where possible. When something exists on only one, say which in Back, e.g. "<code>--no-clobber</code> long form only on GNU".
+- **Commands that do a task:** put the goal first and the command second, in the form "To <goal> do <command>". Reviewing a goal and recalling the command is the way round it gets used:
+  `To move pane 2 of window 2 of the <code>vsp</code> session into the current window do <code>tmux {{c1::join-pane}} -s vsp:2.2</code>`
+  This doesn't apply to flag cards, which follow [Short and long flags](#short-and-long-flags).
+- **Use a concrete example, not a general description.** Give real arguments, e.g. a session, window and pane number, rather than "the same window in two sessions". For tmux, always use <code>vsp</code> as the other session: it's short and a real project of the user's, so it's easy to remember. Use different numbers for the window and the pane (e.g. <code>vsp:3.2</code>), so it's clear which is which.
+- **A card that contrasts two commands** puts each "To … do …" sentence in its own bullet (<code>&lt;ul&gt;&lt;li&gt;</code>).
 
 ### Short and long flags
 - **Flag with both a short and a long form:** show the short flag and cloze the long one, one card per flag, even when several flags of one command come up together. Recalling the long form is the real test: guessing `-c` from `--continue` is trivial, the other way round is not.

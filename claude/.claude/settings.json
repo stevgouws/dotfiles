@@ -21,6 +21,9 @@
   "worktree": {
     "baseRef": "fresh"
   },
+  "attribution": {
+    "pr": ""
+  },
   "effortLevel": "medium",
   "theme": "dark",
   "editorMode": "normal"

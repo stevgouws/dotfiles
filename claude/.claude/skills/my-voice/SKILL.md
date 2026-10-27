@@ -1,6 +1,6 @@
 ---
 name: my-voice
-description: Write in the user's own voice for messages they will send as themselves — Slack messages and threads, DMs, PR announcements, status updates, heads-ups, replies to colleagues, Jira or PR comments, short emails. Use when asked to draft, write, reply to, word or rewrite something "as me", "in my voice", "for me to send", or to tidy up a message they wrote. Not for code comments, docs or formal documents. For PR titles and descriptions, use pr-voice.
+description: Write in the user's own voice for messages they will send as themselves — Slack messages and threads, DMs, PR announcements, status updates, heads-ups, replies to colleagues, Jira or PR comments, short emails. Use when asked to draft, write, reply to, word or rewrite something "as me", "in my voice", "for me to send", or to tidy up a message they wrote. Not for code comments, docs or formal documents. For PR titles and descriptions, use pr-voice. For Jira ticket titles and descriptions, use jira-ticket-voice.
 ---
 
 # Writing in my voice
