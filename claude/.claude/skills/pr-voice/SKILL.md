@@ -45,6 +45,13 @@ This PR:
 - Deletes a bunch of unused CSS and unused husky pre-commit scripts
 ```
 
+Even two changes get this list form. When the bullets carry on the "This PR" sentence, they start lowercase, with no colon after "This PR":
+```
+This PR
+- adds a new `CALL_PERMISSION_REQUEST` websocket message type, which the app sends when ...
+- adds a `message_type` tag to the `message.accepted.count` metric so we can tell ...
+```
+
 **Bug fixes: explain the cause first, then the fix.** In plain words, with the concrete effect:
 > Previously temp-media deletion was triggered after an event with status `SENT` was received. However when messages are rejected because of the 24h window, they also go through `SENT` before `REJECTED`, which meant that for templated messages the media was deleted before Twilio tried to send the template, so the send failed.
 >
@@ -60,7 +67,7 @@ This PR:
 **Optional sections, only when they earn their place.** Use whichever fit:
 - `## Additional Fixes` for unrelated fixes made along the way.
 - `## Pending` or `## Future improvement` for follow-ups, ideally with a ticket: "I've logged [SRC-2452](url) where we can also ..." or "Follow-up ticket 👉 [SRC-2507](url)".
-- `## Please note` for risks or things reviewers should know: "Merging will likely restart ALL `tfe`s".
+- Risks or things reviewers should know go in a `> [!NOTE]` callout at the end of the Description, not a separate `## Please note` heading. E.g. an accepted risk: what could go wrong, what would actually happen, and why it's acceptable.
 - `## Backwards compatibility` when relevant.
 - `## Post-Merge Actions` with checkboxes for anything that has to happen after merge: `- [ ] Please merge <link>`.
 - `## Detail` / `## More detail` or `## Explanation` for the deeper reasoning, after the short version. Put very deep root-cause detail in a `<details><summary>More details about why ...</summary>` block.
@@ -106,6 +113,7 @@ Add how it was verified if it's not obvious: "Checked that all 32 tests that ran
 
 - Generic AI-style headings like `## Summary`, `## Changes`, `## Test plan`, `## Why` when the repo template uses Description / Testing.
 - Empty template sections or unused options left in (e.g. both the ✅ and ❌ testing lines, an empty Screenshots heading). Remove what doesn't apply. Keeping the template's `<!-- -->` hint comments is fine.
+- A template section whose answer is just "No", e.g. `## Post-Merge Actions` with `:x: - No`. Drop the whole section instead; only include it when there is something to do.
 - Restating the title as the first line, listing every file changed, or describing obvious mechanics the diff already shows.
 - Over-hedged or salesy wording ("This PR significantly improves...", "robust", "comprehensive", "seamless").
 - Em dashes, and the other rules in [[my-voice]].
