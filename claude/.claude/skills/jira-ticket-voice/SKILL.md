@@ -59,7 +59,8 @@ End with "Thanks!" and, when it fits, `(Or let me know if I need to do something
 - On descriptive text, not bare URLs: `See [Slack thread](url)`, `As per <name> in [Slack](url)`, `Full discussion with <name> on [Slack](url) if needed`, `[Twilio docs](url)`.
 - Code links to the exact line on GitHub: `[here](https://github.com/.../file.ts#L76)`.
 - Other tickets as `[KEY: summary](url)`, per the `jira-tickets` skill.
-- Follow-ups and connections: `There will be another ticket later to ...`, `Once this is fixed we can also remove the skip in case.flow.e2e.test.ts for webkit.`
+- Don't link the ticket's own PRs. Jira picks them up from the ticket key in the branch or PR title. A PR from a different ticket, cited as background (e.g. a suspected cause), is fine.
+- Follow-ups and connections: `There will be another ticket later to ...`, `I've logged a follow up to make it required later: [KEY: summary](url).`, `Once this is fixed we can also remove the skip in case.flow.e2e.test.ts for webkit.`
 
 **Checklists**
 `- [ ]` items for concrete steps, sites to change, repos to update, or people who need something. Short, start with a verb where it's an action. If the ticket has any other heading (e.g. `## Other notes`), put the checklist under a `# Todo` heading too.
