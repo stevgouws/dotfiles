@@ -31,6 +31,7 @@ print("-----------> isWorkMacBook: " .. tostring(isWorkMacBook))
 hs.alert.show("Config loaded...")
 
 require("hyper").setup({ isWorkMacBook = isWorkMacBook })
+require("windows").setup({ isWorkMacBook = isWorkMacBook })
 
 require("modes.modes").setup({
   globalLeader = globalLeader,

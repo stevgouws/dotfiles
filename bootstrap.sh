@@ -146,6 +146,29 @@ osascript -e 'tell application "System Events" to tell appearance preferences to
 # Make F1–F12 act as standard function keys
 defaults write -g com.apple.keyboard.fnState -bool true
 
+# Turning off a macOS shortcut in System Settings doesn't free its keys: hammerspoon still can't
+# bind them. So these are moved to keys nobody presses (Cmd+Ctrl+Opt+Shift+F17/F19/F20) and turned
+# off, leaving Ctrl+Left/Right/Up free for Hammerspoon's window management.
+move_symbolic_hotkey_out_of_the_way() {
+  local id="$1" key_code="$2"
+  local hyper_modifiers=1966080
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$id" "
+    <dict>
+      <key>enabled</key><false/>
+      <key>value</key><dict>
+        <key>parameters</key><array>
+          <integer>65535</integer><integer>$key_code</integer><integer>$hyper_modifiers</integer>
+        </array>
+        <key>type</key><string>standard</string>
+      </dict>
+    </dict>"
+}
+move_symbolic_hotkey_out_of_the_way 32 64 # Mission Control (was Ctrl+Up) -> F17
+move_symbolic_hotkey_out_of_the_way 79 80 # Move left a space (was Ctrl+Left) -> F19
+move_symbolic_hotkey_out_of_the_way 81 90 # Move right a space (was Ctrl+Right) -> F20
+# Applies the shortcut changes now instead of after the next login.
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
 # Press and hold for VScode
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 
