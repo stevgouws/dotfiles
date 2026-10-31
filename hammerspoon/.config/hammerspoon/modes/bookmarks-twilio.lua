@@ -119,6 +119,7 @@ function M.bookmarks(anchorMenubar)
       l = { name = "Logs",             action = openConsole("messaging-logs/all") },
       t = { name = "Templates",        action = openConsole("templates/messaging/your-templates") },
       s = { name = "Support Tickets",  action = openConsole("support-center/ticket-history") },
+      u = { name = "Show User Accounts",   action = function() pickAccount(anchorMenubar) end },
       w = { name = "Whatsapp Senders", action = openConsole("senders-hub/list/whatsapp") },
     },
   }

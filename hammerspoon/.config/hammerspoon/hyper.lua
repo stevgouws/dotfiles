@@ -1,4 +1,5 @@
 local alacritty = require("alacritty")
+local clipboard = require("clipboard")
 
 local M = {}
 
@@ -30,6 +31,8 @@ local bindings = {
   -- Other
   f = function() hs.open(HOME .. "/Downloads") end,
   l = function() hs.caffeinate.systemSleep() end,
+  v = clipboard.pasteUnstyled,
+  tab = clipboard.pastePrevious,
 }
 
 local workMacBookBindings = {
