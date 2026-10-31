@@ -70,6 +70,8 @@ matches:
   - trigger: "gd;"
     replace: "git checkout dev && git pull"
     force_mode: clipboard
+  - trigger: gf;
+    replace: "git fetch origin"
   - trigger: "gm;"
     replace: "git checkout main && git pull"
     force_mode: clipboard
