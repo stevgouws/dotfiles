@@ -33,6 +33,7 @@ local MODE_BORDER_COLORS = {
   cleanshot         = magenta,
   bookmarks         = vermilion,
   twilio            = violet,
+  windows           = emerald,
 }
 
 local BORDER_WIDTH = 8
@@ -253,6 +254,30 @@ function M.setup(opts)
   bindModeStatus(cleanshot_x, "cleanshot")
   bindExitKeys(cleanshot_x)
 
+  -- Windows
+  -- Focuses the nearest window in a direction, like Ctrl+w h/j/k/l in Vim.
+  local windows = hs.hotkey.modal.new(globalLeader, "w")
+
+  bindModeStatus(windows, "windows")
+
+  local windowFocusDirections = {
+    h = "focusWindowWest",
+    j = "focusWindowSouth",
+    k = "focusWindowNorth",
+    l = "focusWindowEast",
+  }
+
+  for key, method in pairs(windowFocusDirections) do
+    windows:bind("", key, function()
+      windows:exit()
+      local win = hs.window.focusedWindow()
+      -- Passing true for frontmost skips windows that are covered by other windows.
+      if win then win[method](win, nil, true) end
+    end)
+  end
+
+  bindExitKeys(windows)
+
   -- Bookmarks
   local bookmarks = hs.hotkey.modal.new(globalLeader, "b")
 
@@ -356,6 +381,7 @@ function M.setup(opts)
     utils = utils,
     twilio = twilioMode,
     cleanshot_x = cleanshot_x,
+    windows = windows,
     bookmarks = bookmarks,
   }
 end
