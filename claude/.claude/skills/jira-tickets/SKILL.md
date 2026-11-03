@@ -5,7 +5,7 @@ description: Create or edit the user's Jira tickets and subtasks (VoxSmart Atlas
 
 # Jira tickets
 
-The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassian.net`), mostly in the `SRC` (Source) project. Use the Atlassian MCP tools; get the `cloudId` once with `getAccessibleAtlassianResources`.
+The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassian.net`). The user is in the Nexus team, so new tickets go in the `UUI` project by default (backlog: https://voxsmart.atlassian.net/jira/software/c/projects/UUI/boards/415/backlog). Older tickets from their time in the Source team are in `SRC`. Use the Atlassian MCP tools; get the `cloudId` once with `getAccessibleAtlassianResources`.
 
 ## Before creating anything
 
