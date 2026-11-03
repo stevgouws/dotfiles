@@ -313,7 +313,8 @@ function M.setup(opts)
   }
 
   local workBookmarks = {
-    b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217?assignee=712020%3A90fe3c8f-218e-4a28-aa4b-33bf6f1a448d" },
+    -- b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/SRC/boards/217?assignee=712020%3A90fe3c8f-218e-4a28-aa4b-33bf6f1a448d" }, -- Source
+    b = { name = "Sprint/Kanban Board", url = "https://voxsmart.atlassian.net/jira/software/c/projects/UUI/boards/415?assignee=712020%3A90fe3c8f-218e-4a28-aa4b-33bf6f1a448d" }, -- Nexus
     c = { name = "Cezanne", url = "https://w3.cezanneondemand.com/CezanneHR/-/VoxSmart/view/9ebaad0a-8ad5-4d97-b2f1-e5d179149a81?ce=3&et=4d8970cb-6164-4162-b780-4574ff852be1&n=6c5063b4-8307-4f55-b968-ddc3e36e154d" },
     d = { name = "Data Dog", url = "https://app.datadoghq.eu/logs" },
     g = { name = "Github", url = "https://github.com/orgs/VoxSmartLtd/repositories" },
