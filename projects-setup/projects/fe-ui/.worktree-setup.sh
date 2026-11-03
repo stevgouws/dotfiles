@@ -5,3 +5,4 @@ MAIN_WORKTREE="$HOME/projects/fe-ui"
 
 pnpm install
 cp "$MAIN_WORKTREE/.env" .
+pnpm build
