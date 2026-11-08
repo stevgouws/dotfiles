@@ -1,4 +1,24 @@
 #!/usr/bin/env sh
 
-session=$(tmux list-sessions -F '#{session_name}' | fzf --layout=reverse --bind enter:accept-non-empty) || exit 0
+# fzf keeps 2 columns on the left for its pointer and 1 on the right, so each
+# line has 3 fewer columns than the popup.
+width=$(($(tput cols) - 3))
+
+# Each line is "<session name><tab><what fzf shows>". fzf hides the first part
+# and returns the whole line, so the name can be cut off again afterwards.
+#
+# Sessions with a window that has a pending alert (bell, activity or silence)
+# get a marker on the right, e.g. "● 2~" means window 2 has been quiet past its
+# monitor-silence limit.
+session=$(tmux list-sessions -F "#{session_name}	#{session_alerts}" |
+  awk -F '\t' -v width="$width" '{
+    if ($2 == "") { print $1 "\t" $1; next }
+    gap = width - length($1) - length($2) - 2
+    if (gap < 1) gap = 1
+    printf "%s\t%s%" gap "s● %s\n", $1, $1, "", $2
+  }' |
+  fzf --layout=reverse --bind enter:accept-non-empty --delimiter '\t' --with-nth 2 |
+  cut -f1)
+# A pipeline returns cut's exit status, so check for an empty pick (Esc) instead.
+[ -n "$session" ] || exit 0
 tmux switch-client -t "=$session"
