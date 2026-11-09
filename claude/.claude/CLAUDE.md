@@ -70,10 +70,15 @@ Write comments for the next reader of the code, not for the person who asked for
 - Declare components with `function Name() {}`, not `const Name = () => {}`.
 - When a file has several components, order them from the outside in: the outermost wrapper (usually the exported component) at the top, then each component it renders, with more detail further down. A reader can then go top to bottom from the overview into the detail.
 
+## File layout
+
+- Put new module-level helper functions at the bottom of the file, below the main export (class, component, handler) that uses them, so the file reads from the overview down into the detail. Use `function` declarations so they're hoisted. Only put a helper above its caller when it has to be, e.g. a `const` that runs when the module loads.
+- Leave existing helpers and components where they are and as they're declared (don't move them to the bottom or turn a `const` into a `function`) when changing a file for another reason, so the diff only shows the real change.
+
 ## Git
 
 Never stage or commit unless explicitly asked. I stage changes myself as I go, so the unstaged diff in my editor is always exactly your latest work and is easy to review. Running `git add` would mix your changes into what I have already reviewed.
 
 ## Posting to GitHub
 
-Never post anything to GitHub on my behalf (PR or issue comments, reviews, PR descriptions or edits, new PRs or issues) until I've seen the exact final text and approved it. Being asked to "add a comment" isn't approval: show the final wording, with real values in place of any placeholders, and wait for my go-ahead.
+Never post anything to GitHub on my behalf (PR or issue comments, reviews, PR descriptions or edits, new PRs or issues) until I've seen the exact final text and approved it. Being asked to "add a comment" isn't approval: show the final wording, with real values in place of any placeholders, and wait for my go-ahead. The exception is PR titles and descriptions: when I ask to write, update or create one, apply it to the PR directly and give me the link (see the `pr-voice` skill).

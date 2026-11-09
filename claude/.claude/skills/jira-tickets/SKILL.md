@@ -26,6 +26,7 @@ Write titles and descriptions in my voice using the `jira-ticket-voice` skill ([
 
 - Size and shape per `jira-ticket-voice`. For subtasks: what the user sees or what the code must do, then what it depends on.
 - Whenever the description mentions another ticket, link it, using `<KEY>: <summary>` as the link text: `[SRC-2445: Implement backend API to serve invite & reminder screen for a user](https://voxsmart.atlassian.net/browse/SRC-2445)`, not a bare `SRC-2445`. Jira doesn't turn bare keys in a description into links. Fetch the ticket for its current summary rather than writing it from memory.
+- Don't put backticks in link text (``[`file.ts:33`](url)``). The markdown-to-Jira conversion drops the link and keeps only the code. Write `[file.ts:33](url)` instead.
 - When two new tickets refer to each other, create the first without the cross-reference, create the second referencing the first, then edit the first to add the second's key. Never leave a placeholder like `SRC-XXXX` in a created ticket.
 - Leave out decisions or details the user has ruled out (e.g. a field that was dropped from the design), even if the prototype still shows them.
 

@@ -115,6 +115,8 @@ Add how it was verified if it's not obvious: "Checked that all 32 tests that ran
 - Empty template sections or unused options left in (e.g. both the ✅ and ❌ testing lines, an empty Screenshots heading). Remove what doesn't apply. Keeping the template's `<!-- -->` hint comments is fine.
 - A template section whose answer is just "No", e.g. `## Post-Merge Actions` with `:x: - No`. Drop the whole section instead; only include it when there is something to do.
 - Restating the title as the first line, listing every file changed, or describing obvious mechanics the diff already shows.
+- Narrating what the code does: which component a thing moved out of and into, renamed exports, new function arguments. Say what the change achieves and why, and leave the how to the diff. For a refactor, that's often one sentence plus "No change in behaviour". E.g. "This PR just keeps all the flagged event highlight styles together in `FlaggedEventsProvider`, so they're easy to find and compare instead of being spread across components.", not "moves the styles out of `EventsPanel` and `AlertPoliciesPanel` into `FlaggedEventStyles`, and `findTextMatches` now takes the reason separately".
+- Opening with "Follow-up to #123" or similar. Only link an earlier PR when the reviewer needs it to understand this one.
 - Over-hedged or salesy wording ("This PR significantly improves...", "robust", "comprehensive", "seamless").
 - Em dashes, and the other rules in [[my-voice]].
 
@@ -227,4 +229,5 @@ I considered adding linting and validation to the pipeline, but it's pretty comp
 ## Process
 
 1. Draft the title and description, then cut anything a reviewer wouldn't miss.
-2. Show me the final title and body. Never create or edit the PR on GitHub until I've approved the exact text.
+2. When I ask to write, update or create the PR description, apply it straight to the PR (`gh pr edit <n> --title ... --body-file <file>`, or `gh pr create`) and reply with the link. I review it in GitHub's rendered view, which is easier to read than a preview here. Only show the text here first when I ask for a draft or a preview.
+3. Before editing an existing PR, read its current title and body (`gh pr view <n> --json title,body`). If they have changed since you last wrote them, I've edited them on GitHub: keep my changes and only change what I asked for.

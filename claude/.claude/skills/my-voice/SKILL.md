@@ -26,16 +26,17 @@ Friendly, direct, low-ceremony. A colleague talking to colleagues, not a manager
 - Hedge with "I think…?" and end statements with a question mark when I'm checking an assumption: "I think X already mentioned this is expected as we haven't deployed the consumer yet?"
 - Self-deprecating and a bit hyperbolic: "roughly a million edge cases", "touched a looot of files", "GitHub Actions is having a bit of a meltdown".
 - Own mistakes quickly and lightly: "oh damn my bad", "Sorry, must have been annoying!", "ignore me! I clicked on the wrong channel".
-- Asks are polite but not grovelling: "when you have a minute please", "Could I get a re-approve on this one please", ":pray:". Say why I'm asking and how much it matters ("not urgent, but…", "it's now starting to be a blocker", "If it's expensive I can work around it").
+- Asks are polite but not grovelling: "when you have a minute please", "Could I get a re-approve on this one please". Say why I'm asking and how much it matters ("not urgent, but…", "it's now starting to be a blocker", "If it's expensive I can work around it").
 - Pushback is direct and fair: acknowledge their point, state mine plainly, keep it warm ("I don't think that's a fair statement mate :laughing:", "I 100% agree that… but…"), then move on ("we can see how it goes :+1:").
 
 **Emoji**
-- Slack shortcodes, one per message at most, usually at the end: `:+1:` `:laughing:` `:sweat_smile:` `:pray:` `:wave:` `:wink:` `:white_check_mark:`.
-- `:point_right:` before a link in PR or ticket announcements. `:point_up_2:` / `:point_down:` to refer to an adjacent message or attachment.
+- Slack shortcodes, one per message at most, usually at the end: `:+1:` `:laughing:` `:sweat_smile:` `:wave:` `:wink:` `:white_check_mark:`.
+- `:point_up_2:` / `:point_down:` to refer to an adjacent message or attachment. Never `:point_right:` before a link, and never `:pray:`.
 - `:laughing:` or `:sweat_smile:` to soften a complaint, a correction or an awkward ask.
 
 **Formatting**
-- Links go on descriptive text (`<url|PR title>`), not bare URLs, when there's a title to use.
+- Links go on descriptive text as Markdown (`[PR title](url)`), not bare URLs, when there's a title to use. Slack's message box converts Markdown links on paste, but not Slack's own `<url|text>` syntax, which only works through the API.
+- Repo or service names in backticks: `comms-svc`, `messaging-gateway`.
 - `cc @person` on its own line at the end when looping someone in.
 - Bullets for lists of PRs, questions or status items. No bold, no headings.
 - Lowercase starts are fine in quick DMs and replies. Sentence case for anything posted to a channel.
@@ -50,18 +51,29 @@ Friendly, direct, low-ceremony. A colleague talking to colleagues, not a manager
 
 **PR announcement (channel)**
 ```
-PR to :point_right: <url|Fix lint-staged linting everything> (self-merging, feel free to check)
+PR to [Fix lint-staged linting everything](url) (self-merging, feel free to check)
 ```
-Variants: "Small PR to", "Tiny PR to", "One liner to", or `repo-name - <url|title>`. Add a short note after if there's something reviewers should know.
+Variants: "Small PR to", "Tiny PR to", "One liner to", or `` `repo-name` - [title](url) ``. Add a short note after if there's something reviewers should know.
+
+When a change spans several repos, number the PRs in merge order, across messages too:
+```
+1/3 - `event-catalog` - Small PR to [Make eventType required on MobileUserMessageReceivedV1](url)
+```
+```
+Follow-up PRs, when you have a minute please
+
+• 2/3 `messaging-gateway` - [Make eventType required in TypeSpecificEventFields](url)
+• 3/3 `comms-svc` - [Reject messaging gateway events without a valid eventType](url)
+```
 
 **Several PRs**
 ```
 Bump on vulnerability fix reviews please when you can:
 
 service-a
-• <url|Fix vulnerabilities> (not to be merged until we can do decent regression testing)
+• [Fix vulnerabilities](url) (not to be merged until we can do decent regression testing)
 service-b
-• <url|Fix vulnerabilities & convert to vite> (will need to be tested in dev)
+• [Fix vulnerabilities & convert to vite](url) (will need to be tested in dev)
 ```
 
 **Heads up / FYI**
@@ -70,8 +82,8 @@ FYI I've merged main into dev so we have the latest fixes from main
 ```
 ```
 Heads up I'm off tomorrow.
-• I've reviewed <name>'s <url|PR> to get the e2e tests running in the pipeline.
-• <name> I'm still reviewing your e2e tests, and as discussed I'm tweaking things to match the <url|testing guidance>
+• I've reviewed <name>'s [PR](url) to get the e2e tests running in the pipeline.
+• <name> I'm still reviewing your e2e tests, and as discussed I'm tweaking things to match the [testing guidance](url)
 
 Catch y'all on Wednesday :wave:
 ```
@@ -81,7 +93,7 @@ Catch y'all on Wednesday :wave:
 **Reporting a problem to another team**
 > Hey guys, not urgent, but I can't see changes deploying to dev.
 >
-> • <url|Here> is a successful release job from last night
+> • [Here](url) is a successful release job from last night
 > • Everything in Argo looks fine, but it shows last sync was 12 days ago
 > • In Kargo there's a red outline but it's not really obvious to me what that means?
 
@@ -93,7 +105,7 @@ Catch y'all on Wednesday :wave:
 **Explaining an incident in plain terms**
 > These alerts have been firing most days for the last 10 days or so. From what I can tell, when nodes get replaced a lot of pods get rescheduled onto the same node (11 on one node this morning). They use a lot of CPU when starting up, so the node maxes out, their health checks time out, and Kubernetes restarts them. That keeps the CPU pinned, so it turns into a restart loop until they all eventually get through startup, which took about an hour today.
 >
-> I've logged <url|Investigate recurring pod restart loops> with more details.
+> I've logged [Investigate recurring pod restart loops](url) with more details.
 >
 > cc @lead
 
@@ -108,7 +120,7 @@ Catch y'all on Wednesday :wave:
 >
 > That should generate a 1.88.5-rc1 package you can use on main without getting the changes you don't want.
 >
-> More details <url|here> if needed, or just give me a shout.
+> More details [here](url) if needed, or just give me a shout.
 
 **Pushing back**
 > @name I don't think that's a fair statement mate :laughing:. I 100% agree alerts should NOT be ignored, but it's really difficult when the scope is so wide and there's so much going on at once, while we're also under pressure to ship features. So I'm still learning what's what. Where possible, alerts should be scoped to only who needs to know, which is why I asked.
@@ -116,7 +128,7 @@ Catch y'all on Wednesday :wave:
 > I understand in this case it's also our concern, so it's fine as is, we can see how it goes :+1:
 
 **Chasing something that's stalled**
-> I flagged this a couple of weeks ago and logged <url|TICKET-123>, which has been in progress for a while.
+> I flagged this a couple of weeks ago and logged [TICKET-123](url), which has been in progress for a while.
 >
 > Could we maybe get an update when you can please @name, as it's now starting to be a blocker
 
