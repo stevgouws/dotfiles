@@ -17,7 +17,10 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-SESSION="${SESSION:-dotfiles}"
+SESSION="${SESSION:-$(basename "$PWD")}"
+# tmux swaps "." and ":" in session names for "_" (e.g. "my.app" becomes
+# "my_app"), so match that here or the has-session check below never finds it.
+SESSION="${SESSION//[.:]/_}"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 PROJECT_TMUX_SETUP="$PROJECT_ROOT/.tmux-setup.sh"
 if [[ ! -e "$PROJECT_TMUX_SETUP" ]]; then
