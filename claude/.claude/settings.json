@@ -1,11 +1,8 @@
 {
+  "attribution": {
+    "pr": ""
+  },
   "permissions": {
-    "defaultMode": "auto",
-    "additionalDirectories": [
-      "/Users/stevgouws/dotfiles/claude/.claude/skills",
-      "/Users/steven.gouws/dotfiles/claude/.claude/skills",
-      "/Users/steven.gouws/obsidian-sync/VoxSmart/tickets/"
-    ],
     "allow": [
       "Bash(gh pr create:*)"
     ],
@@ -13,16 +10,13 @@
       "Bash(security find-generic-password:*)",
       "Edit(~/dotfiles/claude/.claude/skills/anki-card-writing/anki.py)",
       "Edit(~/.claude/skills/anki-card-writing/anki.py)"
+    ],
+    "defaultMode": "auto",
+    "additionalDirectories": [
+      "/Users/stevgouws/dotfiles/claude/.claude/skills",
+      "/Users/steven.gouws/dotfiles/claude/.claude/skills",
+      "/Users/steven.gouws/obsidian-sync/VoxSmart/tickets/"
     ]
-  },
-  "network": {
-    "allowedDomains": ["api.github.com", "github.com"]
-  },
-  "worktree": {
-    "baseRef": "fresh"
-  },
-  "attribution": {
-    "pr": ""
   },
   "hooks": {
     "Stop": [
@@ -31,6 +25,10 @@
           {
             "type": "command",
             "command": "[ -n \"$TMUX_PANE\" ] && printf '\\a' > \"$(tmux display -p -t \"$TMUX_PANE\" '#{pane_tty}')\" || true"
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.config/scripts/ding\" play"
           }
         ]
       }
@@ -41,12 +39,30 @@
           {
             "type": "command",
             "command": "[ -n \"$TMUX_PANE\" ] && printf '\\a' > \"$(tmux display -p -t \"$TMUX_PANE\" '#{pane_tty}')\" || true"
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/.config/scripts/ding\" play"
           }
         ]
       }
     ]
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "effortLevel": "medium",
+  "voice": {
+    "enabled": true,
+    "mode": "tap"
+  },
   "theme": "dark",
-  "editorMode": "normal"
+  "editorMode": "normal",
+  "voiceEnabled": true,
+  "network": {
+    "allowedDomains": [
+      "api.github.com",
+      "github.com"
+    ]
+  }
 }

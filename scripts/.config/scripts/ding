@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Toggle an audible sound when Claude Code finishes or needs input.
+# Claude's Stop/Notification hooks call `ding play`, which only makes a
+# sound while the setting is on. The setting covers every Claude session at once.
+#
+# Usage: ding [on|off|toggle|status|play]   (no argument = toggle)
+set -euo pipefail
+
+flag="$HOME/.cache/claude-ding-on"
+sound="/System/Library/Sounds/Funk.aiff"
+
+case "${1:-toggle}" in
+  on) mkdir -p "$(dirname "$flag")" && touch "$flag" && echo "Claude ding: on" ;;
+  off) rm -f "$flag" && echo "Claude ding: off" ;;
+  toggle) if [[ -f "$flag" ]]; then "$0" off; else "$0" on; fi ;;
+  status) [[ -f "$flag" ]] && echo "Claude ding: on" || echo "Claude ding: off" ;;
+  # Runs in the background so the hook returns straight away instead of
+  # holding Claude up for the length of the sound.
+  play) [[ -f "$flag" ]] && { afplay "$sound" >/dev/null 2>&1 & } ; true ;;
+  *) echo "Usage: ding [on|off|toggle|status|play]" >&2; exit 1 ;;
+esac
