@@ -229,5 +229,6 @@ I considered adding linting and validation to the pipeline, but it's pretty comp
 ## Process
 
 1. Draft the title and description, then cut anything a reviewer wouldn't miss.
-2. When I ask to write, update or create the PR description, apply it straight to the PR (`gh pr edit <n> --title ... --body-file <file>`, or `gh pr create`) and reply with the link. I review it in GitHub's rendered view, which is easier to read than a preview here. Only show the text here first when I ask for a draft or a preview.
-3. Before editing an existing PR, read its current title and body (`gh pr view <n> --json title,body`). If they have changed since you last wrote them, I've edited them on GitHub: keep my changes and only change what I asked for.
+2. When I ask to write, update or create the PR description, apply it straight to the PR (`gh pr edit <n> --title ... --body-file <file>`, or `gh pr create`) and reply with the link. I review it in GitHub's rendered view, which is easier to read than a preview here. Only show the text here first when I ask to see the text or a preview first.
+3. Open every new PR as a draft (`gh pr create --draft`), so I can check it before reviewers are notified. Only skip the draft when I say "skip draft".
+4. Before editing an existing PR, read its current title and body (`gh pr view <n> --json title,body`). If they have changed since you last wrote them, I've edited them on GitHub: keep my changes and only change what I asked for.
