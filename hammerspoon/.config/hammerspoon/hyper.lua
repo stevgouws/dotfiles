@@ -39,6 +39,7 @@ local workMacBookBindings = {
   d = focusApp("com.electron.dockerdesktop"),
   m = focusApp("com.microsoft.teams2"),
   s = focusApp("com.tinyspeck.slackmacgap"),
+  x = focusApp("com.microsoft.Excel"),
 }
 
 local personalMacBookBindings = {
