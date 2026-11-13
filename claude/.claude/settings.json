@@ -18,6 +18,8 @@
       "/Users/steven.gouws/obsidian-sync/VoxSmart/tickets/"
     ]
   },
+  "model": "opus",
+  "outputStyle": "Concise",
   "hooks": {
     "Stop": [
       {
@@ -54,12 +56,12 @@
   },
   "effortLevel": "medium",
   "voice": {
-    "enabled": true,
+    "enabled": false,
     "mode": "tap"
   },
   "theme": "dark",
   "editorMode": "normal",
-  "voiceEnabled": true,
+  "voiceEnabled": false,
   "network": {
     "allowedDomains": [
       "api.github.com",
