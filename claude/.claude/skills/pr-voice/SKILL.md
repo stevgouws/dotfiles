@@ -67,7 +67,7 @@ This PR
 **Optional sections, only when they earn their place.** Use whichever fit:
 - `## Additional Fixes` for unrelated fixes made along the way.
 - `## Pending` or `## Future improvement` for follow-ups, ideally with a ticket: "I've logged [SRC-2452](url) where we can also ..." or "Follow-up ticket 👉 [SRC-2507](url)".
-- Risks or things reviewers should know go in a `> [!NOTE]` callout at the end of the Description, not a separate `## Please note` heading. E.g. an accepted risk: what could go wrong, what would actually happen, and why it's acceptable.
+- Risks or things reviewers should know go in a `> [!NOTE]` or `> [!WARNING]` callout, not a separate `## Please note` heading. E.g. an accepted risk: what could go wrong, what would actually happen, and why it's acceptable. See **Callouts** for where they go.
 - `## Backwards compatibility` when relevant.
 - `## Post-Merge Actions` with checkboxes for anything that has to happen after merge: `- [ ] Please merge <link>`.
 - `## Detail` / `## More detail` or `## Explanation` for the deeper reasoning, after the short version. Put very deep root-cause detail in a `<details><summary>More details about why ...</summary>` block.
@@ -75,7 +75,10 @@ This PR
 - `## Validation` when I checked something manually that tests don't cover.
 - `## Query Performance impact` with the `EXPLAIN` output for query changes.
 
-**Callouts.** GitHub alerts for things a reviewer must not miss:
+**Callouts.** GitHub alerts for things a reviewer must not miss.
+
+By default callouts go at the very top of the body, above `## Description`, so reviewers and whoever merges see them before anything else. That covers when it can be merged (`DO NOT MERGE until ...`, waiting on another PR or release), how to merge it (e.g. merge, don't squash), what fails until something else lands, and risks or behaviour changes reviewers should know about.
+
 ```
 > [!NOTE]
 > Pipeline will fail until the queue is created in <link>
@@ -159,10 +162,10 @@ Edge case, not needed
 
 **Infra change that depends on another PR**
 ```
-This PR adds the `sns-vibe-telserver-tsnotifier-main` subscription to `sqs-vibe-comms-telecoms-main`.
-
 > [!NOTE]
 > Pipeline will fail until the queue is created in <link to queue PR>
+
+This PR adds the `sns-vibe-telserver-tsnotifier-main` subscription to `sqs-vibe-comms-telecoms-main`.
 ```
 
 **Behaviour change in a shared package**
