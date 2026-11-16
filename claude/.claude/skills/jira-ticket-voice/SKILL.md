@@ -189,4 +189,4 @@ Keep the wording plain even here; it's the structure that changes, not the voice
 
 1. Work out the kind of ticket (quick bug, task, ask to another team, investigation, proposal) and match the closest example for length and shape.
 2. Draft the title and description, then cut anything the person picking it up wouldn't miss.
-3. Show me the exact text. Never create or edit the ticket until I've approved it (see the `jira-tickets` skill).
+3. For a new ticket, show me the exact text and don't create it until I've approved it. For an existing ticket, update it directly and give me the link; I review it in Jira (see the `jira-tickets` skill).

@@ -9,7 +9,8 @@ The user's tickets are on the VoxSmart Atlassian site (`https://voxsmart.atlassi
 
 ## Before creating anything
 
-- Show the proposed wording first (summary and description for each ticket) and wait for the user's go-ahead. Creating a ticket notifies people and is visible to the team.
+- For a new ticket, show the proposed wording first (summary and description for each ticket) and wait for the user's go-ahead. Creating a ticket notifies people and is visible to the team.
+- For a ticket that already exists, apply the change to the ticket directly and reply with its URL, without previewing it here first; the user finds it easier to review and tweak in Jira. Read the ticket first and keep any changes they've made there (e.g. a renamed title). Only show the text here first when they ask for a preview.
 - Read the parent ticket and its existing subtasks first, and match how they're written.
 - Ask about anything the wording depends on and you can't settle from the ticket or the conversation, e.g. assignee, or an open product question. Put those questions in the same message as the draft.
 
