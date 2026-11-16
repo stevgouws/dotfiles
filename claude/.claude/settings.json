@@ -15,7 +15,7 @@
     "additionalDirectories": [
       "/Users/stevgouws/dotfiles/claude/.claude/skills",
       "/Users/steven.gouws/dotfiles/claude/.claude/skills",
-      "/Users/steven.gouws/obsidian-sync/VoxSmart/tickets/"
+      "/Users/steven.gouws/obsidian-sync/VoxSmart/"
     ]
   },
   "model": "opus",
