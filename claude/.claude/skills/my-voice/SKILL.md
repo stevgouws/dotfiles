@@ -35,8 +35,7 @@ Friendly, direct, low-ceremony. A colleague talking to colleagues, not a manager
 - `:laughing:` or `:sweat_smile:` to soften a complaint, a correction or an awkward ask.
 
 **Formatting**
-- Links go on descriptive text as Markdown (`[PR title](url)`), not bare URLs, when there's a title to use. Slack's message box converts Markdown links on paste, but not Slack's own `<url|text>` syntax, which only works through the API.
-- Repo or service names in backticks: `comms-svc`, `messaging-gateway`.
+- For anything going into Slack, follow the `slack-formatting` skill ([[slack-formatting]]). It covers Markdown links, bullets, backticks and the code block.
 - `cc @person` on its own line at the end when looping someone in.
 - Bullets for lists of PRs, questions or status items. No bold, no headings.
 - Lowercase starts are fine in quick DMs and replies. Sentence case for anything posted to a channel.

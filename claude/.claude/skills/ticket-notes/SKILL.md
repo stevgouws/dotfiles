@@ -14,6 +14,7 @@ The user keeps one markdown note per ticket, usually in `~/obsidian-sync/VoxSmar
 - The user edits these notes too, often between your edits. Always re-read the file right before changing it, and build on what's there.
 - Keep the user's wording and structure. If they've reorganised a section, follow their new layout from then on rather than restoring yours.
 - Edit only what was asked. Don't tidy, reword or reorder other sections.
+- The Obsidian Linter plugin reformats the note whenever the user saves it in Obsidian, but not when you write the file. So blank lines, spacing, list markers and similar formatting can change between your edits. Treat those shifts as normal: match old text against the file as it is now, and don't undo the linter's formatting.
 
 ## Structure
 
