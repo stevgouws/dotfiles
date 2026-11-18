@@ -38,6 +38,11 @@ local MODE_BORDER_COLORS = {
 
 local BORDER_WIDTH = 8
 
+-- Outline drawn around the focused window in windows mode, and briefly around the
+-- window it moves focus to.
+local WINDOW_OUTLINE_WIDTH = 4
+local WINDOW_OUTLINE_FLASH_SECONDS = 0.4
+
 function M.setup(opts)
   opts = opts or {}
   local globalLeader = opts.globalLeader
@@ -260,19 +265,82 @@ function M.setup(opts)
 
   bindModeStatus(windows, "windows")
 
+  local windowOutline = nil
+  local windowOutlineTimer = nil
+
+  local function hideWindowOutline()
+    if windowOutlineTimer then
+      windowOutlineTimer:stop()
+      windowOutlineTimer = nil
+    end
+    if windowOutline then
+      windowOutline:delete()
+      windowOutline = nil
+    end
+  end
+
+  --- Draws a border around `win`. With `duration` (seconds) it hides itself afterwards,
+  --- otherwise it stays until hideWindowOutline is called.
+  local function showWindowOutline(win, duration)
+    hideWindowOutline()
+    local frame = win:frame()
+    windowOutline = hs.canvas.new(frame)
+    windowOutline:appendElements({
+      type = "rectangle",
+      action = "stroke",
+      strokeColor = MODE_BORDER_COLORS.windows,
+      strokeWidth = WINDOW_OUTLINE_WIDTH,
+      roundedRectRadii = { xRadius = 10, yRadius = 10 },
+      -- The stroke is centred on the rectangle's edge, so inset by half its width to keep
+      -- all of it inside the canvas.
+      frame = {
+        x = WINDOW_OUTLINE_WIDTH / 2,
+        y = WINDOW_OUTLINE_WIDTH / 2,
+        w = frame.w - WINDOW_OUTLINE_WIDTH,
+        h = frame.h - WINDOW_OUTLINE_WIDTH,
+      },
+    })
+    windowOutline:level(hs.canvas.windowLevels.overlay)
+    windowOutline:clickActivating(false)
+    windowOutline:show()
+    if duration then
+      windowOutlineTimer = hs.timer.doAfter(duration, hideWindowOutline)
+    end
+  end
+
+  local showModeStatus = windows.entered
+  local hideModeStatus = windows.exited
+
+  function windows:entered()
+    showModeStatus(self)
+    local win = hs.window.focusedWindow()
+    if win then showWindowOutline(win) end
+  end
+
+  function windows:exited()
+    hideModeStatus(self)
+    hideWindowOutline()
+  end
+
   local windowFocusDirections = {
-    h = "focusWindowWest",
-    j = "focusWindowSouth",
-    k = "focusWindowNorth",
-    l = "focusWindowEast",
+    h = "windowsToWest",
+    j = "windowsToSouth",
+    k = "windowsToNorth",
+    l = "windowsToEast",
   }
 
   for key, method in pairs(windowFocusDirections) do
     windows:bind("", key, function()
       windows:exit()
       local win = hs.window.focusedWindow()
+      if not win then return end
       -- Passing true for frontmost skips windows that are covered by other windows.
-      if win then win[method](win, nil, true) end
+      -- The list is sorted nearest first.
+      local target = win[method](win, nil, true)[1]
+      if target then
+        target:focus()
+        showWindowOutline(target, WINDOW_OUTLINE_FLASH_SECONDS)
+      end
     end)
   end
 
