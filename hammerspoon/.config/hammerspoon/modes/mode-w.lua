@@ -4,7 +4,7 @@
 local M = {}
 
 local OUTLINE_WIDTH = 4
-local OUTLINE_FLASH_SECONDS = 0.4
+local OUTLINE_FLASH_SECONDS = 0.25
 
 local focusDirections = {
   h = "windowsToWest",
@@ -59,10 +59,10 @@ local function showOutline(win, color, duration)
 end
 
 function M.setup(opts)
-  local color = opts.borderColor
+  local color = opts.outlineColor
   local windows = hs.hotkey.modal.new(opts.globalLeader, "w")
 
-  opts.bindModeStatus(windows, "windows", color)
+  opts.bindModeStatus(windows, "windows")
 
   local showModeStatus = windows.entered
   local hideModeStatus = windows.exited

@@ -34,8 +34,10 @@ local MODE_BORDER_COLORS = {
   cleanshot         = magenta,
   bookmarks         = vermilion,
   twilio            = violet,
-  windows           = emerald,
 }
+
+-- Windows mode outlines the focused window instead of showing the screen-edge border.
+local WINDOW_OUTLINE_COLOR = emerald
 
 local BORDER_WIDTH = 8
 
@@ -260,7 +262,7 @@ function M.setup(opts)
     globalLeader = globalLeader,
     bindModeStatus = bindModeStatus,
     bindExitKeys = bindExitKeys,
-    borderColor = MODE_BORDER_COLORS.windows,
+    outlineColor = WINDOW_OUTLINE_COLOR,
   })
 
   -- Bookmarks
