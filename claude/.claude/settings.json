@@ -19,7 +19,6 @@
     ]
   },
   "model": "opus",
-  "outputStyle": "Concise",
   "hooks": {
     "Stop": [
       {
@@ -54,6 +53,7 @@
   "worktree": {
     "baseRef": "fresh"
   },
+  "outputStyle": "Concise",
   "effortLevel": "medium",
   "voice": {
     "enabled": false,
@@ -67,5 +67,6 @@
       "api.github.com",
       "github.com"
     ]
-  }
+  },
+  "switchModelsOnFlag": false
 }

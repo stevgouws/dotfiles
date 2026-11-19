@@ -9,6 +9,24 @@ The user keeps one markdown note per ticket, usually in `~/obsidian-sync/VoxSmar
 
 "Obsidian", "in Obsidian" or "the Obsidian file" just means one of these markdown files; Obsidian is the editor the user writes them in. Nothing Obsidian-specific is needed: read and edit the file like any other markdown file. If it's unclear which note is meant, look in the tickets folder for the ticket key from the branch name or conversation.
 
+When you mention a note in a reply, give it as an `obsidian://` link so the user can click it to open the note: `obsidian://open?vault=VoxSmart&file=<path from the vault root, without .md, URL-encoded>`, e.g. `obsidian://open?vault=VoxSmart&file=tickets%2FUUI-2834%20-%20Spike%20-%20Compare%20AC%27s%20to%20VSP%20API%20capabilities`. Encode it with `urllib.parse.quote(path, safe='')` rather than by hand. Give it as a markdown link with the note's name as the text, e.g. `[UUI-2834 - Spike - Compare AC's to VSP API capabilities](obsidian://...)`; the user's terminal opens it on Shift+click.
+
+## `#link` markers
+
+When I end a line with `#link`, turn the thing it refers to into a link and remove the tag. When I ask you to update a note, or say "fix the links", search the note for `#link` first.
+
+- Ticket keys (`UUI-2593`): `[UUI-2593: <summary from Jira>](https://voxsmart.atlassian.net/browse/UUI-2593)`. Fetch the summary, don't write it from memory.
+- Other notes: `[[note name]]`. PRs, Slack threads, files: the URL, with the text as the link text.
+- If I've put text in square brackets (`[the banner ticket] #link`), link exactly that text.
+- If it's unclear what to link or where it should point, leave the tag and ask.
+
+## `#claude` markers
+
+`#claude` marks a spot where I want you to do something, e.g. fill in a section, answer a question or build a table. When I ask you to update a note, or point you at a `#claude`, search the note for `#claude` too.
+
+- Work out the task from the heading it sits under, the nearby notes and our conversation. Do it there, and replace the tag with the result.
+- If it isn't clear what I want, ask before writing anything, and leave the tag where it is.
+
 ## Before editing
 
 - The user edits these notes too, often between your edits. Always re-read the file right before changing it, and build on what's there.
@@ -124,6 +142,7 @@ URL:
 
 ## Writing style
 
-- Short bullets, plain language. Use `code` formatting for file paths, identifiers and values.
+- Short bullets, plain language. Use `code` formatting for file paths, identifiers and values, and for IDs that aren't links, e.g. `AC01`. Ticket keys that are linked stay plain link text.
 - Write paths relative to the repo root (e.g. `wfe/app/src/...`).
 - Each item should make sense to someone reading the note cold in a week's time.
+- Write in my voice (`my-voice` skill, [[my-voice]]): full, plain sentences the way I'd say them. Don't compress them into shorthand like "`AC03` (its `AC02`, old UI to new)" to save space; short is good, cryptic isn't.

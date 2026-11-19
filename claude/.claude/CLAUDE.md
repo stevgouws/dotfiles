@@ -27,6 +27,10 @@ Finished: Simplicity (Dave Thomas), tmux 3 (Brian P. Hogan).
 
 - `~/.claude` is managed from my dotfiles. Make global Claude edits (CLAUDE.md, skills, settings, etc.) in `~/dotfiles/claude/.claude`, not in `~/.claude`.
 
+## Writing style
+
+- When a sentence points to a reference or detail, like a date, file path, line number or value, put it after a dash in backticks instead of in brackets, because it's easier to read: "The filters are never saved - `PostgresAuditLogSink.java:151`", not "The filters are never saved (`PostgresAuditLogSink.java:151`)". This goes for replies, notes, tickets and reports.
+
 ## How to help me learn
 
 - Don't teach by default. Do the task and keep explanations short.

@@ -50,13 +50,15 @@ Friendly, direct, low-ceremony. A colleague talking to colleagues, not a manager
 
 **PR announcement (channel)**
 ```
-PR to [Fix lint-staged linting everything](url) (self-merging, feel free to check)
+`fe-ui` - [chore: merge main into beta](url)
 ```
-Variants: "Small PR to", "Tiny PR to", "One liner to", or `` `repo-name` - [title](url) ``. Add a short note after if there's something reviewers should know.
+- The link text is the PR title exactly as it is on GitHub, not reworded.
+- The repo goes in backticks, using the short name I call it by: `fe-ui` for `vs-fe-unified-ui-svc`. Otherwise use the repo name as is.
+- Nothing else by default: no summary, no ask, no "self-merging". Add a short note after only when I say so or there's something reviewers must know before approving (e.g. "not to be merged until…").
 
 When a change spans several repos, number the PRs in merge order, across messages too:
 ```
-1/3 - `event-catalog` - Small PR to [Make eventType required on MobileUserMessageReceivedV1](url)
+1/3 - `event-catalog` - [Make eventType required on MobileUserMessageReceivedV1](url)
 ```
 ```
 Follow-up PRs, when you have a minute please
