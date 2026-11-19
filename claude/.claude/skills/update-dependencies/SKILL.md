@@ -23,6 +23,21 @@ pnpm outdated -r                # what is behind
 
 In a pnpm workspace, run `pnpm audit` from the root. It audits the whole lockfile, so every workspace package is covered; there is no `-r` and no `--filter`.
 
+Also list the repo's open Dependabot alerts (the repo's Security tab). `pnpm audit` asks the npm registry, which gets its advisories from GitHub's advisory database but doesn't always match what Dependabot reports (e.g. while an advisory is being withdrawn), so an alert can show up in one and not the other:
+
+```sh
+gh api --paginate "repos/<owner>/<repo>/dependabot/alerts?state=open&per_page=100" \
+  --jq '.[] | [.number, .security_advisory.ghsa_id, .security_advisory.severity, .dependency.package.name, .dependency.scope, (.security_vulnerability.first_patched_version.identifier // "no patch"), (if .security_advisory.withdrawn_at then "WITHDRAWN" else "" end)] | @tsv' \
+  > <scratchpad>/dependabot-before.tsv
+```
+
+Handle an alert that the audit doesn't report like any other advisory in steps 3 and 4, with these exceptions:
+
+- **Withdrawn advisory** (`withdrawn_at` is set): don't fix it. Give the alert number and the reason for the withdrawal (`gh api /advisories/<GHSA-id> --jq .description`) in the report, so the user can dismiss it as "Inaccurate". Don't dismiss it yourself, because that changes the repo on GitHub.
+- **No patched version**: nothing can be bumped or overridden, so treat it as left open (see [Triage what is left](#triage-what-is-left)).
+
+Dependabot only reads the default branch, so the alerts stay open until the fix reaches it (for a PR into `beta`, that's after the next release to `main`). To check which alerts the branch fixes before then, look up each alert's package and version in the branch's lockfile with `pnpm why <pkg> -r`.
+
 Also save the peer warnings as they are now, so a new one can be spotted later. `pnpm install --frozen-lockfile` prints none, so resolve instead, in a scratch worktree of the starting commit: `pnpm install --resolution-only > <scratchpad>/peers-before.txt 2>&1`.
 
 ## 1. Remove the security overrides
@@ -152,6 +167,7 @@ Shell notes: on macOS, `timeout` doesn't exist, and in zsh an unquoted `$VAR` ho
 In the report (the PR description is shorter, see [Pull request](#pull-request)):
 
 - the audit count before, after step 1, after step 2 and at the end, with the paths of the saved audit JSON
+- the open Dependabot alerts that `pnpm audit` didn't report, with what was done about each one (fixed, withdrawn, no patch)
 - every override, with the parent it applies to, the advisory and why the parent can't be bumped instead
 - every compatibility pin and bug-fix minimum kept, with its reason, or a note that the reason is missing
 - every exact pin bumped or left, with the reason
