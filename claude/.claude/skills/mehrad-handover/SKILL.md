@@ -1,6 +1,6 @@
 ---
 name: mehrad-handover
-description: Add or update entries in the user's Mehrad Handover note in Obsidian, the list of big changes Mehrad needs to know when he's back in Feb 2027. Use when asked to add something to "Mehrad's handover", "the handover", or to note something "for Mehrad".
+description: Add or update entries in the user's Mehrad Handover note in Obsidian, the list of big changes Mehrad needs to know when he's back in Feb 2027. Use only when the request names Mehrad, e.g. "add this to Mehrad's handover" or "note this for Mehrad". Not for /handover or "the handover" on its own, which hand work off to another Claude session.
 ---
 
 # Mehrad handover
