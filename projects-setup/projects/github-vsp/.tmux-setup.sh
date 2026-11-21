@@ -13,7 +13,7 @@ tmux split-window -v -d -t "=${SESSION}:1.{left}" -c "$ROOT/wfe/app"
 tmux send-keys -t "=${SESSION}:1.{bottom-left}" "pnpm start"
 
 tmux new-window -t "=${SESSION}:2" -n test -c "$ROOT/wfe/app"
-tmux new-window -t "=${SESSION}:3" -n claude "claude"
+tmux new-window -t "=${SESSION}:3" -n claude "start-claude-with-handover-support"
 tmux new-window -t "=${SESSION}:4" -n zsh
 tmux new-window -t "=${SESSION}:5" -n e2e
 

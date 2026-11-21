@@ -1,26 +1,79 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
+usage() {
+  cat <<'EOF'
+Usage: gwa <name> [options]
+
+Create a git worktree for the current repo at ~/projects/worktrees/<repo>/<name>
+and open it in a tmux session called <name>. Run it from inside the repo.
+
+Branch used for the worktree, in order of preference:
+  1. an existing local branch
+  2. an existing branch on origin
+  3. a new branch from --base-branch
+
+Options:
+  --branch-name <branch>  Branch to check out (default: <name>)
+  --base-branch <branch>  Where a new branch starts from (default: origin/main)
+  --detach                Create the tmux session without switching to it
+  --task-file <file>      Move <file> into the worktree's .git folder as
+                          handover.md, for start-claude-with-handover-support
+                          to send to Claude as its first prompt.
+  -h, --help              Show this help
+
+Copies .tmux-setup.sh and .worktree-setup.sh from the main worktree, if present,
+and runs .worktree-setup.sh in the new session.
+
+Example:
+  gwa fix-login --base-branch origin/develop --detach
+EOF
+}
+
+# Exit code 2 means "called wrong", as opposed to 1 for "something failed".
+usage_error() {
+  echo "$1" >&2
+  usage >&2
+  exit 2
+}
+
+# Takes the option and the number of arguments left, e.g. `require_value "$1" $#`.
+require_value() {
+  if [[ $2 -lt 2 ]]; then
+    usage_error "$1 needs a value"
+  fi
+}
+
 name=""
 branch_name=""
 base_branch="origin/main"
+detach=false
+task_file=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --branch-name) branch_name="$2"; shift 2 ;;
-    --base-branch) base_branch="$2"; shift 2 ;;
+    --branch-name) require_value "$1" $#; branch_name="$2"; shift 2 ;;
+    --base-branch) require_value "$1" $#; base_branch="$2"; shift 2 ;;
+    --detach) detach=true; shift ;;
+    --task-file) require_value "$1" $#; task_file="$2"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    -*) usage_error "Unknown option: $1" ;;
     *)
       if [[ -z "$name" ]]; then
         name="$1"; shift
       else
-        echo "Unknown argument: $1" >&2; exit 1
+        usage_error "Unknown argument: $1"
       fi
       ;;
   esac
 done
 
 if [[ -z "$name" ]]; then
-  echo "Usage: gwa <name> [--branch-name <branch>] [--base-branch <branch>]" >&2
+  usage_error "Missing <name>"
+fi
+
+if [[ -n "$task_file" && ! -f "$task_file" ]]; then
+  echo "Task file not found: $task_file" >&2
   exit 1
 fi
 
@@ -48,11 +101,21 @@ fi
 
 cd "$worktree_dir"
 
+# The task goes in the worktree's own git folder so it can never be committed.
+# start-claude-with-handover-support picks it up as Claude's first prompt in the new session.
+if [[ -n "$task_file" ]]; then
+  mv "$task_file" "$(git rev-parse --absolute-git-dir)/handover.md"
+fi
+
 cp "$main_worktree/.tmux-setup.sh" . 2>/dev/null || true
 cp "$main_worktree/.worktree-setup.sh" . 2>/dev/null || true
 
-if [[ -x "$worktree_dir/.worktree-setup.sh" ]]; then
-  exec ~/.config/scripts/tx "$dir_name" --run "./.worktree-setup.sh"
-else
-  exec ~/.config/scripts/tx "$dir_name"
+tx_args=("$dir_name")
+if [[ "$detach" == true ]]; then
+  tx_args+=(--detach)
 fi
+if [[ -x "$worktree_dir/.worktree-setup.sh" ]]; then
+  tx_args+=(--run "./.worktree-setup.sh")
+fi
+
+exec ~/.config/scripts/tx "${tx_args[@]}"
