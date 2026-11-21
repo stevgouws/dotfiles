@@ -32,6 +32,7 @@ hs.alert.show("Config loaded...")
 
 require("hyper").setup({ isWorkMacBook = isWorkMacBook })
 require("windows").setup({ isWorkMacBook = isWorkMacBook })
+require("anki").setup({ meh = meh })
 
 require("modes.modes").setup({
   globalLeader = globalLeader,
