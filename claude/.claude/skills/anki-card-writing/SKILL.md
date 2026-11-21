@@ -184,12 +184,12 @@ Running it with an action that isn't allowed prints the allowed list.
 
 #### Keep requests to a minimum
 
-Every `anki.py` run asks the user for a password, so make as few as possible.
+Each `anki.py` run slows the task down and fills the conversation with its output, so make as few as possible.
 
 - **Don't look for duplicates by default.** If a card already exists, the user will usually recognise it. Only search when they ask, or when you need something from Anki to do the task (e.g. an exact tag spelling or a deck added since the list above).
 - **When you do need to read, do it in one go:** one `findNotes` with every term joined by `or` (e.g. `query="helm or argocd or \"feature flag\""`), then one `notesInfo` with all the IDs it returns. Print every non-empty field, since notes use different field names (`Cloze`, `Text`, `Front`), and reading only one shows some notes as blank.
 - **Never re-run a request just to see more of its result.** Get everything you need the first time.
-- **If Anki is slow, wait** for that request to finish instead of moving on and asking again later. If it can't be reached, say so and carry on without it. It likely means the user hasn't typed the password yet.
+- **If Anki is slow, wait** for that request to finish instead of moving on and asking again later. If it can't be reached, say so and carry on without it. Anki is probably closed.
 
 ## Examples
 
