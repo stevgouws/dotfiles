@@ -430,5 +430,13 @@
 		"tags": [],
 		"enabled": true,
 		"profile": ""
+	},
+	{
+		"name": "fe-unified-test",
+		"rootPath": "/Users/steven.gouws/projects/fe-unified-test",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
 	}
 ]
