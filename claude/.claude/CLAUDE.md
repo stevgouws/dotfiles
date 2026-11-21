@@ -23,6 +23,12 @@ Reference these when relevant to the work, but don't assume I know material past
 
 Finished: Simplicity (Dave Thomas), tmux 3 (Brian P. Hogan).
 
+## Colleagues
+
+Nicknames I use for colleagues, and their GitHub logins:
+
+- Alby: Alberto Corrales - `alberto-corrales`
+
 ## Editing Claude config
 
 - `~/.claude` is managed from my dotfiles. Make global Claude edits (CLAUDE.md, skills, settings, etc.) in `~/dotfiles/claude/.claude`, not in `~/.claude`.
@@ -85,4 +91,4 @@ Never stage or commit unless explicitly asked. I stage changes myself as I go, s
 
 ## Posting to GitHub
 
-Never post anything to GitHub on my behalf (PR or issue comments, reviews, PR descriptions or edits, new PRs or issues) until I've seen the exact final text and approved it. Being asked to "add a comment" isn't approval: show the final wording, with real values in place of any placeholders, and wait for my go-ahead. The exception is PR titles and descriptions: when I ask to write, update or create one, apply it to the PR directly and give me the link (see the `pr-voice` skill).
+Never post anything to GitHub on my behalf (PR or issue comments, reviews, PR descriptions or edits, new PRs or issues) until I've seen the exact final text and approved it. Being asked to "add a comment" isn't approval: show the final wording, with real values in place of any placeholders, and wait for my go-ahead. The exception is PR titles and descriptions: when I ask to write, update or create one, apply it to the PR directly and give me the link (see the `pr-voice` skill). PR review comments are also an exception: when I already have a pending review on the PR, or I ask you to add a review comment, add it to my pending review directly without a preview (see the `my-voice` skill). Never submit a review.

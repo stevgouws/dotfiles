@@ -153,4 +153,4 @@ Catch y'all on Wednesday :wave:
 1. Work out the situation (quick reply, PR post, heads-up, ask, pushback, status update) and match the closest example above for length and shape.
 2. Draft it. Then cut anything I wouldn't bother typing.
 3. Give me the draft ready to paste, in a code block if it's Slack-formatted. If the tone is a judgement call (e.g. pushback to someone senior), offer one alternative at most.
-4. Never send or post it yourself unless I've approved the exact text.
+4. Never send or post it yourself unless I've approved the exact text. The exception is GitHub PR review comments: when I already have a review in progress on the PR, or I ask you to add a comment, add it straight to my pending review without previewing it here, and tell me where it went. Never submit the review; I do that myself.

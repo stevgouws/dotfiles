@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Starts Claude, using a task handed off with `gwa --task-file` as the first
+# prompt. The file is deleted once read, so starting Claude again in the same
+# worktree doesn't resend the task. `claude --resume` still has it.
+
+git_dir="$(git rev-parse --absolute-git-dir 2>/dev/null || true)"
+handover_file="$git_dir/handover.md"
+
+if [[ -n "$git_dir" && -f "$handover_file" ]]; then
+  handover="$(cat "$handover_file")"
+  rm "$handover_file"
+  exec claude "$@" "$handover"
+fi
+
+exec claude "$@"
