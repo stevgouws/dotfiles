@@ -129,5 +129,7 @@ stty -ixon
 # less expands tabs itself and ignores terminal stops, so set -x too.
 # Only when output goes to a terminal: piped or captured output would otherwise get the escape codes.
 [[ -t 1 ]] && tabs -2
-export LESS="-R -x2"
+# --mouse lets the scroll wheel, or a swipe in a phone SSH app like Termius, scroll less (and so git
+# diffs through delta). Without it, tmux hands the scroll to less, which ignores it.
+export LESS="-R -x2 --mouse"
 
