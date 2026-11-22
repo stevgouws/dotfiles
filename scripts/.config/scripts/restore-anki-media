@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Copies Anki media back from the iCloud copy made by backup-anki into a profile's media folder.
+# Only files missing from the profile are copied; files already there are never overwritten, so
+# it's safe to run on your real profile to recover deleted media.
+#
+# Usage: restore-anki-media [profile]   (default profile: "User 1")
+#   e.g. restore-anki-media "Restore test"
+#
+# Quit Anki first. To restore the collection itself (notes, cards, review history), use Anki:
+# File → Switch Profile → Open Backup, and pick a .colpkg from the iCloud backups folder.
+#
+# The terminal running this needs access to iCloud Drive, or rsync fails with "Operation not
+# permitted": System Settings → Privacy & Security → Full Disk Access → turn on the terminal app
+# (e.g. Alacritty), then reopen it (and run `tmux kill-server` if using tmux). Without that, copy
+# the files in Finder: iCloud Drive → Backups → Anki → media, into the profile's collection.media
+# folder, skipping files that already exist.
+set -euo pipefail
+
+profile_name="${1:-User 1}"
+profile="$HOME/Library/Application Support/Anki2/$profile_name"
+icloud_media="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Backups/Anki/media"
+
+if pgrep -qf "/Applications/Anki.app/Contents/MacOS/Anki"; then
+  echo "Anki is running. Quit it first, so it isn't using the media folder while files are copied in." >&2
+  exit 1
+fi
+
+if [[ ! -d "$profile" ]]; then
+  echo "No Anki profile named \"$profile_name\" at $profile" >&2
+  exit 1
+fi
+
+mkdir -p "$profile/collection.media"
+rsync -a --ignore-existing --itemize-changes "$icloud_media/" "$profile/collection.media/"
+echo "Restored missing media into \"$profile_name\"."

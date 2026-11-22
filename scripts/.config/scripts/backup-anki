@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Copies Anki's own backups and its media folder to iCloud Drive, so they survive losing this Mac.
+# Run daily by the com.stevgouws.backup-anki LaunchAgent.
+#
+# Anki already saves the collection (notes, cards, review history) every 30 minutes while it's
+# open and keeps a rolling set of daily, weekly and monthly backups, so those are mirrored as is.
+# Those backups leave out media, which is copied separately. Only the "User 1" profile is backed up.
+#
+# Usage: backup-anki
+set -euo pipefail
+
+profile="$HOME/Library/Application Support/Anki2/User 1"
+icloud_dir="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Backups/Anki"
+
+# The work MacBook has no iCloud Drive, so the copy would never leave the machine.
+if "$HOME/.config/scripts/is-work-macbook"; then
+  echo "Work MacBook, skipping Anki backup."
+  exit 0
+fi
+
+if [[ ! -d "$profile" ]]; then
+  echo "No Anki profile at $profile, nothing to back up."
+  exit 0
+fi
+
+mkdir -p "$icloud_dir/backups" "$icloud_dir/media"
+
+echo "$(date '+%F %T') Backing up Anki to $icloud_dir"
+
+# --delete keeps the copy in step with Anki's rotation; otherwise backups Anki has dropped would pile
+# up in iCloud forever. But it would also empty the copy if Anki's folder were ever emptied, so the
+# mirror is skipped when there are less than half as many backups locally as in iCloud. Rotation
+# alone never drops that many at once. Skipping also shows a notification and fails the run (so
+# `launchctl print gui/$(id -u)/com.stevgouws.backup-anki` shows a non-zero exit code), since it
+# needs looking at and the log alone would go unread.
+local_count=$(find "$profile/backups" -name '*.colpkg' | wc -l)
+copy_count=$(find "$icloud_dir/backups" -name '*.colpkg' | wc -l)
+mirror_skipped=false
+if (( local_count * 2 < copy_count )); then
+  mirror_skipped=true
+  warning="Only $local_count Anki backups locally but $copy_count in iCloud, so they weren't mirrored."
+  echo "WARNING: $warning"
+  osascript -e "display notification \"$warning\" with title \"backup-anki\""
+else
+  rsync -a --delete "$profile/backups/" "$icloud_dir/backups/"
+fi
+
+# No --delete here: a media file deleted in Anki stays in the copy, so an accidental deletion can
+# still be recovered.
+rsync -a "$profile/collection.media/" "$icloud_dir/media/"
+
+echo "$(date '+%F %T') Done"
+if [[ "$mirror_skipped" == true ]]; then exit 1; fi
