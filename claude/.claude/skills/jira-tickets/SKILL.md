@@ -34,7 +34,7 @@ Write titles and descriptions in my voice using the `jira-ticket-voice` skill ([
 
 ## Fields
 
-- Assign only when the user says who. The user's own accountId comes from `atlassianUserInfo`. Pass it as `{"assignee": {"accountId": "..."}}`: a bare accountId string is accepted without an error but doesn't assign anyone.
+- Assign only when the user says who. The user's own accountId comes from `atlassianUserInfo`. Pass it as `{"assignee": {"accountId": "..."}}`: a bare accountId string is accepted without an error but doesn't assign anyone. `createJiraIssue`'s `assignee_account_id` and `parent` inputs didn't stick either (UUI-2964), so after creating, read the ticket back and set any missing assignee or parent with `editJiraIssue` (`{"parent": {"key": "UUI-2582"}}`).
 - Don't set priority, sprint, labels or story points unless asked; Jira's defaults apply.
 - Subtasks: issue type `Sub-task`, with `parent` set to the parent key.
 - Story points are `customfield_10004`. A value of `0` means the ticket hasn't been pointed yet.

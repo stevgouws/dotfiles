@@ -25,41 +25,43 @@ const againstDue = (days) => {
 	if (spare === 0) return "On target";
 	return spare > 0 ? `${spare} days ahead` : `${-spare} days short`;
 };
-// Uses the average days per point of the epic tickets left, as cutting a mix of ticket sizes is more likely than cutting only small or only big ones.
+// Turns days into points using the average days per point of the must-haves left, since any mix of ticket sizes could end up over or spare.
 const epicPoints = mustHaves.array().reduce((total, p) => total + (p.points ?? 0), 0);
-const pointsToCut = (days, epicDays) => {
-	const short = days - workingDays;
-	if (short <= 0) return "None";
-	return `${Math.ceil(short / (epicDays / epicPoints))} of ${epicPoints}`;
+const pointsAgainstDue = (days, epicDays) => {
+	const spareDays = workingDays - days;
+	const daysPerPoint = epicDays / epicPoints;
+	if (round(spareDays) === 0) return "On target";
+	return spareDays > 0
+		? `${Math.floor(spareDays / daysPerPoint)} points spare`
+		: `${Math.ceil(-spareDays / daysPerPoint)} points over`;
 };
-// A plain table without a header row. dv.table adds a result count to the header, and markdownTable always has a header row.
-const table = (rows) => {
+// One table with a column each for with and without BAU. Two separate tables don't fit side by side in the note's width.
+// Built by hand because dv.table adds a result count to the header.
+// Adds text to an element, showing any `backticked` parts as code.
+const addText = (el, text) =>
+	text.split("`").forEach((part, i) => (i % 2 ? el.createEl("code", { text: part }) : el.appendText(part)));
+const table = (headers, rows) => {
 	const el = dv.container.createEl("table");
-	for (const cells of rows) {
-		const row = el.createEl("tr");
-		for (const cell of cells) row.createEl("td", { text: String(cell) });
+	const head = el.createEl("thead").createEl("tr");
+	for (const header of headers) addText(head.createEl("th"), header);
+	const body = el.createEl("tbody");
+	for (const [label, ...values] of rows) {
+		const row = body.createEl("tr");
+		row.createEl("td", { text: String(label) });
+		for (const value of values) row.createEl("td").createEl("code", { text: String(value) });
 	}
 };
-dv.paragraph(`**Must-haves, with BAU at ${bauPoints} points a week**`);
-table([
-	["Epic work left", round(epicWithAi)],
-	[`BAU at ${bauPoints} points a week`, round(bauDays("with_ai"))],
-	["Total work left", round(withAi)],
-	[`Working days until ${due.toFormat("d MMM")}`, workingDays],
-	["Against the due date", againstDue(withAi)],
-	["Epic points to cut", pointsToCut(withAi, epicWithAi)],
-]);
-
-dv.paragraph("**Must-haves, without BAU**");
-table([
-	["Epic work left", round(epicWithAi)],
-	[`Working days until ${due.toFormat("d MMM")}`, workingDays],
-	["Against the due date", againstDue(epicWithAi)],
-	["Epic points to cut", pointsToCut(epicWithAi, epicWithAi)],
+table(["Must-haves", `With BAU (\`${bauPoints}\` points a week)`, "Without BAU"], [
+	["Epic work left", round(epicWithAi), round(epicWithAi)],
+	["BAU", round(bauDays("with_ai")), 0],
+	["Total work left", round(withAi), round(epicWithAi)],
+	[`Working days until ${due.toFormat("d MMM")}`, workingDays, workingDays],
+	["Against the due date", againstDue(withAi), againstDue(epicWithAi)],
+	["In points", pointsAgainstDue(withAi, epicWithAi), pointsAgainstDue(epicWithAi, epicWithAi)],
 ]);
 
 dv.paragraph(
-	`Stretch goals, not counted above: ${round(daysLeft("with_ai", stretchGoals))} days for ${stretchGoals.length} tickets.`
+	`Stretch goals, not counted above: ${round(daysLeft("with_ai", stretchGoals))} days, ${stretchGoals.array().reduce((total, p) => total + (p.points ?? 0), 0)} points, ${stretchGoals.length} tickets.`
 );
 
 const unpointed = tickets.where((p) => !p.points).map((p) => p.file.link).array();
