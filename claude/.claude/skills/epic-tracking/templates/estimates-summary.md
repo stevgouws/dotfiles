@@ -1,9 +1,12 @@
 ```dataviewjs
 const scale = dv.page("Estimation");
 const due = dv.date(dv.current().due);
-const tickets = dv.pages("#{{EPIC_TAG}}").where((p) => p.status !== "Done");
-const daysLeft = (prefix) =>
-	tickets.array().reduce((total, p) => total + (p.points ? scale[`${prefix}_${p.points}`] ?? 0 : 0), 0);
+// Only my tickets: others on the epic (e.g. QA) aren't in my estimates.
+const tickets = dv.pages("#{{EPIC_TAG}}").where((p) => p.status !== "Done" && p.assignee === "{{ASSIGNEE}}");
+const mustHaves = tickets.where((p) => !p.stretch);
+const stretchGoals = tickets.where((p) => p.stretch);
+const daysLeft = (prefix, list = mustHaves) =>
+	list.array().reduce((total, p) => total + (p.points ? scale[`${prefix}_${p.points}`] ?? 0 : 0), 0);
 
 // Counts from tomorrow, so the rest of today isn't included.
 let workingDays = 0;
@@ -23,7 +26,7 @@ const againstDue = (days) => {
 	return spare > 0 ? `${spare} days ahead` : `${-spare} days short`;
 };
 // Uses the average days per point of the epic tickets left, as cutting a mix of ticket sizes is more likely than cutting only small or only big ones.
-const epicPoints = tickets.array().reduce((total, p) => total + (p.points ?? 0), 0);
+const epicPoints = mustHaves.array().reduce((total, p) => total + (p.points ?? 0), 0);
 const pointsToCut = (days, epicDays) => {
 	const short = days - workingDays;
 	if (short <= 0) return "None";
@@ -37,7 +40,7 @@ const table = (rows) => {
 		for (const cell of cells) row.createEl("td", { text: String(cell) });
 	}
 };
-dv.paragraph(`**With BAU at ${bauPoints} points a week**`);
+dv.paragraph(`**Must-haves, with BAU at ${bauPoints} points a week**`);
 table([
 	["Epic work left", round(epicWithAi)],
 	[`BAU at ${bauPoints} points a week`, round(bauDays("with_ai"))],
@@ -47,13 +50,17 @@ table([
 	["Epic points to cut", pointsToCut(withAi, epicWithAi)],
 ]);
 
-dv.paragraph("**Without BAU**");
+dv.paragraph("**Must-haves, without BAU**");
 table([
 	["Epic work left", round(epicWithAi)],
 	[`Working days until ${due.toFormat("d MMM")}`, workingDays],
 	["Against the due date", againstDue(epicWithAi)],
 	["Epic points to cut", pointsToCut(epicWithAi, epicWithAi)],
 ]);
+
+dv.paragraph(
+	`Stretch goals, not counted above: ${round(daysLeft("with_ai", stretchGoals))} days for ${stretchGoals.length} tickets.`
+);
 
 const unpointed = tickets.where((p) => !p.points).map((p) => p.file.link).array();
 if (unpointed.length) {

@@ -1,6 +1,7 @@
 filters:
   and:
     - file.hasTag("{{EPIC_TAG}}")
+    - assignee == "{{ASSIGNEE}}"
 formulas:
   days_pre_ai: if(points, file("Estimation.md").properties["pre_ai_" + points.toString()])
   days_with_ai: if(points, file("Estimation.md").properties["with_ai_" + points.toString()])
@@ -21,6 +22,8 @@ properties:
     displayName: Depends on
   file.backlinks:
     displayName: Needed by
+  note.stretch:
+    displayName: Stretch
 views:
   - type: table
     name: Estimates
@@ -33,6 +36,7 @@ views:
       - points
       - formula.days_pre_ai
       - formula.days_with_ai
+      - stretch
     sort:
       - property: order
         direction: ASC
@@ -63,11 +67,11 @@ views:
       - Ready for review
       - Done
     order:
+      - order
       - file.name
-      - status
       - points
       - depends_on
-      - order
+      - status
       - formula.days_with_ai
     sort:
       - property: order
@@ -80,16 +84,23 @@ views:
         direction: ASC
     summaries:
       points: Sum
+      note.points: 32
   - type: table
     name: By status
     groupBy:
       property: status
       direction: ASC
+    groupOrder:
+      - New
+      - Done
     order:
+      - order
       - file.name
       - points
       - depends_on
     sort:
+      - property: order
+        direction: ASC
       - property: file.name
         direction: ASC
     summaries:
@@ -106,3 +117,9 @@ views:
     sort:
       - property: file.name
         direction: ASC
+  - type: table
+    name: View
+  - type: kanban
+    name: View 2
+    cardSize: 470
+    imageAspectRatio: 1.2
