@@ -37,6 +37,12 @@ Write titles and descriptions in my voice using the `jira-ticket-voice` skill ([
 - Assign only when the user says who. The user's own accountId comes from `atlassianUserInfo`.
 - Don't set priority, sprint, labels or story points unless asked; Jira's defaults apply.
 - Subtasks: issue type `Sub-task`, with `parent` set to the parent key.
+- Story points are `customfield_10004`. A value of `0` means the ticket hasn't been pointed yet.
+- To find an epic's tickets, search with `parent = <EPIC KEY>`. Tickets can keep the epic's label after they're moved off it, so the label isn't reliable.
+
+## Moving a ticket to Done
+
+Only when the user asks. Get the transition id with `executeRead` `listJiraIssueTransitions`, then `transitionJiraIssue`. The Done transition needs the CPTO fields, or Jira rejects it with "Please, fill the CPTO required fields". If the ticket doesn't have them yet, pass them in the transition's `fields`, copying the values from a sibling ticket that's already Done (for UUI-2582 tickets: `customfield_11715` "CPTO: Planned?" `{"id": "11029"}` (YES) and `customfield_11714` "CPTO: Work Type" `{"id": "11021"}` (New Product Development)), and tell the user what was set.
 
 ## After creating
 

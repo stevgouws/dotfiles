@@ -9,6 +9,8 @@ The user keeps one markdown note per ticket, usually in `~/obsidian-sync/VoxSmar
 
 "Obsidian", "in Obsidian" or "the Obsidian file" just means one of these markdown files; Obsidian is the editor the user writes them in. Nothing Obsidian-specific is needed: read and edit the file like any other markdown file. If it's unclear which note is meant, look in the tickets folder for the ticket key from the branch name or conversation.
 
+For tickets that belong to an epic tracked in Obsidian (an epic tag, `order`, `points` and `depends_on` in the frontmatter, and an epic overview Base), also follow the `epic-tracking` skill ([[epic-tracking]]).
+
 When you mention a note in a reply, give it as an `obsidian://` link so the user can click it to open the note: `obsidian://open?vault=VoxSmart&file=<path from the vault root, without .md, URL-encoded>`, e.g. `obsidian://open?vault=VoxSmart&file=tickets%2FUUI-2834%20-%20Spike%20-%20Compare%20AC%27s%20to%20VSP%20API%20capabilities`. Encode it with `urllib.parse.quote(path, safe='')` rather than by hand. Give it as a markdown link with the note's name as the text, e.g. `[UUI-2834 - Spike - Compare AC's to VSP API capabilities](obsidian://...)`; the user's terminal opens it on Shift+click.
 
 ## `#link` markers

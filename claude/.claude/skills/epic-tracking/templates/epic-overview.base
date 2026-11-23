@@ -1,0 +1,108 @@
+filters:
+  and:
+    - file.hasTag("{{EPIC_TAG}}")
+formulas:
+  days_pre_ai: if(points, file("Estimation.md").properties["pre_ai_" + points.toString()])
+  days_with_ai: if(points, file("Estimation.md").properties["with_ai_" + points.toString()])
+properties:
+  formula.days_pre_ai:
+    displayName: Days pre-AI
+  formula.days_with_ai:
+    displayName: Dev days
+  file.name:
+    displayName: Ticket
+  note.status:
+    displayName: Jira status
+  note.points:
+    displayName: Points
+  note.order:
+    displayName: Order
+  note.depends_on:
+    displayName: Depends on
+  file.backlinks:
+    displayName: Needed by
+views:
+  - type: table
+    name: Estimates
+    filters:
+      and:
+        - status != "Done"
+    order:
+      - file.name
+      - status
+      - points
+      - formula.days_pre_ai
+      - formula.days_with_ai
+    sort:
+      - property: order
+        direction: ASC
+    summaries:
+      points: Sum
+      formula.days_pre_ai: Sum
+      formula.days_with_ai: Sum
+  - type: table
+    name: Work order
+    order:
+      - file.name
+      - status
+      - points
+      - depends_on
+      - file.backlinks
+    sort:
+      - property: order
+        direction: ASC
+    summaries:
+      points: Sum
+  - type: table
+    name: All tickets
+    groupBy:
+      property: status
+      direction: DESC
+    groupOrder:
+      - New
+      - Ready for review
+      - Done
+    order:
+      - file.name
+      - status
+      - points
+      - depends_on
+      - order
+      - formula.days_with_ai
+    sort:
+      - property: order
+        direction: ASC
+      - property: formula.days_with_ai
+        direction: DESC
+      - property: file.backlinks
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    summaries:
+      points: Sum
+  - type: table
+    name: By status
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - points
+      - depends_on
+    sort:
+      - property: file.name
+        direction: ASC
+    summaries:
+      points: Sum
+  - type: table
+    name: Not pointed
+    filters:
+      and:
+        - note.points.isEmpty()
+    order:
+      - file.name
+      - status
+      - depends_on
+    sort:
+      - property: file.name
+        direction: ASC
