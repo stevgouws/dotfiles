@@ -82,7 +82,11 @@ When asked to update Obsidian from Jira, check points, or similar:
 5. A ticket on the epic without a note: create one (see [[ticket-notes]]) with the frontmatter above, and ask the user where it goes in the work order.
 6. A changed summary: rename the note and fix the links (see File names).
 7. A ticket that's now Done: also remove it from every other note's `depends_on`, leaving `[]` if nothing's left.
-8. Report what changed in a short table, and the new estimate figures if they moved.
+8. Dependencies: compare each note's `depends_on` with the ticket's "is blocked by" links in Jira (`searchJiraIssuesUsingJql` with `issue in linkedIssues(<KEY>, "is blocked by")`, or `getJiraIssue` with `view: "evidence"`, which returns the links).
+	- A link in Jira that's missing from `depends_on`: add it to the note.
+	- A dependency only in the notes: list it, and only add it to Jira when the user asks, since the tickets belong to other people too (Stu reports most of them). Link it with `executeWrite` `createJiraIssueLink`, `linkType: "Blocks"`, with the blocker as `inwardIssue` and the blocked ticket as `outwardIssue`. Use these links for dependencies rather than a "Depends on" line in the description.
+	- While comparing, flag dependencies that look wrong rather than copying them across: a blocker that's no longer on the epic, or a loose one where the ticket only picks something up once the other is done (e.g. a date that will use the Admin's timezone after UUI-2590). Ask the user before removing them.
+9. Report what changed in a short table, and the new estimate figures if they moved.
 
 ## Marking a ticket done
 
