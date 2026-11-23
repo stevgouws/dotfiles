@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Restart every Claude Code session running in tmux and resume the same
+# conversation in each pane, e.g. to pick up a settings change. Skips the pane it's run
+# from, so it's safe to run from inside a Claude session.
+#
+# Only run it while the sessions are idle: a session that's busy or has a
+# half-typed prompt won't exit, and is reported as skipped.
+#
+# Usage: restart-claude
+set -euo pipefail
+
+restart_pane() {
+  local pane="$1"
+  tmux send-keys -t "$pane" /exit Enter
+
+  # Typing `claude -c` before Claude has fully exited gets it swallowed, so
+  # wait for the shell to be back in charge of the pane (up to 10s).
+  for _ in {1..20}; do
+    if [[ "$(tmux display-message -p -t "$pane" '#{pane_current_command}')" != claude ]]; then
+      local session_id
+      session_id=$(exited_session_id "$pane" || true)
+      if [[ -n "$session_id" ]]; then
+        tmux send-keys -t "$pane" "claude --resume $session_id" Enter
+        echo "restarted $(pane_label "$pane")"
+      else
+        tmux send-keys -t "$pane" 'claude -c' Enter
+        echo "restarted $(pane_label "$pane") with claude -c: no session ID found, check it's the right conversation" >&2
+      fi
+      return
+    fi
+    sleep 0.5
+  done
+  echo "skipped $(pane_label "$pane"): Claude didn't exit, is it busy?" >&2
+}
+
+# Claude prints `claude --resume <id>` as it exits. -J joins lines the
+# terminal wrapped, so the ID is found even in a narrow pane.
+exited_session_id() {
+  tmux capture-pane -p -J -t "$1" -S -50 |
+    grep -oE 'claude --resume [0-9a-f-]{36}' |
+    tail -n 1 |
+    awk '{ print $3 }'
+}
+
+pane_label() {
+  tmux display-message -p -t "$1" '#{session_name}:#{window_index}.#{pane_index}'
+}
+
+panes=$(tmux list-panes -a -F '#{pane_id} #{pane_current_command}' |
+  awk -v me="${TMUX_PANE:-}" '$2 == "claude" && $1 != me { print $1 }')
+
+if [[ -z "$panes" ]]; then
+  echo "No other Claude sessions running in tmux."
+  exit 0
+fi
+
+for pane in $panes; do
+  restart_pane "$pane" &
+done
+wait
