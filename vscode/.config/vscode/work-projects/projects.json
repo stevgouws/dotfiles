@@ -438,5 +438,13 @@
 		"tags": [],
 		"enabled": true,
 		"profile": ""
+	},
+	{
+		"name": "platform-vcs-local",
+		"rootPath": "/Users/steven.gouws/projects/platform-vcs-local",
+		"paths": [],
+		"tags": [],
+		"enabled": true,
+		"profile": ""
 	}
 ]
