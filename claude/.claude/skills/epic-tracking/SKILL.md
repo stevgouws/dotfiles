@@ -39,7 +39,7 @@ depends_on:
 ```
 
 - `depends_on` is `[]` when there's nothing. The Base's "Needed by" column comes from backlinks, so it doesn't need its own property.
-- `assignee` is set in Obsidian, not synced from Jira (most of the epic's Jira tickets have no assignee). Tickets someone else does (e.g. QA) keep the epic's tag, so the sync still finds them, but have that person's name, so the Base and summary leave them out.
+- `assignee` mirrors the Jira assignee's first name (`Steven Gouws` → `Steven`). When a ticket has no assignee in Jira yet, keep what the note says, since the user sometimes knows who'll do it first. Tickets someone else does (e.g. QA) keep the epic's tag, so the sync still finds them, but have that person's name, so the Base and summary leave them out.
 - `stretch: true` marks a nice-to-have. The summary counts must-haves and stretch goals separately, and the Estimates view shows the flag.
 - `order` values are spaced out (10, 20, 30...) so a ticket can go between two others without renumbering. The user often reorders them in Obsidian, so keep their values.
 - The epic note has `tags: [ticket]` (not the epic tag, so it isn't a row in the Base), `Related:` links to related notes (instead of a "Related notes" section), and `due: YYYY-MM-DD`, which the Estimates summary reads.
@@ -81,13 +81,14 @@ When asked to update Obsidian from Jira, check points, or similar:
 
 1. Fetch the epic's tickets: `searchJiraIssuesUsingJql` with `parent = <EPIC> ORDER BY key` and fields `summary`, `status`, `customfield_10004` (story points).
 2. List the notes with the epic's tag and their `status` and `points`, and compare.
-3. Update `status` and `points` in each note that differs. Jira returns `0` points for a ticket that isn't pointed yet, so leave `points` empty for those.
+3. Update `status`, `points` and `assignee` in each note that differs (fetch the `assignee` field too). Jira returns `0` points for a ticket that isn't pointed yet, so leave `points` empty for those.
 4. A ticket that's no longer on the epic: remove the epic's tag from its note so it leaves the Base. Don't delete the note. Tickets can keep the epic's Jira label after leaving it, so go by `parent`, not the label.
 5. A ticket on the epic without a note: create one (see [[ticket-notes]]) with the frontmatter above, and ask the user who's doing it and where it goes in the work order.
 6. A changed summary: rename the note and fix the links (see File names).
 7. A ticket that's now Done: also remove it from every other note's `depends_on`, leaving `[]` if nothing's left.
 8. Dependencies: compare each note's `depends_on` with the ticket's "is blocked by" links in Jira (`searchJiraIssuesUsingJql` with `issue in linkedIssues(<KEY>, "is blocked by")`, or `getJiraIssue` with `view: "evidence"`, which returns the links).
 	- A link in Jira that's missing from `depends_on`: add it to the note.
+	- A Jira link that's no longer in `depends_on`: there's no MCP operation to delete issue links, so tell the user exactly where to remove it, ticket first: "Go to UUI-2829, and under 'blocks' remove the link to UUI-2592".
 	- A dependency only in the notes: list it, and only add it to Jira when the user asks, since the tickets belong to other people too (Stu reports most of them). Link it with `executeWrite` `createJiraIssueLink`, `linkType: "Blocks"`, with the blocker as `inwardIssue` and the blocked ticket as `outwardIssue`. Use these links for dependencies rather than a "Depends on" line in the description.
 	- While comparing, flag dependencies that look wrong rather than copying them across: a blocker that's no longer on the epic, or a loose one where the ticket only picks something up once the other is done (e.g. a date that will use the Admin's timezone after UUI-2590). Ask the user before removing them.
 9. Report what changed in a short table, and the new estimate figures if they moved.
@@ -103,5 +104,5 @@ Things that only apply to one epic. Check here before syncing or changing that e
 ### UUI-2582 - New VSP UI - Communications Page
 
 - Tag `new-vsp-ui`, Base `tickets/UUI-2582 - Epic overview.base`, due 20 Dec 2026.
-- UUI-2607 (QA parity check and usability retest) is done by Mans, so its note has `assignee: Mans` and it's not in the user's estimates. Don't change that when syncing.
+- UUI-2607 (QA parity check and usability retest) is done by Mans, so its note has `assignee: Mans` and it's not in the user's estimates. It's unassigned in Jira for now, so keep `Mans` when syncing.
 - Stretch goals: from 2026-11-23, everything from UUI-2590 onwards in the work order (`stretch: true`). #Stu will move some of these to phase 2. Keep them in the notes until they leave the epic in Jira.
