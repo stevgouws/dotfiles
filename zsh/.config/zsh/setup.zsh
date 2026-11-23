@@ -69,11 +69,6 @@ bindkey '^p' history-search-backward
 # Forward-delete key (fn+Delete) isn't bound by default without oh-my-zsh's
 # key-bindings module, so it self-inserts a literal "~" instead of deleting.
 bindkey '^[[3~' delete-char
-# zsh-autosuggest
-## ctrl+shift+option+k
-bindkey $'\e[1;8K' autosuggest-execute
-## ctrl+shift+option+l
-bindkey $'\e[1;8L' autosuggest-accept
 
 # History
 HISTSIZE=5000

@@ -89,17 +89,19 @@ key = "K"
 mods = "Alt|Shift"
 chars = "\u001b[5;30002~"
 
-# Map Ctrl+Shift+Alt+k to actually send that instead of just ctrl k
+# Ctrl+Shift+Alt+k: accept the suggestion and run it, in both zsh-autosuggestions
+# and Claude Code. Sends Right arrow then Enter, because Right arrow at the end
+# of the line is what both of them use to accept a greyed-out suggestion.
 [[keyboard.bindings]]
 key = "k"
 mods = "Shift|Alt|Control"
-chars = "\u001b[1;8K"
+chars = "\u001b[C\r"
 
-# Map Ctrl+Shift+Alt+l to actually send that instead of just ctrl l
+# Ctrl+Shift+Alt+l: accept the suggestion without running it (sends Right arrow).
 [[keyboard.bindings]]
 key = "l"
 mods = "Shift|Alt|Control"
-chars = "\u001b[1;8L"
+chars = "\u001b[C"
 
 # Cmd+J -> <M-j> -> join lines in nvim
 [[keyboard.bindings]]
