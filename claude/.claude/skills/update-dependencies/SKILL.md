@@ -262,6 +262,7 @@ pnpm workspace with `app`, `user-guides` (Docusaurus), `shared`, `test-utils` an
 - **`"@radix-ui/react-select@<2.4.1": "^2.4.1"`**: not a security fix (it has no advisory). It works around a vx1-components issue that is fixed there but not yet merged (UUI-2511, `647ee2af`). Keep it until that fix is merged and released; the team removes it then.
 - **`pnpm.packageExtensions`** for `@voxsmartltd/vx1-components` and `@voxsmartltd/frontend-utils`: a compatibility fix, not an override (see `AGENTS.md`).
 - **`@easyops-cn/docusaurus-search-local`** is under `pnpm.patchedDependencies`.
+- **jimp loaded with `createRequire`**: `packages/user-guides/src/manual-images/toManualJpeg.ts` loads `jimp` with `createRequire` instead of an import. Docusaurus loads plugins through jiti 1 with `interopDefault`, which hands jimp zod 4's default export (no `z`), so a plain import breaks the docs build with "Cannot read properties of undefined (reading 'object')". Keep it while jimp is on zod 4 and Docusaurus on jiti 1.
 
 **Updating.** Use `pnpm update-packages` instead of `pnpm update -r`: it runs `pnpm -r up` and then Biome over the workspace packages' `package.json` files. Biome leaves the root `package.json` alone, so collapse its `packageExtensions` entries back to one line each by hand.
 
@@ -309,5 +310,4 @@ Always set `MOCKED_APP_PORT` to a free port for the `check-app-mocked` and `audi
 
 **Known open advisories (November 2026; confirm with `pnpm why`)**
 
-- `zod` 3 from `jimp`: forcing zod 4 breaks `jimp` when Docusaurus loads it through `jiti`, and there is no patched zod 3.
-- `deepmerge` from `@rsbuild/plugin-type-check` and `@svgr/plugin-svgo`: no patched version exists, and both only merge config from the repo. It shows under `--prod` because `user-guides` lists Docusaurus under `dependencies`.
+None. `zod` 3 from `jimp` was fixed by jimp 1.7 (see the `createRequire` workaround above), and the `deepmerge` advisory (GHSA-gcqx-w48m-w2h4) was withdrawn on 2026-11-16.
