@@ -34,6 +34,17 @@ require("hyper").setup({ isWorkMacBook = isWorkMacBook })
 require("windows").setup({ isWorkMacBook = isWorkMacBook })
 require("anki").setup({ meh = meh })
 
+if isWorkMacBook then
+  require("widgets.epic").setup({
+    vault = os.getenv("HOME") .. "/obsidian-sync/VoxSmart",
+    title = "VSP new UI · Communications",
+    epicNote = "tickets/UUI-2582 - Epic - New VSP UI - Communications Page.md",
+    tag = "new-vsp-ui",
+    assignee = "Steven",
+    style = "wasp",
+  })
+end
+
 require("modes.modes").setup({
   globalLeader = globalLeader,
   meh = meh,
