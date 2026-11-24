@@ -61,11 +61,11 @@ The day columns are formulas that read the scale from Estimation: `file("Estimat
 
 ## Estimates
 
-`Estimation.md` holds the scale as flat properties, `pre_ai_<points>` and `with_ai_<points>` for 1, 2, 3, 5 and 8, plus `bau_points_per_week`. Its body shows them with inline Dataview (`= this.with_ai_5`), so the properties are the only place the numbers live. Change the numbers there, never in the Base or the summary. If Estimation doesn't exist yet, copy `templates/Estimation.md` to the vault root and ask the user for their scale.
+`Estimation.md` holds the scale as flat properties, `pre_ai_<points>` and `with_ai_<points>` for 1, 2, 3, 5 and 8, plus `bau_points_per_week`, and the days off as lists of dates: `bank_holidays` (England and Wales, from gov.uk) and `leave` (one date per day off). Its body shows them with inline Dataview (`= this.with_ai_5`), so the properties are the only place the numbers live. Change the numbers there, never in the Base or the summary. If Estimation doesn't exist yet, copy `templates/Estimation.md` to the vault root and ask the user for their scale.
 
 The Estimates section is the first section of the epic note, straight after the Due callout. It has the Dataview summary first and then the embedded Base view. The summary is from `templates/estimates-summary.md` (replace `{{EPIC_TAG}}` and `{{ASSIGNEE}}`). The summary only counts the user's own tickets that aren't Done. It:
 
-- counts working days (Mon-Fri) from tomorrow until the epic note's `due`
+- counts working days (Mon-Fri, less `bank_holidays` and `leave`) from tomorrow until the epic note's `due`
 - adds up the Dev days of the must-haves, and shows the stretch goals' days separately underneath
 - shows one table with a column for with BAU (`bau_points_per_week`, counted as one ticket of that size per week) and one for without. Two separate tables side by side don't fit in the note's width, so they wrap
 - shows how many days ahead or short that is, and the same in points ("4 points spare", "7 points over"), using the average days per point of the must-haves left
@@ -74,6 +74,10 @@ The Estimates section is the first section of the epic note, straight after the 
 The table is built with `createEl` rather than `dv.table`, which adds a result count to the header. Values are wrapped in `<code>`.
 
 When the user asks for figures in chat, work them out from the notes the same way and say they're from today. Ready for review counts as remaining until it's Done.
+
+## Desktop widget
+
+A Hammerspoon desktop widget shows the epic against its due date: `~/dotfiles/hammerspoon/.config/hammerspoon/widgets/epic.lua` and `widgets/epic.html`, set up in that folder's `init.lua`. It reads the same notes and Estimation properties as the summary and redraws when a note changes, so keep the two in step: a change to how the summary counts days or points belongs in the widget too.
 
 ## Syncing with Jira
 

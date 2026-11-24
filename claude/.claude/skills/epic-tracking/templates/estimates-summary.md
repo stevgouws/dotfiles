@@ -8,10 +8,12 @@ const stretchGoals = tickets.where((p) => p.stretch);
 const daysLeft = (prefix, list = mustHaves) =>
 	list.array().reduce((total, p) => total + (p.points ? scale[`${prefix}_${p.points}`] ?? 0 : 0), 0);
 
+// Bank holidays and leave from Estimation aren't working days. Dataview reads the dates as dates, so they're turned back into text to compare.
+const daysOff = new Set([...(scale.bank_holidays ?? []), ...(scale.leave ?? [])].map((d) => (typeof d === "string" ? d : d.toISODate())));
 // Counts from tomorrow, so the rest of today isn't included.
 let workingDays = 0;
 for (let day = dv.luxon.DateTime.now().startOf("day").plus({ days: 1 }); day <= due; day = day.plus({ days: 1 })) {
-	if (day.weekday <= 5) workingDays++;
+	if (day.weekday <= 5 && !daysOff.has(day.toISODate())) workingDays++;
 }
 
 const bauPoints = scale.bau_points_per_week;
