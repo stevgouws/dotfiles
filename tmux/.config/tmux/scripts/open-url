@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+# Open the link under the copy-mode cursor of the given pane.
+# Prefers the real link target, so a Markdown link in Claude Code that only shows its text
+# (or a long URL wrapped over several lines) still opens the full URL. Otherwise opens the
+# first URL written out on the cursor's line, of any kind (https://, obsidian://, ...).
+
+pane=$1
+
+url=$(tmux display -p -t "$pane" '#{copy_cursor_hyperlink}')
+
+if [ -z "$url" ]; then
+  # Trailing punctuation is dropped, e.g. the ")." in "(see https://example.com)."
+  url=$(tmux display -p -t "$pane" '#{copy_cursor_line}' |
+    grep -Eo '[a-zA-Z][a-zA-Z0-9+.-]*://[^[:space:]<>"`]+' |
+    head -n 1 |
+    sed -E 's/[].,;:!?)]+$//')
+fi
+
+if [ -z "$url" ]; then
+  tmux display-message -t "$pane" "No link under the cursor"
+  exit 0
+fi
+
+open "$url"

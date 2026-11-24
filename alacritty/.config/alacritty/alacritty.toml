@@ -44,10 +44,10 @@ key = "V"
 mods = "Control|Option|Shift"
 chars = "\u0013["
 
-# Send a custom escape sequence when pressing Ctrl+Option+Shift+S.
+# Send a custom escape sequence when pressing Ctrl+Option+Shift+Enter.
 # tmux maps this sequence to User0, which opens the session switcher popup.
 [[keyboard.bindings]]
-key = "S"
+key = "Enter"
 mods = "Control|Alt|Shift"
 chars = "\u001b[5;30000~"
 
@@ -58,12 +58,6 @@ key = "W"
 mods = "Control|Alt|Shift"
 chars = "\u001b[5;30001~"
 
-# # Ctrl+Option+Shift+S -> tmux prefix + s -> tmux list-sessions
-# [[keyboard.bindings]]
-# key = "S"
-# mods = "Control|Alt|Shift"
-# chars = "\u0013s"
-#
 # # Ctrl+Option+Shift+W -> tmux prefix + s -> tmux list-windows
 # [[keyboard.bindings]]
 # key = "W"
@@ -88,6 +82,13 @@ action = "ScrollHalfPageDown"
 key = "K"
 mods = "Alt|Shift"
 chars = "\u001b[5;30002~"
+
+# Send a custom escape sequence for Ctrl+Option+Shift+U.
+# tmux maps this sequence to User3, which opens the link under the cursor in copy mode.
+[[keyboard.bindings]]
+key = "U"
+mods = "Control|Alt|Shift"
+chars = "\u001b[5;30003~"
 
 # Ctrl+Shift+Alt+k: accept the suggestion and run it, in both zsh-autosuggestions
 # and Claude Code. Sends Right arrow then Enter, because Right arrow at the end
