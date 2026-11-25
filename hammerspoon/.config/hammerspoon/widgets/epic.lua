@@ -1,14 +1,20 @@
---- A desktop widget, top right of the MacBook's own screen, showing how an epic is doing against its
+--- A desktop widget, bottom right of the MacBook's own screen, showing how an epic is doing against its
 --- due date. Everything it shows comes from Obsidian: the epic's ticket notes, the epic note's due
 --- date, and Estimation.md for the points-to-days scale, BAU, bank holidays and leave (the layout the
 --- epic-tracking Claude skill sets up). It redraws whenever a note changes. The card itself is
 --- widgets/epic.html.
+---
+--- With `historyFile` set, it also keeps one line per working day with how many days ahead or short
+--- the epic is, which widgets/epic_history.lua charts. Each redraw overwrites today's line, so the
+--- last one of the day is the end-of-day figure.
 local M = {}
 
 -- Declared up front so the helpers further down stay local to this file but can still be called from setup.
-local place, builtInScreen, render, epicData, readFile, frontmatter, unquote, hasValue, asList
+local place, builtInScreen, render, fillTemplate, epicData, recordSnapshot, saveSnapshot, readFile,
+  frontmatter, unquote, hasValue, asList
 
 local TEMPLATE = hs.configdir .. "/widgets/epic.html"
+local THEMES = hs.configdir .. "/widgets/epic-themes.css"
 
 -- Fits the 360px-wide card plus the page padding in epic.html. Anything taller than HEIGHT is cut
 -- off, so raise it if the card gets more rows.
@@ -21,6 +27,8 @@ local WIDTH, HEIGHT = 400, 470
 --- - tag: the tag on every ticket note in the epic
 --- - assignee: only this person's tickets are counted
 --- - style: the look of the card, one of the styles in epic.html (defaults to "glass")
+--- - historyFile: optional CSV, relative to the vault, to record each day's days ahead or short in
+--- - spaceBelow: optional height in pixels to leave free under the widget, e.g. for epic_history.lua
 function M.setup(options)
   M.options = options
 
@@ -31,6 +39,9 @@ function M.setup(options)
     :allowTextEntry(false)
     :level(hs.drawing.windowLevels.desktopIcon)
     :behaviorAsLabels({ "canJoinAllSpaces", "stationary" })
+    :navigationCallback(function(action)
+      if action == "didFinishNavigation" then recordSnapshot() end
+    end)
 
   M.redraw = hs.timer.delayed.new(2, render)
 
@@ -52,7 +63,8 @@ function M.setup(options)
   place()
 end
 
---- Shows the widget top right of the built-in screen, or hides it when the lid is shut.
+--- Shows the widget bottom right of the built-in screen, above any `spaceBelow`, or hides it when
+--- the lid is shut.
 function place()
   local screen = builtInScreen()
   if not screen then
@@ -60,7 +72,8 @@ function place()
     return
   end
   local frame = screen:frame()
-  M.webview:topLeft({ x = frame.x + frame.w - WIDTH, y = frame.y }):show()
+  local bottom = frame.y + frame.h - (M.options.spaceBelow or 0)
+  M.webview:topLeft({ x = frame.x + frame.w - WIDTH, y = bottom - HEIGHT }):show()
 end
 
 function builtInScreen()
@@ -79,12 +92,14 @@ function render()
     print("Epic widget: " .. tostring(data))
     data = { error = tostring(data), style = M.options.style }
   end
-  local template = readFile(TEMPLATE)
-  local json = hs.json.encode(data)
-  -- A function replacement, because gsub would treat any "%" in the JSON as a capture reference.
-  M.webview:html((template:gsub("__DATA__", function()
-    return json
-  end)))
+  M.webview:html(fillTemplate(TEMPLATE, data))
+end
+
+--- A card's HTML with the shared themes and its data filled in.
+function fillTemplate(templatePath, data)
+  local values = { __THEMES__ = readFile(THEMES), __DATA__ = hs.json.encode(data) }
+  -- A table replacement, because a string one would treat any "%" in the values as a capture reference.
+  return (readFile(templatePath):gsub("__%u+__", values))
 end
 
 function epicData()
@@ -125,6 +140,31 @@ function epicData()
     tickets = tickets,
     daysOff = daysOff,
   }
+end
+
+--- Asks the card for the figure it just worked out, since the sums live in epic.html.
+function recordSnapshot()
+  if not M.options.historyFile then return end
+  M.webview:evaluateJavaScript("typeof snapshot === 'function' && JSON.stringify(snapshot())", function(result)
+    local snapshot = type(result) == "string" and hs.json.decode(result)
+    if snapshot and snapshot.workingDay then saveSnapshot(snapshot) end
+  end)
+end
+
+--- Writes today's line into the history file, replacing an earlier one from today.
+function saveSnapshot(snapshot)
+  local path = M.options.vault .. "/" .. M.options.historyFile
+  local days = {}
+  for line in readFile(path):gmatch("[^\n]+") do
+    if line:match("^%d") and line:sub(1, 10) ~= snapshot.date then table.insert(days, line) end
+  end
+  table.insert(days, string.format("%s,%.2f", snapshot.date, snapshot.daysAhead))
+  -- ISO dates sort by date as plain text.
+  table.sort(days)
+
+  local file = assert(io.open(path, "w"))
+  file:write("date,days_ahead\n" .. table.concat(days, "\n") .. "\n")
+  file:close()
 end
 
 function readFile(path)
@@ -181,5 +221,9 @@ function hasValue(list, wanted)
   end
   return false
 end
+
+M.builtInScreen = builtInScreen
+M.fillTemplate = fillTemplate
+M.readFile = readFile
 
 return M

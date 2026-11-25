@@ -1,0 +1,44 @@
+/* The looks shared by the epic widgets, picked with their `style` option in init.lua. Each one only
+   sets these variables. epic.lua puts this file in place of __THEMES__ in each card. */
+body, body[data-style="glass"] {
+	--card: rgba(28, 28, 32, 0.9);
+	--edge: rgba(255, 255, 255, 0.08);
+	--shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+	--radius: 18px;
+	--text: #f2f2f5;
+	--muted: #9a9aa6;
+	--faint: rgba(255, 255, 255, 0.07);
+	--epic: #7c8cff;
+	--bau: #c18cff;
+	--good: #4fd18b;
+	--warn: #ffb547;
+	--bad: #f28b82;
+	--font: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+	--headline-font: var(--font);
+}
+/* Wasp is the Obsidian theme (gruvbox-based, yellow on near-black); these are its colours, with gruvbox-material's softer red. */
+body[data-style="wasp"] {
+	--card: rgba(25, 25, 25, 0.94);
+	--edge: rgba(248, 197, 55, 0.22);
+	--text: #faf2d6;
+	--muted: #bdae93;
+	--faint: rgba(250, 242, 214, 0.07);
+	--epic: #f8c537;
+	--bau: #d49335;
+	--good: #8ec07c;
+	--warn: #fe8019;
+	--bad: #ea6962;
+}
+body[data-style="midnight"] {
+	--card: linear-gradient(160deg, rgba(22, 30, 56, 0.95), rgba(12, 14, 26, 0.95));
+	--edge: rgba(90, 200, 250, 0.16);
+	--muted: #8a93ad;
+	--epic: #5ac8fa;
+	--bau: #7c8cff;
+}
+body[data-style="graphite"] {
+	--card: rgba(20, 20, 22, 0.92);
+	--muted: #8e8e93;
+	--epic: #e5e5ea;
+	--bau: #8e8e93;
+}

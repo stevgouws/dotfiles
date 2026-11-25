@@ -39,12 +39,22 @@ require("anki").setup({ meh = meh })
 require("tmux_vscode").setup({ meh = meh })
 
 if isWorkMacBook then
+  local vault = os.getenv("HOME") .. "/obsidian-sync/VoxSmart"
+  local historyFile = "tickets/UUI-2582 - Epic daily shortfall.csv"
+  local epicHistory = require("widgets.epic_history")
   require("widgets.epic").setup({
-    vault = os.getenv("HOME") .. "/obsidian-sync/VoxSmart",
+    vault = vault,
     title = "VSP new UI · Communications",
     epicNote = "tickets/UUI-2582 - Epic - New VSP UI - Communications Page.md",
     tag = "new-vsp-ui",
     assignee = "Steven",
+    style = "wasp",
+    historyFile = historyFile,
+    spaceBelow = epicHistory.height,
+  })
+  epicHistory.setup({
+    historyFile = vault .. "/" .. historyFile,
+    title = "Days ahead or short, end of day",
     style = "wasp",
   })
 end
