@@ -17,8 +17,8 @@ end
 
 local function tmux_run(target, test_cmd)
   last_leader_j_cmd = string.format(
-    'tmux send-keys -t %q C-c && tmux send-keys -t %q %q C-m && tmux select-window -t %q',
-    target, target, "clear && " .. test_cmd, target
+    'tmux send-keys -t %q C-c && tmux send-keys -t %q %q C-m',
+    target, target, "clear && " .. test_cmd
   )
   os.execute(last_leader_j_cmd)
 end
