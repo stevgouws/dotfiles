@@ -10,8 +10,14 @@ width=$(($(tput cols) - 3))
 # Sessions with a window that has a pending alert (bell, activity or silence)
 # get a marker on the right, e.g. "● 2~" means window 2 has been quiet past its
 # monitor-silence limit.
-session=$(tmux list-sessions -F "#{session_name}	#{session_alerts}" |
+#
+# Mirror sessions are left out, e.g. one made with `tmux new -t fe-ui -s mirror`
+# to show the same windows in a second terminal. tmux names the group after the
+# session it was made from, so the session whose name matches its group stays
+# in the list.
+session=$(tmux list-sessions -F "#{session_name}	#{session_alerts}	#{session_grouped}	#{session_group}" |
   awk -F '\t' -v width="$width" '{
+    if ($3 == "1" && $1 != $4) next
     if ($2 == "") { print $1 "\t" $1; next }
     gap = width - length($1) - length($2) - 2
     if (gap < 1) gap = 1
