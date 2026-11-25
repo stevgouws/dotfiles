@@ -1,3 +1,6 @@
+-- Lets the `hs` command-line tool talk to Hammerspoon, e.g. `hs -c 'hs.reload()'`.
+require("hs.ipc")
+
 -- Register Hammerspoon as a macOS login item.
 if not hs.autoLaunch() then
   hs.autoLaunch(true)
@@ -33,6 +36,7 @@ hs.alert.show("Config loaded...")
 require("hyper").setup({ isWorkMacBook = isWorkMacBook })
 require("windows").setup({ isWorkMacBook = isWorkMacBook })
 require("anki").setup({ meh = meh })
+require("tmux_vscode").setup({ meh = meh })
 
 if isWorkMacBook then
   require("widgets.epic").setup({
