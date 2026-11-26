@@ -65,11 +65,15 @@ function render()
   }))
 end
 
---- The history file's `date,days_ahead` lines, oldest first.
+--- The history file's `date,days_ahead,points_ahead` lines, oldest first. Days recorded before
+--- points were saved have no points_ahead.
 function readHistory()
   local days = {}
-  for date, daysAhead in epic.readFile(M.options.historyFile):gmatch("(%d%d%d%d%-%d%d%-%d%d),([-%d.]+)") do
-    table.insert(days, { date = date, daysAhead = tonumber(daysAhead) })
+  for line in epic.readFile(M.options.historyFile):gmatch("[^\n]+") do
+    local date, daysAhead, pointsAhead = line:match("^(%d%d%d%d%-%d%d%-%d%d),([-%d.]+),?([-%d.]*)")
+    if date then
+      table.insert(days, { date = date, daysAhead = tonumber(daysAhead), pointsAhead = tonumber(pointsAhead) })
+    end
   end
   return days
 end

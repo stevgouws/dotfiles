@@ -166,9 +166,13 @@ function stretchRunway() {
 	</div>`;
 }
 
-/** Today's figure for epic.lua to save in the history file. */
+/**
+ * Today's figures for epic.lua to save in the history file. Today isn't counted as a working day
+ * left, so pointsAhead below zero is also how many points would have to be done today to catch up.
+ */
 function snapshot() {
-	return { date: EPIC.today, daysAhead: spare, workingDay: isWorkingDay(today) };
+	const pointsAhead = daysPerPoint ? spare / daysPerPoint : null;
+	return { date: EPIC.today, daysAhead: spare, pointsAhead, workingDay: isWorkingDay(today) };
 }
 
 function parseDate(iso) {

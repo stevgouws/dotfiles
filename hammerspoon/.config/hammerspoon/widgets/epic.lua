@@ -4,8 +4,8 @@
 --- epic-tracking Claude skill sets up). It redraws whenever a note changes. The card itself is
 --- widgets/epic.html.
 ---
---- With `historyFile` set, it also keeps one line per working day with how many days ahead or short
---- the epic is, which widgets/epic_history.lua charts. Each redraw overwrites today's line, so the
+--- With `historyFile` set, it also keeps one line per working day with how many days and points ahead
+--- or short the epic is, which widgets/epic_history.lua charts. Each redraw overwrites today's line, so the
 --- last one of the day is the end-of-day figure.
 local M = {}
 
@@ -27,7 +27,7 @@ local WIDTH, HEIGHT = 400, 470
 --- - tag: the tag on every ticket note in the epic
 --- - assignee: only this person's tickets are counted
 --- - style: the look of the card, one of the styles in epic.html (defaults to "glass")
---- - historyFile: optional CSV, relative to the vault, to record each day's days ahead or short in
+--- - historyFile: optional CSV, relative to the vault, to record each day's days and points ahead or short in
 --- - spaceBelow: optional height in pixels to leave free under the widget, e.g. for epic_history.lua
 function M.setup(options)
   M.options = options
@@ -158,12 +158,13 @@ function saveSnapshot(snapshot)
   for line in readFile(path):gmatch("[^\n]+") do
     if line:match("^%d") and line:sub(1, 10) ~= snapshot.date then table.insert(days, line) end
   end
-  table.insert(days, string.format("%s,%.2f", snapshot.date, snapshot.daysAhead))
+  local pointsAhead = snapshot.pointsAhead and string.format("%.2f", snapshot.pointsAhead) or ""
+  table.insert(days, string.format("%s,%.2f,%s", snapshot.date, snapshot.daysAhead, pointsAhead))
   -- ISO dates sort by date as plain text.
   table.sort(days)
 
   local file = assert(io.open(path, "w"))
-  file:write("date,days_ahead\n" .. table.concat(days, "\n") .. "\n")
+  file:write("date,days_ahead,points_ahead\n" .. table.concat(days, "\n") .. "\n")
   file:close()
 end
 
