@@ -12,7 +12,13 @@ vim.opt.gdefault = true
 vim.g.mapleader = ","
 
 if vim.g.vscode then
-    -- VSCode extension
+  -- Neovim gets whatever PATH VS Code started with. Opened with `code` from a
+  -- terminal, that's the shell's full PATH. Opened from the Dock, Spotlight or
+  -- after an update, it can be just the system PATH, and Homebrew tools like
+  -- `gh` can't be found.
+  if not vim.env.PATH:find("/opt/homebrew/bin", 1, true) then
+    vim.env.PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:" .. vim.env.PATH
+  end
 else
   -- ordinary Neovim
   vim.opt.relativenumber = true -- not needed VScode provides it anyway
