@@ -3,14 +3,13 @@ set -euo pipefail
 
 dir=$(basename "$PWD")
 
-if [ -z "$1" ]; then
-  echo "Usage: retire <dir-name>"
-  echo "Current directory: $dir"
-  exit 1
-fi
+a=$((RANDOM % 8 + 2))
+b=$((RANDOM % 8 + 2))
+echo "Retiring '$dir'."
+read -rp "$a + $b = ? " answer
 
-if [ "$1" != "$dir" ]; then
-  echo "Error: '$1' does not match current directory '$dir'"
+if [ "$answer" != "$((a + b))" ]; then
+  echo "Wrong answer, not retiring '$dir'"
   exit 1
 fi
 
