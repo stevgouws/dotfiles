@@ -12,7 +12,17 @@ The user dispatches work from this session. Another Claude, started in window 3 
 - **Repo:** the main checkout under `~/projects/<repo>` (e.g. `~/projects/fe-ui`). Ask if it isn't clear from the request or the current directory.
 - **Name:** the worktree and tmux session name. Make it a short, friendly name of one or two words that says what the work is, in kebab-case (`ui-shell`, `retention-csv`), not the ticket number, so it's easy to spot and type in the session picker. It must not clash with an existing worktree in `~/projects/worktrees/<repo>/` or a tmux session (`tmux ls`).
 - **Branch:** by default `gwa` uses the name as the branch too. When there's a Jira key, pass `--branch-name` so the branch still has the key, following the repo's branch naming (e.g. `feature/UUI-2587-new-ui-shell` in `fe-ui`, see its AGENTS.md). Pass `--base-branch` only if the user names a base other than `origin/main`.
-- **Ask first:** suggest the name and branch (and the repo, if you had to pick one) in one short question and wait for the user to approve or change them before writing the brief or running `gwa`.
+- **Ask first:** suggest the name and branch (and the repo, if you had to pick one) and wait for the user to approve or change them before writing the brief or running `gwa`. Keep it terse: one line saying what you're handing over, then a bullet per thing to confirm with the value in backticks, then a short question. No prose around it:
+
+  ```
+  Handing over the retention date column to a new session:
+
+  - Repo: `fe-ui`
+  - Session: `retention-csv`
+  - Branch: `feature/UUI-2609-retention-policy-end-date`
+
+  OK, or change any?
+  ```
 
 ## 2. Write the brief
 
