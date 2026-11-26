@@ -64,6 +64,8 @@ views:
       direction: DESC
     groupOrder:
       - New
+      - To Do
+      - In Progress
       - Ready for review
       - Done
     order:
@@ -92,6 +94,9 @@ views:
       direction: ASC
     groupOrder:
       - New
+      - To Do
+      - In Progress
+      - Ready for review
       - Done
     order:
       - order

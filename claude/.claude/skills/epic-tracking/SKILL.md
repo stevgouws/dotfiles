@@ -57,6 +57,8 @@ Start from `templates/epic-overview.base` and replace `{{EPIC_TAG}}` with the ep
 - **Work order:** every ticket by `order`, with depends on and needed by.
 - **All tickets**, **By status**, **Not pointed**.
 
+The grouped views (All tickets, By status) only show the statuses listed in their `groupOrder`, so a ticket in any other status silently drops out of them. Keep every status the epic uses in that list (`New`, `To Do`, `In Progress`, `Ready for review`, `Done`), and add a new one when a ticket moves into it.
+
 The day columns are formulas that read the scale from Estimation: `file("Estimation.md").properties["with_ai_" + points.toString()]`. Bases don't refresh values read from another note by themselves, so after changing Estimation the user may need to reopen the Base.
 
 ## Estimates

@@ -10,8 +10,9 @@ The user dispatches work from this session. Another Claude, started in window 3 
 ## 1. Work out the repo, name and branch
 
 - **Repo:** the main checkout under `~/projects/<repo>` (e.g. `~/projects/fe-ui`). Ask if it isn't clear from the request or the current directory.
-- **Name:** the worktree, tmux session and (by default) branch name. Use the Jira key if there is one (`FE-1234`), otherwise a short kebab-case name. It must not clash with an existing worktree in `~/projects/worktrees/<repo>/` or a tmux session (`tmux ls`).
-- Pass `--branch-name` only if the user wants a branch name that differs from the worktree name, and `--base-branch` only if the user names a base other than `origin/main`.
+- **Name:** the worktree and tmux session name. Make it a short, friendly name of one or two words that says what the work is, in kebab-case (`ui-shell`, `retention-csv`), not the ticket number, so it's easy to spot and type in the session picker. It must not clash with an existing worktree in `~/projects/worktrees/<repo>/` or a tmux session (`tmux ls`).
+- **Branch:** by default `gwa` uses the name as the branch too. When there's a Jira key, pass `--branch-name` so the branch still has the key, following the repo's branch naming (e.g. `feature/UUI-2587-new-ui-shell` in `fe-ui`, see its AGENTS.md). Pass `--base-branch` only if the user names a base other than `origin/main`.
+- **Ask first:** suggest the name and branch (and the repo, if you had to pick one) in one short question and wait for the user to approve or change them before writing the brief or running `gwa`.
 
 ## 2. Write the brief
 
