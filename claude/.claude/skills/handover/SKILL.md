@@ -33,10 +33,11 @@ Don't restate the user's global rules (no staging, no commits, no GitHub posts w
 ## 3. Start the session
 
 ```sh
-cd ~/projects/<repo> && gwa <name> --detach --task-file <brief path>
+cd ~/projects/<repo> && gwa <name> --detach --task-file <brief path> && tmux select-window -t "=<name>:3"
 ```
 
 - `--detach` matters. Without it `tx` switches the user's tmux client to the new session and opens VS Code.
+- `select-window` makes Claude's window the session's current window, so the user lands on it when they switch over. The session setup leaves window 1 selected otherwise. It doesn't move the user's own client.
 - `gwa` moves the brief into the worktree's git folder as `handover.md`. `start-claude-with-handover-support` in window 3 sends it as the first prompt and deletes it, so Claude doesn't get it again on a restart.
 - If `gwa` fails before the worktree is created, the brief is still in the scratchpad, so fix the problem and rerun.
 
