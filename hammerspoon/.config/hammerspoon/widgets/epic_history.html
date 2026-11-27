@@ -17,33 +17,31 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-		font: 13px/1.35 var(--font);
+		font: 15px/1.35 var(--font);
 		color: var(--text);
 		-webkit-user-select: none;
 		cursor: default;
 	}
 	.card {
-		width: 360px;
-		padding: 16px 18px;
+		padding: 18px 22px;
 		border-radius: var(--radius);
 		background: var(--card);
 		border: 1px solid var(--edge);
 		box-shadow: var(--shadow);
 	}
 	.title { font-weight: 600; color: var(--muted); }
-	.big { font: 700 24px/1.2 var(--headline-font); letter-spacing: -0.02em; margin-top: 8px; }
-	.points { font: 600 13px var(--font); letter-spacing: 0; color: var(--text); margin-left: 6px; }
-	.sub { color: var(--muted); font-size: 12px; }
-	/* Row heights are fixed, as epic_history.lua sizes the window from the number of rows. */
-	.today { margin-top: 6px; height: 18px; display: flex; align-items: center; gap: 8px; }
-	.today .bar { flex: 1; height: 6px; border-radius: 3px; background: var(--faint); overflow: hidden; }
+	.big { font: 700 32px/1.2 var(--headline-font); letter-spacing: -0.02em; margin-top: 8px; }
+	.points { font: 600 15px var(--font); letter-spacing: 0; color: var(--text); margin-left: 8px; }
+	.sub { color: var(--muted); font-size: 14px; }
+	.today { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+	.today .bar { flex: 1; height: 8px; border-radius: 4px; background: var(--faint); overflow: hidden; }
 	.today .bar i { display: block; height: 100%; background: var(--epic); }
-	.today .label { width: 72px; }
-	.target { margin-top: 8px; }
-	.target .sub { line-height: 18px; }
-	.target ul { margin: 2px 0 0; padding: 0; list-style: none; }
-	.target li { display: flex; gap: 8px; font-size: 12px; font-weight: 600; line-height: 17px; height: 17px; white-space: nowrap; }
-	.target li .pts { width: 14px; flex: none; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+	.today .label { width: 88px; }
+	.target { margin-top: 12px; }
+	/* Two columns, read down then across, so the queue stays in work order. */
+	.target ul { margin: 4px 0 0; padding: 0; list-style: none; columns: 2; column-gap: 24px; }
+	.target li { display: flex; gap: 8px; font-size: 14px; font-weight: 600; line-height: 21px; white-space: nowrap; break-inside: avoid; }
+	.target li .pts { width: 16px; flex: none; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 	.target li .name { overflow: hidden; text-overflow: ellipsis; }
 	.target li.more { font-weight: 400; color: var(--muted); }
 	svg { display: block; margin-top: 10px; }
@@ -68,14 +66,26 @@ const latest = days.at(-1);
 const previous = days.at(-2);
 // The epic widget keeps rewriting today's figure until the day ends, so it isn't an end-of-day one yet.
 const latestIsToday = latest?.date === HISTORY.today;
+const clearingToday = latestIsToday && catchUpTickets.length > 0;
 
-document.getElementById("card").innerHTML = days.length
+const card = document.getElementById("card");
+// The chart fills the card, which is as wide as the window epic_history.lua opens.
+const chartWidth = card.clientWidth - 2 * parseFloat(getComputedStyle(card).paddingLeft);
+
+card.innerHTML = days.length
 	? `<div class="title">${escape(HISTORY.title)}</div>${headline()}${doneToday()}${catchUp()}${chart()}`
 	: `<div class="title">${escape(HISTORY.title)}</div><div class="sub" style="margin-top:6px">No days recorded yet.</div>`;
 
+/**
+ * When short today, what to get done today, as the epic widget already leads with the finish date
+ * and how far short that is. Otherwise how far ahead or short the epic is.
+ */
 function headline() {
-	return `<div class="big" style="color:${colour(latest.daysAhead)}">${verdict(latest.daysAhead)}${points(latest)}</div>
-		<div class="sub">${latestIsToday ? "today so far" : `end of ${fmt(latest.date)}`}${previous ? ` · ${trend(latest.daysAhead - previous.daysAhead)} since ${fmt(previous.date)}` : ""}</div>`;
+	const when = latestIsToday ? "today so far" : `end of ${fmt(latest.date)}`;
+	const big = clearingToday ? `${catchUpPoints()} pts to clear today` : `${verdict(latest.daysAhead)}${points(latest)}`;
+	const sub = clearingToday ? `${verdict(latest.daysAhead)} ${when}` : when;
+	return `<div class="big" style="color:${colour(latest.daysAhead)}">${big}</div>
+		<div class="sub">${sub}${previous ? ` · ${trend(latest.daysAhead - previous.daysAhead)} since ${fmt(previous.date)}` : ""}</div>`;
 }
 
 /**
@@ -115,14 +125,14 @@ function catchUp() {
 	const rows = shown.map((t) => `<li><span class="pts">${t.points ?? ""}</span><span class="name">${escape(t.title)}</span></li>`).join("");
 	const more = count > shown.length ? `<li class="more"><span class="pts"></span><span class="name">and ${count - shown.length} more</span></li>` : "";
 	return `<div class="target">
-		<div class="sub">To Ready for Testing today to catch up: ${catchUpPoints()} pts</div>
+		<div class="sub">To Ready for Testing today to catch up</div>
 		<ul>${rows}${more}</ul>
 	</div>`;
 }
 
 /** One point per recorded working day, evenly spaced, against a zero line for "on target". */
 function chart() {
-	const W = 324, H = 120, pad = { l: 30, r: 10, t: 12, b: 20 };
+	const W = chartWidth, H = 110, pad = { l: 36, r: 10, t: 14, b: 22 };
 	const values = days.map((d) => d.daysAhead);
 	// Always includes zero, and at least a day either way, so a flat run doesn't fill the whole height.
 	const top = Math.max(0, ...values) + 0.5;
@@ -138,25 +148,25 @@ function chart() {
 	const gridValues = [...new Set([Math.ceil(top - 0.5), 0, Math.floor(bottom + 0.5)])];
 	const grid = gridValues.map((v) => `
 		<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? "var(--muted)" : "var(--faint)"}" stroke-opacity="${v === 0 ? 0.5 : 1}"/>
-		<text x="${pad.l - 6}" y="${y(v) + 3}" fill="var(--muted)" font-size="10" text-anchor="end">${v > 0 ? `+${v}` : v}d</text>`).join("");
+		<text x="${pad.l - 6}" y="${y(v) + 4}" fill="var(--muted)" font-size="12" text-anchor="end">${v > 0 ? `+${v}` : v}d</text>`).join("");
 
 	// Labels the first and last day, and one in the middle once there are enough days to fit it.
 	const labelled = [...new Set([0, days.length >= 5 ? Math.floor((days.length - 1) / 2) : 0, days.length - 1])];
-	const ticks = labelled.map((i) => `<text x="${x(i)}" y="${H - 4}" fill="var(--muted)" font-size="10" text-anchor="${tickAnchor(i)}">${i === days.length - 1 && latestIsToday ? "today" : fmt(days[i].date)}</text>`).join("");
+	const ticks = labelled.map((i) => `<text x="${x(i)}" y="${H - 4}" fill="var(--muted)" font-size="12" text-anchor="${tickAnchor(i)}">${i === days.length - 1 && latestIsToday ? "today" : fmt(days[i].date)}</text>`).join("");
 
 	const dots = days.map((d, i) => {
 		const last = i === days.length - 1;
 		return `<circle cx="${x(i)}" cy="${y(d.daysAhead)}" r="${last ? 4.5 : 3}" fill="${last ? colour(d.daysAhead) : "var(--epic)"}"/>`;
 	}).join("");
 
-	// Each label is about 26px wide, so with many days only every 2nd, 3rd, ... day gets one,
+	// Each label is about 32px wide, so with many days only every 2nd, 3rd, ... day gets one,
 	// counting back from the latest so that one is always labelled.
-	const labelEvery = Math.ceil(days.length / Math.floor((W - pad.l - pad.r) / 26));
+	const labelEvery = Math.ceil(days.length / Math.floor((W - pad.l - pad.r) / 32));
 	const valueLabels = days.map((d, i) => {
 		if ((days.length - 1 - i) % labelEvery !== 0) return "";
 		// Above the dot, unless that would run off the top of the chart.
-		const labelY = y(d.daysAhead) - 8 < 9 ? y(d.daysAhead) + 14 : y(d.daysAhead) - 8;
-		return `<text x="${x(i)}" y="${labelY}" fill="var(--text)" font-size="9" text-anchor="${tickAnchor(i)}">${signed(r1(d.daysAhead))}</text>`;
+		const labelY = y(d.daysAhead) - 9 < 11 ? y(d.daysAhead) + 17 : y(d.daysAhead) - 9;
+		return `<text x="${x(i)}" y="${labelY}" fill="var(--text)" font-size="11" text-anchor="${tickAnchor(i)}">${signed(r1(d.daysAhead))}</text>`;
 	}).join("");
 
 	return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -190,18 +200,17 @@ function verdict(daysAhead) {
 	return rounded > 0 ? `${rounded}d ahead` : `${-rounded}d short`;
 }
 
-/**
- * The day's figure in points, rounded the same way as the epic widget. When short today, it's the
- * points of the catch-up tickets, as the next tickets in the queue can cost more or fewer days per
- * point than the average the history file is worked out with.
- */
+/** The day's figure in points, rounded the same way as the epic widget. */
 function points(day) {
 	if (day.pointsAhead == null || r1(day.daysAhead) === 0) return "";
 	if (day.pointsAhead > 0) return `<span class="points">· ${Math.floor(day.pointsAhead)} pts spare</span>`;
-	if (latestIsToday && day === latest && catchUpTickets.length) return `<span class="points">· ${catchUpPoints()} pts to clear today</span>`;
 	return `<span class="points">· ${Math.ceil(-day.pointsAhead)} pts behind</span>`;
 }
 
+/**
+ * Today's shortfall in points, from the catch-up tickets rather than the history file's average days
+ * per point, as the next tickets in the queue can cost more or fewer days per point than the average.
+ */
 function catchUpPoints() {
 	return catchUpTickets.reduce((total, t) => total + (t.points || 0), 0);
 }

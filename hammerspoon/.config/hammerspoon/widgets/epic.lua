@@ -10,15 +10,18 @@
 local M = {}
 
 -- Declared up front so the helpers further down stay local to this file but can still be called from setup.
-local place, builtInScreen, render, fillTemplate, epicData, recordSnapshot, saveSnapshot, readFile,
-  frontmatter, unquote, hasValue, asList
+local place, builtInScreen, widgetWidth, fitToCard, render, fillTemplate, epicData, recordSnapshot,
+  saveSnapshot, readFile, frontmatter, unquote, hasValue, asList
 
 local TEMPLATE = hs.configdir .. "/widgets/epic.html"
 local THEMES = hs.configdir .. "/widgets/epic-themes.css"
 
--- Fits the 360px-wide card plus the page padding in epic.html. Anything taller than HEIGHT is cut
--- off, so raise it if the card gets more rows.
-local WIDTH, HEIGHT = 400, 470
+-- The top and bottom padding round the card in epic.html and epic_history.html.
+local PAGE_PADDING = 40
+
+local width
+-- Until the card is drawn and measured, tall enough not to cut it off.
+local height = 600
 
 --- Options:
 --- - vault: the Obsidian vault folder
@@ -33,7 +36,8 @@ local WIDTH, HEIGHT = 400, 470
 function M.setup(options)
   M.options = options
 
-  M.webview = hs.webview.new({ x = 0, y = 0, w = WIDTH, h = HEIGHT })
+  width = widgetWidth(400)
+  M.webview = hs.webview.new({ x = 0, y = 0, w = width, h = height })
     :windowStyle({ "borderless" })
     :transparent(true)
     :shadow(false)
@@ -41,7 +45,13 @@ function M.setup(options)
     :level(hs.drawing.windowLevels.desktopIcon)
     :behaviorAsLabels({ "canJoinAllSpaces", "stationary" })
     :navigationCallback(function(action)
-      if action == "didFinishNavigation" then recordSnapshot() end
+      if action == "didFinishNavigation" then
+        recordSnapshot()
+        fitToCard(M.webview, function(newHeight)
+          height = newHeight
+          place()
+        end)
+      end
     end)
 
   M.redraw = hs.timer.delayed.new(2, render)
@@ -65,16 +75,40 @@ function M.setup(options)
 end
 
 --- Shows the widget bottom right of the built-in screen, above any `spaceBelow`, or hides it when
---- the lid is shut.
+--- the lid is shut. Redraws it if the screen's width has changed, as the card fills the window.
 function place()
   local screen = builtInScreen()
   if not screen then
     M.webview:hide()
     return
   end
+  local newWidth = widgetWidth(width)
+  M.webview:size({ w = newWidth, h = height })
+  if newWidth ~= width then
+    width = newWidth
+    render()
+  end
   local frame = screen:frame()
   local bottom = frame.y + frame.h - (M.options.spaceBelow and M.options.spaceBelow() or 0)
-  M.webview:topLeft({ x = frame.x + frame.w - WIDTH, y = bottom - HEIGHT }):show()
+  M.webview:topLeft({ x = frame.x + frame.w - width, y = bottom - height }):show()
+end
+
+--- Half the built-in screen's width, so the epic widgets stacked together take up its right half.
+--- `fallback` when the lid is shut.
+function widgetWidth(fallback)
+  local screen = builtInScreen()
+  return screen and math.floor(screen:frame().w / 2) or fallback
+end
+
+--- Measures a widget's card once it's drawn, and calls `onChange` with the window height that fits
+--- it, padding included, if that's not the window's height already.
+function fitToCard(webview, onChange)
+  webview:evaluateJavaScript("document.getElementById('card').offsetHeight", function(result)
+    local cardHeight = tonumber(result)
+    if not cardHeight then return end
+    local fitted = cardHeight + PAGE_PADDING
+    if fitted ~= webview:size().h then onChange(fitted, cardHeight) end
+  end)
 end
 
 function builtInScreen()
@@ -233,6 +267,8 @@ end
 
 M.place = place
 M.builtInScreen = builtInScreen
+M.widgetWidth = widgetWidth
+M.fitToCard = fitToCard
 M.fillTemplate = fillTemplate
 M.readFile = readFile
 
