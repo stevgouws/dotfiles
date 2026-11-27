@@ -110,13 +110,12 @@ function progressRow(label, done, target) {
 function catchUp() {
 	if (!catchUpTickets.length) return "";
 	const count = catchUpTickets.length;
-	const pts = catchUpTickets.reduce((total, t) => total + (t.points || 0), 0);
 	const maxRows = HISTORY.maxRows || count;
 	const shown = count > maxRows ? catchUpTickets.slice(0, maxRows - 1) : catchUpTickets;
 	const rows = shown.map((t) => `<li><span class="pts">${t.points ?? ""}</span><span class="name">${escape(t.title)}</span></li>`).join("");
 	const more = count > shown.length ? `<li class="more"><span class="pts"></span><span class="name">and ${count - shown.length} more</span></li>` : "";
 	return `<div class="target">
-		<div class="sub">To Ready for Testing today to catch up: ${pts} pts</div>
+		<div class="sub">To Ready for Testing today to catch up: ${catchUpPoints()} pts</div>
 		<ul>${rows}${more}</ul>
 	</div>`;
 }
@@ -192,14 +191,19 @@ function verdict(daysAhead) {
 }
 
 /**
- * The day's figure in points, rounded the same way as the epic widget. When short, that's how many
- * points would have to be done that day to catch up.
+ * The day's figure in points, rounded the same way as the epic widget. When short today, it's the
+ * points of the catch-up tickets, as the next tickets in the queue can cost more or fewer days per
+ * point than the average the history file is worked out with.
  */
 function points(day) {
 	if (day.pointsAhead == null || r1(day.daysAhead) === 0) return "";
 	if (day.pointsAhead > 0) return `<span class="points">· ${Math.floor(day.pointsAhead)} pts spare</span>`;
-	const behind = Math.ceil(-day.pointsAhead);
-	return `<span class="points">· ${behind} pts ${latestIsToday && day === latest ? "to clear today" : "behind"}</span>`;
+	if (latestIsToday && day === latest && catchUpTickets.length) return `<span class="points">· ${catchUpPoints()} pts to clear today</span>`;
+	return `<span class="points">· ${Math.ceil(-day.pointsAhead)} pts behind</span>`;
+}
+
+function catchUpPoints() {
+	return catchUpTickets.reduce((total, t) => total + (t.points || 0), 0);
 }
 
 /** How the figure moved: up means catching up, down means falling further behind. */
