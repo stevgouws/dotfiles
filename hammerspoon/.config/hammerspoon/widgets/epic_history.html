@@ -34,6 +34,16 @@
 	.big { font: 700 24px/1.2 var(--headline-font); letter-spacing: -0.02em; margin-top: 8px; }
 	.points { font: 600 13px var(--font); letter-spacing: 0; color: var(--text); margin-left: 6px; }
 	.sub { color: var(--muted); font-size: 12px; }
+	/* Row heights are fixed, as epic_history.lua sizes the window from the number of rows. */
+	.today { margin-top: 6px; height: 18px; display: flex; align-items: center; gap: 8px; }
+	.today .bar { flex: 1; height: 6px; border-radius: 3px; background: var(--faint); overflow: hidden; }
+	.today .bar i { display: block; height: 100%; background: var(--epic); }
+	.today .label { width: 72px; }
+	.target { margin-top: 8px; }
+	.target .sub { line-height: 18px; }
+	.target ul { margin: 2px 0 0; padding-left: 2px; list-style-position: inside; }
+	.target li { font-size: 12px; font-weight: 600; line-height: 17px; height: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.target li.more { font-weight: 400; color: var(--muted); list-style: none; }
 	svg { display: block; margin-top: 10px; }
 	svg text { font-family: inherit; font-variant-numeric: tabular-nums; }
 </style>
@@ -50,6 +60,7 @@ const HISTORY = __DATA__;
 document.body.dataset.style = HISTORY.style || "glass";
 // Lua's JSON encoder writes an empty list as {}.
 const days = Array.isArray(HISTORY.days) ? HISTORY.days : [];
+const catchUpTickets = Array.isArray(HISTORY.catchUp) ? HISTORY.catchUp : [];
 
 const latest = days.at(-1);
 const previous = days.at(-2);
@@ -57,12 +68,55 @@ const previous = days.at(-2);
 const latestIsToday = latest?.date === HISTORY.today;
 
 document.getElementById("card").innerHTML = days.length
-	? `<div class="title">${escape(HISTORY.title)}</div>${headline()}${chart()}`
+	? `<div class="title">${escape(HISTORY.title)}</div>${headline()}${doneToday()}${catchUp()}${chart()}`
 	: `<div class="title">${escape(HISTORY.title)}</div><div class="sub" style="margin-top:6px">No days recorded yet.</div>`;
 
 function headline() {
 	return `<div class="big" style="color:${colour(latest.daysAhead)}">${verdict(latest.daysAhead)}${points(latest)}</div>
 		<div class="sub">${latestIsToday ? "today so far" : `end of ${fmt(latest.date)}`}${previous ? ` · ${trend(latest.daysAhead - previous.daysAhead)} since ${fmt(previous.date)}` : ""}</div>`;
+}
+
+/**
+ * Points that reached Ready for Testing or further today, against two targets: a day's worth, which
+ * keeps the epic as far ahead or short as it was, and the pace that would finish the must-haves by
+ * the due date if they were spread evenly from today. Needs yesterday's total complete to compare with.
+ */
+function doneToday() {
+	const before = previous?.pointsComplete;
+	if (!latestIsToday || before == null || latest.pointsComplete == null) return "";
+	// A finished ticket leaving the epic lowers the total, which isn't negative progress.
+	const done = Math.max(0, latest.pointsComplete - before);
+	// The points left as they were this morning, so the pace doesn't drop as today's tickets get done.
+	const onTimePace = HISTORY.workingDaysLeft ? (HISTORY.mustPointsLeft + done) / HISTORY.workingDaysLeft : null;
+	return progressRow("Day's worth", done, HISTORY.pointsPerDay) + progressRow("To hit due", done, onTimePace);
+}
+
+function progressRow(label, done, target) {
+	if (!target) return "";
+	const fill = Math.min(1, done / target) * 100;
+	return `<div class="today">
+		<span class="sub label">${label}</span>
+		<span class="bar"><i style="width:${fill}%;${done >= target ? "background:var(--good)" : ""}"></i></span>
+		<span class="sub"><b style="color:var(--text)">${done} of ${r1(target)} pts</b></span>
+	</div>`;
+}
+
+/**
+ * When short, the tickets, in work order, to get to Ready for Testing today for tomorrow to start on
+ * track. Past maxRows, the last row says how many more there are.
+ */
+function catchUp() {
+	if (!catchUpTickets.length) return "";
+	const count = catchUpTickets.length;
+	const pts = catchUpTickets.reduce((total, t) => total + (t.points || 0), 0);
+	const maxRows = HISTORY.maxRows || count;
+	const shown = count > maxRows ? catchUpTickets.slice(0, maxRows - 1) : catchUpTickets;
+	const rows = shown.map((t) => `<li>${escape(t.title)}</li>`).join("");
+	const more = count > shown.length ? `<li class="more">and ${count - shown.length} more</li>` : "";
+	return `<div class="target">
+		<div class="sub">To Ready for Testing today to catch up: ${pts} pts</div>
+		<ul>${rows}${more}</ul>
+	</div>`;
 }
 
 /** One point per recorded working day, evenly spaced, against a zero line for "on target". */

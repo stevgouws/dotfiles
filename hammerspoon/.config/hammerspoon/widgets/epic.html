@@ -64,10 +64,12 @@ const daysOff = new Set(EPIC.daysOff);
 const due = parseDate(EPIC.due);
 const today = parseDate(EPIC.today);
 
-const open = EPIC.tickets.filter((t) => t.status !== "Done");
+// A ticket is finished on my side once it's with QA.
+const COMPLETE = new Set(["Ready for Testing", "In Testing", "Done"]);
+const open = EPIC.tickets.filter((t) => !COMPLETE.has(t.status));
 const must = open.filter((t) => !t.stretch);
 const stretch = open.filter((t) => t.stretch);
-const done = EPIC.tickets.filter((t) => t.status === "Done" && !t.stretch);
+const done = EPIC.tickets.filter((t) => COMPLETE.has(t.status) && !t.stretch);
 
 const daysUntilDue = workingDaysUntil(due);
 const epicDays = sum(must, "days");
@@ -172,7 +174,37 @@ function stretchRunway() {
  */
 function snapshot() {
 	const pointsAhead = daysPerPoint ? spare / daysPerPoint : null;
-	return { date: EPIC.today, daysAhead: spare, pointsAhead, workingDay: isWorkingDay(today) };
+	// Doing this many points in a day keeps the epic as far ahead or short as it was.
+	const pointsPerDay = daysPerPoint ? capacityPerDay / daysPerPoint : null;
+	const pointsComplete = sum(EPIC.tickets.filter((t) => COMPLETE.has(t.status)), "points");
+	return {
+		date: EPIC.today,
+		daysAhead: spare,
+		pointsAhead,
+		pointsComplete,
+		pointsPerDay,
+		mustPointsLeft: sum(must, "points"),
+		// Including today, unlike daysUntilDue.
+		workingDaysLeft: daysUntilDue + (isWorkingDay(today) ? 1 : 0),
+		workingDay: isWorkingDay(today),
+		catchUp: catchUp(),
+	};
+}
+
+/**
+ * The must-haves to finish today, in work order, for the epic to start tomorrow on track: the
+ * fewest from the front of the queue whose days cover the shortfall. Empty when it's on track already.
+ */
+function catchUp() {
+	const queue = [...must].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity) || a.key.localeCompare(b.key));
+	const tickets = [];
+	let shortfall = -spare;
+	for (const t of queue) {
+		if (r1(shortfall) <= 0) break;
+		tickets.push({ key: t.key, title: t.title, points: t.points });
+		shortfall -= t.days;
+	}
+	return tickets;
 }
 
 function parseDate(iso) {

@@ -5,8 +5,8 @@
 --- widgets/epic.html.
 ---
 --- With `historyFile` set, it also keeps one line per working day with how many days and points ahead
---- or short the epic is, which widgets/epic_history.lua charts. Each redraw overwrites today's line, so the
---- last one of the day is the end-of-day figure.
+--- or short the epic is, and how many points are complete so far, which widgets/epic_history.lua
+--- charts. Each redraw overwrites today's line, so the last one of the day is the end-of-day figure.
 local M = {}
 
 -- Declared up front so the helpers further down stay local to this file but can still be called from setup.
@@ -28,7 +28,8 @@ local WIDTH, HEIGHT = 400, 470
 --- - assignee: only this person's tickets are counted
 --- - style: the look of the card, one of the styles in epic.html (defaults to "glass")
 --- - historyFile: optional CSV, relative to the vault, to record each day's days and points ahead or short in
---- - spaceBelow: optional height in pixels to leave free under the widget, e.g. for epic_history.lua
+--- - spaceBelow: optional function returning the height in pixels to leave free under the widget,
+---   e.g. epic_history.lua's spaceTaken. Call `place` again when it changes.
 function M.setup(options)
   M.options = options
 
@@ -72,7 +73,7 @@ function place()
     return
   end
   local frame = screen:frame()
-  local bottom = frame.y + frame.h - (M.options.spaceBelow or 0)
+  local bottom = frame.y + frame.h - (M.options.spaceBelow and M.options.spaceBelow() or 0)
   M.webview:topLeft({ x = frame.x + frame.w - WIDTH, y = bottom - HEIGHT }):show()
 end
 
@@ -115,6 +116,9 @@ function epicData()
       if hasValue(note.tags, options.tag) and note.assignee == options.assignee then
         local points = tonumber(note.points)
         table.insert(tickets, {
+          key = name:match("^(%u+%-%d+)") or name,
+          title = name:match("^%u+%-%d+ %- (.-)%.md$") or name:gsub("%.md$", ""),
+          order = tonumber(note.order),
           status = note.status,
           stretch = note.stretch == "true",
           points = points or 0,
@@ -142,12 +146,16 @@ function epicData()
   }
 end
 
---- Asks the card for the figure it just worked out, since the sums live in epic.html.
+--- Asks the card for the figures it just worked out, since the sums live in epic.html. They're kept
+--- in `M.latestSnapshot`, and `M.onSnapshot` is called when they change, e.g. for epic_history.lua to
+--- show which tickets would catch the epic up.
 function recordSnapshot()
-  if not M.options.historyFile then return end
   M.webview:evaluateJavaScript("typeof snapshot === 'function' && JSON.stringify(snapshot())", function(result)
     local snapshot = type(result) == "string" and hs.json.decode(result)
-    if snapshot and snapshot.workingDay then saveSnapshot(snapshot) end
+    if not snapshot then return end
+    M.latestSnapshot = snapshot
+    if M.options.historyFile and snapshot.workingDay then saveSnapshot(snapshot) end
+    if M.onSnapshot then M.onSnapshot() end
   end)
 end
 
@@ -159,12 +167,12 @@ function saveSnapshot(snapshot)
     if line:match("^%d") and line:sub(1, 10) ~= snapshot.date then table.insert(days, line) end
   end
   local pointsAhead = snapshot.pointsAhead and string.format("%.2f", snapshot.pointsAhead) or ""
-  table.insert(days, string.format("%s,%.2f,%s", snapshot.date, snapshot.daysAhead, pointsAhead))
+  table.insert(days, string.format("%s,%.2f,%s,%d", snapshot.date, snapshot.daysAhead, pointsAhead, snapshot.pointsComplete))
   -- ISO dates sort by date as plain text.
   table.sort(days)
 
   local file = assert(io.open(path, "w"))
-  file:write("date,days_ahead,points_ahead\n" .. table.concat(days, "\n") .. "\n")
+  file:write("date,days_ahead,points_ahead,points_complete\n" .. table.concat(days, "\n") .. "\n")
   file:close()
 end
 
@@ -223,6 +231,7 @@ function hasValue(list, wanted)
   return false
 end
 
+M.place = place
 M.builtInScreen = builtInScreen
 M.fillTemplate = fillTemplate
 M.readFile = readFile
