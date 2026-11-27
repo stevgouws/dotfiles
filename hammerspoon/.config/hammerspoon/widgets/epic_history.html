@@ -41,9 +41,11 @@
 	.today .label { width: 72px; }
 	.target { margin-top: 8px; }
 	.target .sub { line-height: 18px; }
-	.target ul { margin: 2px 0 0; padding-left: 2px; list-style-position: inside; }
-	.target li { font-size: 12px; font-weight: 600; line-height: 17px; height: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-	.target li.more { font-weight: 400; color: var(--muted); list-style: none; }
+	.target ul { margin: 2px 0 0; padding: 0; list-style: none; }
+	.target li { display: flex; gap: 8px; font-size: 12px; font-weight: 600; line-height: 17px; height: 17px; white-space: nowrap; }
+	.target li .pts { width: 14px; flex: none; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+	.target li .name { overflow: hidden; text-overflow: ellipsis; }
+	.target li.more { font-weight: 400; color: var(--muted); }
 	svg { display: block; margin-top: 10px; }
 	svg text { font-family: inherit; font-variant-numeric: tabular-nums; }
 </style>
@@ -111,8 +113,8 @@ function catchUp() {
 	const pts = catchUpTickets.reduce((total, t) => total + (t.points || 0), 0);
 	const maxRows = HISTORY.maxRows || count;
 	const shown = count > maxRows ? catchUpTickets.slice(0, maxRows - 1) : catchUpTickets;
-	const rows = shown.map((t) => `<li>${escape(t.title)}</li>`).join("");
-	const more = count > shown.length ? `<li class="more">and ${count - shown.length} more</li>` : "";
+	const rows = shown.map((t) => `<li><span class="pts">${t.points ?? ""}</span><span class="name">${escape(t.title)}</span></li>`).join("");
+	const more = count > shown.length ? `<li class="more"><span class="pts"></span><span class="name">and ${count - shown.length} more</span></li>` : "";
 	return `<div class="target">
 		<div class="sub">To Ready for Testing today to catch up: ${pts} pts</div>
 		<ul>${rows}${more}</ul>
