@@ -11,41 +11,41 @@
 	* { box-sizing: border-box; }
 	html, body { background: transparent; margin: 0; }
 	body {
-		padding: 16px 20px 24px;
-		/* The window is a fixed size (see epic_history.lua), so the card sits at its bottom, level with the epic card. */
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		font: 15px/1.35 var(--font);
+		/* The window is half the screen and the full height of it (see epic.lua); the card fills it. */
+		height: 100vh;
+		padding: 24px 24px 24px 8px;
+		font: 21px/1.35 var(--font);
 		color: var(--text);
 		-webkit-user-select: none;
 		cursor: default;
 	}
 	.card {
-		padding: 18px 22px;
+		height: 100%;
+		padding: 24px 28px;
 		border-radius: var(--radius);
 		background: var(--card);
 		border: 1px solid var(--edge);
 		box-shadow: var(--shadow);
+		overflow: hidden;
 	}
+	.content { display: flex; flex-direction: column; gap: 22px; }
 	.title { font-weight: 600; color: var(--muted); }
-	.big { font: 700 32px/1.2 var(--headline-font); letter-spacing: -0.02em; margin-top: 8px; }
-	.points { font: 600 15px var(--font); letter-spacing: 0; color: var(--text); margin-left: 8px; }
-	.sub { color: var(--muted); font-size: 14px; }
-	.today { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
-	.today .bar { flex: 1; height: 8px; border-radius: 4px; background: var(--faint); overflow: hidden; }
+	.big { font: 700 50px/1.15 var(--headline-font); letter-spacing: -0.02em; }
+	.sub { color: var(--muted); }
+	svg { display: block; }
+	svg text { font-family: inherit; font-variant-numeric: tabular-nums; }
+	.points { font: 600 0.62em var(--font); letter-spacing: 0; color: var(--text); margin-left: 10px; }
+	.rows { display: flex; flex-direction: column; gap: 10px; }
+	.today { display: flex; align-items: center; gap: 14px; }
+	.today .bar { flex: 1; height: 10px; border-radius: 5px; background: var(--faint); overflow: hidden; }
 	.today .bar i { display: block; height: 100%; background: var(--epic); }
-	.today .label { width: 88px; }
-	.target { margin-top: 12px; }
-	/* Two columns, read down then across, so the queue stays in work order. */
-	.target ul { margin: 4px 0 0; padding: 0; list-style: none; columns: 2; column-gap: 24px; }
-	.target li { display: flex; gap: 8px; font-size: 14px; font-weight: 600; line-height: 21px; white-space: nowrap; break-inside: avoid; }
-	.target li .pts { width: 16px; flex: none; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+	.today .label { width: 7em; }
+	.target ul { margin: 4px 0 0; padding: 0; list-style: none; }
+	.target li { display: flex; gap: 12px; font-weight: 600; line-height: 1.55; white-space: nowrap; }
+	.target li .pts { width: 1.2em; flex: none; text-align: right; color: var(--epic); font-variant-numeric: tabular-nums; }
 	.target li .name { overflow: hidden; text-overflow: ellipsis; }
 	.target li.more { font-weight: 400; color: var(--muted); }
-	svg { display: block; margin-top: 10px; }
-	svg text { font-family: inherit; font-variant-numeric: tabular-nums; }
+	svg { margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -71,10 +71,24 @@ const clearingToday = latestIsToday && catchUpTickets.length > 0;
 const card = document.getElementById("card");
 // The chart fills the card, which is as wide as the window epic_history.lua opens.
 const chartWidth = card.clientWidth - 2 * parseFloat(getComputedStyle(card).paddingLeft);
+const CHART_TEXT = 18;
 
-card.innerHTML = days.length
-	? `<div class="title">${escape(HISTORY.title)}</div>${headline()}${doneToday()}${catchUp()}${chart()}`
-	: `<div class="title">${escape(HISTORY.title)}</div><div class="sub" style="margin-top:6px">No days recorded yet.</div>`;
+// Drawn once to see how much height is left, then again with the chart taking all of it.
+draw(150);
+if (days.length) draw(Math.max(110, 150 + spareHeight()));
+
+function draw(chartHeight) {
+	card.innerHTML = days.length
+		? `<div class="content"><div><div class="title">${escape(HISTORY.title)}</div>${headline()}</div>${doneToday()}${catchUp()}${chart(chartHeight)}</div>`
+		: `<div class="content"><div class="title">${escape(HISTORY.title)}</div><div class="sub">No days recorded yet.</div></div>`;
+}
+
+/** The card's height not taken up by its content; below zero when the content doesn't fit. */
+function spareHeight() {
+	const style = getComputedStyle(card);
+	const inner = card.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+	return inner - card.firstElementChild.offsetHeight;
+}
 
 /**
  * When short today, what to get done today, as the epic widget already leads with the finish date
@@ -100,7 +114,7 @@ function doneToday() {
 	const done = Math.max(0, latest.pointsComplete - before);
 	// The points left as they were this morning, so the pace doesn't drop as today's tickets get done.
 	const onTimePace = HISTORY.workingDaysLeft ? (HISTORY.mustPointsLeft + done) / HISTORY.workingDaysLeft : null;
-	return progressRow("Day's worth", done, HISTORY.pointsPerDay) + progressRow("To hit due", done, onTimePace);
+	return `<div class="rows">${progressRow("Day's worth", done, HISTORY.pointsPerDay)}${progressRow("To hit due", done, onTimePace)}</div>`;
 }
 
 function progressRow(label, done, target) {
@@ -109,7 +123,7 @@ function progressRow(label, done, target) {
 	return `<div class="today">
 		<span class="sub label">${label}</span>
 		<span class="bar"><i style="width:${fill}%;${done >= target ? "background:var(--good)" : ""}"></i></span>
-		<span class="sub"><b style="color:var(--text)">${done} of ${r1(target)} pts</b></span>
+		<b>${done} of ${r1(target)} pts</b>
 	</div>`;
 }
 
@@ -131,8 +145,8 @@ function catchUp() {
 }
 
 /** One point per recorded working day, evenly spaced, against a zero line for "on target". */
-function chart() {
-	const W = chartWidth, H = 110, pad = { l: 36, r: 10, t: 14, b: 22 };
+function chart(H) {
+	const W = chartWidth, fs = CHART_TEXT, pad = { l: 2.6 * fs, r: 10, t: fs + 10, b: fs + 12 };
 	const values = days.map((d) => d.daysAhead);
 	// Always includes zero, and at least a day either way, so a flat run doesn't fill the whole height.
 	const top = Math.max(0, ...values) + 0.5;
@@ -148,35 +162,35 @@ function chart() {
 	const gridValues = [...new Set([Math.ceil(top - 0.5), 0, Math.floor(bottom + 0.5)])];
 	const grid = gridValues.map((v) => `
 		<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? "var(--muted)" : "var(--faint)"}" stroke-opacity="${v === 0 ? 0.5 : 1}"/>
-		<text x="${pad.l - 6}" y="${y(v) + 4}" fill="var(--muted)" font-size="12" text-anchor="end">${v > 0 ? `+${v}` : v}d</text>`).join("");
+		<text x="${pad.l - 6}" y="${y(v) + fs / 3}" fill="var(--muted)" font-size="${fs}" text-anchor="end">${v > 0 ? `+${v}` : v}d</text>`).join("");
 
 	// Labels the first and last day, and one in the middle once there are enough days to fit it.
 	const labelled = [...new Set([0, days.length >= 5 ? Math.floor((days.length - 1) / 2) : 0, days.length - 1])];
-	const ticks = labelled.map((i) => `<text x="${x(i)}" y="${H - 4}" fill="var(--muted)" font-size="12" text-anchor="${tickAnchor(i)}">${i === days.length - 1 && latestIsToday ? "today" : fmt(days[i].date)}</text>`).join("");
+	const ticks = labelled.map((i) => `<text x="${x(i)}" y="${H - 4}" fill="var(--muted)" font-size="${fs}" text-anchor="${tickAnchor(i)}">${i === days.length - 1 && latestIsToday ? "today" : fmt(days[i].date)}</text>`).join("");
 
 	const dots = days.map((d, i) => {
 		const last = i === days.length - 1;
-		return `<circle cx="${x(i)}" cy="${y(d.daysAhead)}" r="${last ? 4.5 : 3}" fill="${last ? colour(d.daysAhead) : "var(--epic)"}"/>`;
+		return `<circle cx="${x(i)}" cy="${y(d.daysAhead)}" r="${last ? 6.5 : 4.5}" fill="${last ? colour(d.daysAhead) : "var(--epic)"}"/>`;
 	}).join("");
 
-	// Each label is about 32px wide, so with many days only every 2nd, 3rd, ... day gets one,
-	// counting back from the latest so that one is always labelled.
-	const labelEvery = Math.ceil(days.length / Math.floor((W - pad.l - pad.r) / 32));
+	// Each label is about 2.5 characters' worth wide, so with many days only every 2nd, 3rd, ... day
+	// gets one, counting back from the latest so that one is always labelled.
+	const labelEvery = Math.ceil(days.length / Math.floor((W - pad.l - pad.r) / (2.5 * fs)));
 	const valueLabels = days.map((d, i) => {
 		if ((days.length - 1 - i) % labelEvery !== 0) return "";
 		// Above the dot, unless that would run off the top of the chart.
-		const labelY = y(d.daysAhead) - 9 < 11 ? y(d.daysAhead) + 17 : y(d.daysAhead) - 9;
-		return `<text x="${x(i)}" y="${labelY}" fill="var(--text)" font-size="11" text-anchor="${tickAnchor(i)}">${signed(r1(d.daysAhead))}</text>`;
+		const labelY = y(d.daysAhead) - 12 < fs ? y(d.daysAhead) + fs + 10 : y(d.daysAhead) - 12;
+		return `<text x="${x(i)}" y="${labelY}" fill="var(--text)" font-size="${fs}" font-weight="600" text-anchor="${tickAnchor(i)}">${signed(r1(d.daysAhead))}</text>`;
 	}).join("");
 
-	return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+	return `<div><div class="sub">Days ahead or short at the end of each day</div><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 		${grid}
-		<path d="${settled}" stroke="var(--epic)" stroke-width="2" fill="none" stroke-linejoin="round"/>
-		<path d="${provisional}" stroke="var(--epic)" stroke-width="2" stroke-dasharray="3 3" fill="none"/>
+		<path d="${settled}" stroke="var(--epic)" stroke-width="3" fill="none" stroke-linejoin="round"/>
+		<path d="${provisional}" stroke="var(--epic)" stroke-width="3" stroke-dasharray="4 4" fill="none"/>
 		${dots}
 		${valueLabels}
 		${ticks}
-	</svg>`;
+	</svg></div>`;
 
 	function tickAnchor(i) {
 		if (days.length === 1) return "middle";

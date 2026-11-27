@@ -50,11 +50,10 @@ if isWorkMacBook then
     assignee = "Steven",
     style = "wasp",
     historyFile = historyFile,
-    spaceBelow = epicHistory.height,
   })
   epicHistory.setup({
     historyFile = vault .. "/" .. historyFile,
-    title = "Days ahead or short, end of day",
+    title = "Today",
     style = "wasp",
   })
 end

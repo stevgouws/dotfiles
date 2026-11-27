@@ -12,36 +12,34 @@
 	* { box-sizing: border-box; }
 	html, body { background: transparent; margin: 0; }
 	body {
-		padding: 16px 20px 24px;
-		/* The window is a fixed size (see epic.lua), so the card sits at its bottom, against the screen's bottom edge. */
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		font: 15px/1.35 var(--font);
+		/* The window is half the screen and the full height of it (see epic.lua); the card fills it. */
+		height: 100vh;
+		padding: 24px 8px 24px 24px;
+		font: 21px/1.35 var(--font);
 		color: var(--text);
 		-webkit-user-select: none;
 		cursor: default;
 	}
 	.card {
-		padding: 18px 22px;
+		height: 100%;
+		padding: 24px 28px;
 		border-radius: var(--radius);
 		background: var(--card);
 		border: 1px solid var(--edge);
 		box-shadow: var(--shadow);
+		overflow: hidden;
 	}
-	.head { display: flex; justify-content: space-between; align-items: baseline; }
+	.content { display: flex; flex-direction: column; gap: 22px; }
 	.title { font-weight: 600; color: var(--muted); }
-	.due { font-size: 14px; color: var(--muted); }
-	.big { font: 700 32px/1.2 var(--headline-font); letter-spacing: -0.02em; }
-	.sub { color: var(--muted); font-size: 14px; }
-	.row { display: flex; justify-content: space-between; font-size: 14px; }
+	.big { font: 700 50px/1.15 var(--headline-font); letter-spacing: -0.02em; }
+	.sub { color: var(--muted); }
+	svg { display: block; }
+	svg text { font-family: inherit; font-variant-numeric: tabular-nums; }
+	.head { display: flex; justify-content: space-between; align-items: baseline; }
+	.finish { font-size: 0.62em; color: var(--text); }
+	.row { display: flex; justify-content: space-between; align-items: baseline; }
 	.pill { font-weight: 600; font-variant-numeric: tabular-nums; }
-	.legend { display: flex; white-space: nowrap; gap: 16px; font-size: 13px; color: var(--muted); margin-top: 8px; }
-	.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
-	.hatch { background: repeating-linear-gradient(45deg, var(--epic) 0 2px, var(--faint) 2px 4px); opacity: 0.6; }
-	.stretch { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--edge); }
-	svg text { font-family: inherit; }
+	.stretch { padding-top: 20px; border-top: 1px solid var(--edge); }
 </style>
 </head>
 <body>
@@ -92,31 +90,46 @@ const finish = dateOfWorkingDay(mustFinish);
 const card = document.getElementById("card");
 // The charts fill the card, which is as wide as the window epic.lua opens.
 const chartWidth = card.clientWidth - 2 * parseFloat(getComputedStyle(card).paddingLeft);
+const CHART_TEXT = 18;
 
-card.innerHTML = `
-	<div class="head"><span class="title">${escape(EPIC.title)}</span><span class="due">due ${fmt(due)}</span></div>
-	${summary()}
-	${burndown()}
-	${stretchRunway()}`;
+// Drawn once to see how much height is left, then again with the burndown taking all of it.
+draw(200);
+draw(Math.max(140, 200 + spareHeight()));
+
+function draw(burndownHeight) {
+	card.innerHTML = `<div class="content">
+		<div class="head"><span class="title">${escape(EPIC.title)}</span><span class="sub">due ${fmt(due)}</span></div>
+		${summary()}
+		${burndown(burndownHeight)}
+		${stretchSummary()}
+	</div>`;
+}
+
+/** The card's height not taken up by its content; below zero when the content doesn't fit. */
+function spareHeight() {
+	const style = getComputedStyle(card);
+	const inner = card.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+	return inner - card.firstElementChild.offsetHeight;
+}
 
 function summary() {
-	return `<div style="display:flex;align-items:center;gap:18px;margin-top:10px">
+	return `<div style="display:flex;align-items:center;gap:24px">
 		${progressRing(pointsDone / pointsAll)}
 		<div>
-			<div class="big" style="color:${colour(spare)}">Done ${fmt(finish)}</div>
-			<div class="sub">${versusDue()} · ${verdict(spare)} · ${inPoints(spare)}</div>
+			<div class="big" style="color:${colour(spare)}">${verdict(spare)} <span class="finish">· done ${fmt(finish)}</span></div>
+			<div class="sub">${versusDue()} · ${inPoints(spare)}</div>
 			<div class="sub">${pointsDone}/${pointsAll} pts done · ${daysUntilDue} working days left</div>
 		</div>
 	</div>`;
 }
 
 function progressRing(fraction) {
-	const r = 32, c = 2 * Math.PI * r;
-	return svg(78, 78, `
-		<circle cx="39" cy="39" r="${r}" fill="none" stroke="var(--faint)" stroke-width="8"/>
-		<circle cx="39" cy="39" r="${r}" fill="none" stroke="var(--epic)" stroke-width="8" stroke-linecap="round"
-			stroke-dasharray="${c * fraction} ${c}" transform="rotate(-90 39 39)"/>
-		<text x="39" y="44" text-anchor="middle" fill="var(--text)" font-size="15" font-weight="700">${Math.round(fraction * 100)}%</text>`);
+	const r = 48, c = 2 * Math.PI * r;
+	return svg(110, 110, `
+		<circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--faint)" stroke-width="10"/>
+		<circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--epic)" stroke-width="10" stroke-linecap="round"
+			stroke-dasharray="${c * fraction} ${c}" transform="rotate(-90 55 55)"/>
+		<text x="55" y="62" text-anchor="middle" fill="var(--text)" font-size="22" font-weight="700">${Math.round(fraction * 100)}%</text>`);
 }
 
 /** How many working days the must-haves finish before or after the due date. */
@@ -127,57 +140,51 @@ function versusDue() {
 	return late > 0 ? `${days} late` : `${days} early`;
 }
 
-/** Epic work left over the coming working days: the forecast with BAU, and the line needed to finish by the due date. */
-function burndown() {
-	const W = chartWidth, H = 130, pad = { l: 30, r: 8, t: 10, b: 22 };
-	const span = Math.ceil(Math.max(mustFinish, daysUntilDue)) + 1;
+/**
+ * Work left over the coming working days, BAU included: the must-haves, the must-haves plus the
+ * stretch goals, and the line the must-haves need to follow to finish by the due date.
+ */
+function burndown(H) {
+	const W = chartWidth, fs = CHART_TEXT, pad = { l: 2 * fs, r: 8, t: 10, b: fs + 12 };
+	const allDays = epicDays + stretchDays;
+	const span = Math.ceil(Math.max(stretchFinish, daysUntilDue)) + 1;
 	const x = (day) => pad.l + (day / span) * (W - pad.l - pad.r);
-	const y = (days) => pad.t + (1 - days / Math.max(epicDays, 0.01)) * (H - pad.t - pad.b);
+	const y = (days) => pad.t + (1 - days / Math.max(allDays, 0.01)) * (H - pad.t - pad.b);
 	const path = (points) => points.map(([a, b], i) => `${i ? "L" : "M"}${x(a)},${y(b)}`).join("");
-	const forecast = path([[0, epicDays], [mustFinish, 0]]);
+	const mustLine = path([[0, epicDays], [mustFinish, 0]]);
+	const stretchLine = path([[0, allDays], [stretchFinish, 0]]);
 	const needed = path([[0, epicDays], [daysUntilDue, 0]]);
 	const dates = workingDates(today, span);
 	const step = Math.max(1, Math.round(span / 8));
 	const ticks = Array.from({ length: Math.ceil(span / step) }, (_, i) => i * step)
-		.map((day) => `<text x="${x(day)}" y="${H - 4}" fill="var(--muted)" font-size="12" text-anchor="middle">${day === 0 ? "today" : fmt(dates[day - 1])}</text>`)
+		.map((day) => `<text x="${x(day)}" y="${H - 4}" fill="var(--muted)" font-size="${fs}" text-anchor="middle">${day === 0 ? "today" : fmt(dates[day - 1])}</text>`)
 		.join("");
 	const gridLines = [0, 0.5, 1].map((f) => `
-		<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(epicDays * f)}" y2="${y(epicDays * f)}" stroke="var(--faint)"/>
-		<text x="${pad.l - 6}" y="${y(epicDays * f) + 4}" fill="var(--muted)" font-size="12" text-anchor="end">${Math.round(epicDays * f)}</text>`).join("");
-	return `<div style="margin-top:10px">${svg(W, H, `
+		<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(allDays * f)}" y2="${y(allDays * f)}" stroke="var(--faint)"/>
+		<text x="${pad.l - 6}" y="${y(allDays * f) + fs / 3}" fill="var(--muted)" font-size="${fs}" text-anchor="end">${Math.round(allDays * f)}</text>`).join("");
+	// A quarter of the way along its line, clear of the due date, above it, where the line falls away from the text.
+	const label = (text, colour, finishDay, startDays) =>
+		`<text x="${x(finishDay / 4) + 8}" y="${y((startDays * 3) / 4) - 8}" fill="${colour}" font-size="${fs}" font-weight="600">${text}</text>`;
+	return svg(W, H, `
 		<defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--epic)" stop-opacity=".35"/><stop offset="1" stop-color="var(--epic)" stop-opacity="0"/></linearGradient></defs>
 		${gridLines}
 		<rect x="${x(daysUntilDue)}" y="${pad.t}" width="${Math.max(0, x(span) - x(daysUntilDue))}" height="${H - pad.t - pad.b}" fill="var(--bad)" fill-opacity=".1"/>
-		<path d="${forecast} L${x(0)},${y(0)}Z" fill="url(#fill)"/>
+		<path d="${mustLine} L${x(0)},${y(0)}Z" fill="url(#fill)"/>
 		<path d="${needed}" stroke="var(--muted)" stroke-dasharray="4 4" fill="none"/>
-		<path d="${forecast}" stroke="var(--epic)" stroke-width="2.5" fill="none"/>
+		<path d="${stretchLine}" stroke="var(--bau)" stroke-width="2.5" fill="none"/>
+		<path d="${mustLine}" stroke="var(--epic)" stroke-width="3" fill="none"/>
 		<line x1="${x(daysUntilDue)}" x2="${x(daysUntilDue)}" y1="${pad.t}" y2="${H - pad.b}" stroke="var(--bad)" stroke-dasharray="3 3"/>
-		<circle cx="${x(mustFinish)}" cy="${y(0)}" r="4" fill="${colour(spare)}"/>
-		${ticks}`)}</div>
-		<div class="legend"><span><i style="background:var(--epic)"></i>Forecast with BAU</span><span><i style="background:var(--muted)"></i>Needed to hit due</span></div>`;
+		<circle cx="${x(stretchFinish)}" cy="${y(0)}" r="5" fill="var(--bau)"/>
+		<circle cx="${x(mustFinish)}" cy="${y(0)}" r="6" fill="${colour(spare)}"/>
+		${label("with stretch goals", "var(--bau)", stretchFinish, allDays)}
+		${label("must-haves", "var(--epic)", mustFinish, epicDays)}
+		<text x="${x(daysUntilDue) - 12}" y="${y(0) - 12}" fill="var(--muted)" font-size="${fs}" font-weight="600" text-anchor="end">needed to hit due</text>
+		${ticks}`);
 }
 
-/** Work left as one bar (epic, BAU, stretch goals) against the due date. */
-function stretchRunway() {
-	const W = chartWidth, max = Math.max(epicDays + bauDays + stretchDays, daysUntilDue) * 1.02;
-	const x = (days) => (days / max) * W;
-	let at = 0;
-	const segment = (days, fill) => {
-		const rect = `<rect x="${x(at)}" y="22" width="${Math.max(0, x(days) - 2)}" height="8" rx="4" fill="${fill}"/>`;
-		at += days;
-		return rect;
-	};
-	return `<div class="stretch">
-		<div class="row"><span class="sub">With stretch goals</span>
-			<span class="pill" style="color:${colour(stretchSpare)}">${verdict(stretchSpare)} · finish ${fmt(dateOfWorkingDay(stretchFinish))}</span></div>
-		${svg(W, 36, `
-			<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-				<rect width="6" height="6" fill="var(--epic)" fill-opacity=".12"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--epic)" stroke-opacity=".55" stroke-width="2"/></pattern></defs>
-			${segment(epicDays, "var(--epic)")}${segment(bauDays, "var(--bau)")}${segment(stretchDays, "url(#hatch)")}
-			<line x1="${x(daysUntilDue)}" x2="${x(daysUntilDue)}" y1="12" y2="34" stroke="var(--bad)" stroke-dasharray="3 3"/>
-			<text x="${x(daysUntilDue)}" y="9" fill="var(--muted)" font-size="12" text-anchor="middle">${fmt(due)}</text>`)}
-		<div class="legend" style="margin-top:4px"><span><i style="background:var(--epic)"></i>Epic ${r1(epicDays)}d</span><span><i style="background:var(--bau)"></i>BAU ${r1(bauDays)}d</span><span><i class="hatch"></i>Stretch ${r1(stretchDays)}d · ${sum(stretch, "points")} pts</span></div>
-	</div>`;
+function stretchSummary() {
+	return `<div class="stretch row"><span class="sub">With stretch goals</span>
+		<span class="pill" style="color:${colour(stretchSpare)}">${verdict(stretchSpare)} · done ${fmt(dateOfWorkingDay(stretchFinish))}</span></div>`;
 }
 
 /**
