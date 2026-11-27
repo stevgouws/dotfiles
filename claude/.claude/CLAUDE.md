@@ -58,6 +58,7 @@ Nicknames I use for colleagues, and their GitHub logins:
 Write comments for the next reader of the code, not for the person who asked for the change.
 
 - Only add a comment when it says something the code cannot: the *why*, a non-obvious constraint, a gotcha, or a link to an external reference.
+- Most code needs no comment. Don't comment interfaces, their fields, constants or config objects by default: a clear name and type are usually enough. When unsure whether a comment adds anything, leave it out.
 - Do not restate what the code visibly does (`// increment counter`, `# loop over users`).
 - Do not record conversation context, task history, or the fact that something was changed (`// added per request`, `// updated to fix bug`, `// previously used X`). That belongs in the commit message or PR.
 - Do not describe past state unless it is still relevant to understanding the current code, e.g. a workaround that must stay until an upstream fix lands.
@@ -72,12 +73,13 @@ Write comments for the next reader of the code, not for the person who asked for
 - Keep comments short, but never so terse they need decoding. Understandable beats compact.
 - If code needs a long comment to be understood, prefer making the code clearer first: small well-named helpers and descriptive variable names, then a brief comment for whatever is still non-obvious.
 - Describe a reusable unit (class, module, helper) in terms of what it does, not who currently calls it. Mention a caller only as an example ("e.g. ...") when it explains a design choice, so the comment stays true if the unit is reused elsewhere.
-- Write comments on functions, components, classes and other declarations as docblocks (`/** ... */` in JS/TS, Javadoc in Java, docstrings in Python), not line comments, so the editor shows them on hover at the call site. Line comments are for notes inside a function body.
-- When editing existing code, remove or update comments that your change has made stale.
+- When a function, component, class or other declaration does need a comment, write it as a docblock (`/** ... */` in JS/TS, Javadoc in Java, docstrings in Python), not line comments, so the editor shows them on hover at the call site. Line comments are for notes inside a function body.
+- Keep a docblock to what the unit itself does, at its own level ("sends X to Y instead of Z"), not the knock-on effects elsewhere in the system. When the behaviour depends on a setting, name the setting.
+- Put the reason for a particular line next to that line, not in the docblock.
 
 ## React components
 
-- Declare components with `function Name() {}`, not `const Name = () => {}`.
+- Declare components with `function Name() {}`, not `const Name = () => {}`, unless the project's own instructions say to use arrow functions. A code example that happens to use an arrow function doesn't count.
 - When a file has several components, order them from the outside in: the outermost wrapper (usually the exported component) at the top, then each component it renders, with more detail further down. A reader can then go top to bottom from the overview into the detail.
 
 ## File layout

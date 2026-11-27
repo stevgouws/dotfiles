@@ -100,7 +100,8 @@ By default callouts go at the very top of the body, above `## Description`, so r
   :-------------------------:|:-------------------------:
   | <img ...> | <img ...> |
   ```
-  Leave a placeholder for me to drop the screenshots in; don't invent image URLs.
+  Don't invent image URLs. In a table, leave a placeholder in each cell for me to replace.
+- Several screenshots that would be too small side by side: a `###` heading for each instead of a table. Under each heading leave just a blank line, no `<screenshot>` placeholder, so I can paste straight in without deleting anything first.
 - A small table when comparing states across several cases (e.g. which tests ran before, after, and with this PR).
 - Before/after code snippets when changing how others write code, followed by "This is for two reasons: 1. ... 2. ...".
 - "Most important changes are in" + a short list of files, when a PR touches many files but only a few matter.
@@ -116,6 +117,7 @@ Add how it was verified if it's not obvious: "Checked that all 32 tests that ran
 
 - Generic AI-style headings like `## Summary`, `## Changes`, `## Test plan`, `## Why` when the repo template uses Description / Testing.
 - Empty template sections or unused options left in (e.g. both the ✅ and ❌ testing lines, an empty Screenshots heading). Remove what doesn't apply. Keeping the template's `<!-- -->` hint comments is fine.
+- "(if appropriate)" left in the template's `## Screenshots (if appropriate)` heading when the PR has screenshots. Make it just `## Screenshots`.
 - A template section whose answer is just "No", e.g. `## Post-Merge Actions` with `:x: - No`. Drop the whole section instead; only include it when there is something to do.
 - Restating the title as the first line, listing every file changed, or describing obvious mechanics the diff already shows.
 - Narrating what the code does: which component a thing moved out of and into, renamed exports, new function arguments. Say what the change achieves and why, and leave the how to the diff. For a refactor, that's often one sentence plus "No change in behaviour". E.g. "This PR just keeps all the flagged event highlight styles together in `FlaggedEventsProvider`, so they're easy to find and compare instead of being spread across components.", not "moves the styles out of `EventsPanel` and `AlertPoliciesPanel` into `FlaggedEventStyles`, and `findTextMatches` now takes the reason separately".
@@ -238,6 +240,8 @@ I considered adding linting and validation to the pipeline, but it's pretty comp
    ```
    `fe-ui` - [Allow starting the release workflow manually](https://github.com/VoxSmartLtd/vs-fe-unified-ui-svc/pull/1169)
    ```
+   When I say "gimme slack" (or "slack post", "slack link") about a PR, reply with this post, using the PR's current title, and also put it on the clipboard as the `slack-formatting` skill describes. Never start the reply with the post: the terminal puts its `⏺` reply marker at the start of the first line, so I'd copy the marker along with the post. Start with the clipboard callout from `slack-formatting` (`> ***✓ Copied***`), and put the code block below it.
    Use the name I call the repo by, not its full GitHub name (`fe-ui` for `vs-fe-unified-ui-svc`). If you don't know it, use the GitHub name and I'll correct it.
+   When I say "post to Slack" about a PR without saying where, post it to `#vs-nexus-prs` (channel `C0C8V12TUAC`) as myself, and reply with the message link. In the post, use the PR title without its `type(TICKET):` prefix.
 3. Open every new PR as a draft (`gh pr create --draft`), so I can check it before reviewers are notified. Only skip the draft when I say "skip draft".
 4. Before editing an existing PR, read its current title and body (`gh pr view <n> --json title,body`). If they have changed since you last wrote them, I've edited them on GitHub: keep my changes and only change what I asked for.

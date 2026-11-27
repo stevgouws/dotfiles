@@ -36,6 +36,7 @@ await screen.findByText('Error: Request failed with status code 500');
 
 - `getBy*` and `findBy*` already fail when nothing is found, so don't wrap them in `expect(...).toBeInTheDocument()`. A bare `screen.getByRole('row', { name: /Aaliyah/ })` is the assertion.
 - Use `toBeInTheDocument()` only with `queryBy*`, in its negative form: `expect(screen.queryByText('…')).not.toBeInTheDocument()`.
+- **Exception for `fe-ui` and `vx1` (vx-components):** wrap every `getBy*`/`findBy*` that's used as an assertion in `expect(...).toBeInTheDocument()`, e.g. `expect(screen.getByRole('row', { name: /Aaliyah/ })).toBeInTheDocument()`. The team writes them this way in those repos, so stay consistent with them there rather than following my preference.
 
 ## Use Testing Library, not the DOM
 

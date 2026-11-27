@@ -58,6 +58,5 @@ Keep findings out of headings. Full sentences in heading size are hard to read, 
 
 1. Get the current body: `gh pr view <number> --json body -q .body > <scratchpad>/body-old.md`.
 2. Write the new body to `<scratchpad>/body-new.md`, changing only the asides section. Write it with the Write tool or a short script rather than retyping the rest of the body, so nothing else changes by accident.
-3. Show the user the exact section text (or the `diff` of the two files) and wait for their approval before posting, as CLAUDE.md requires. Approval of an earlier draft covers small deletions they asked for (e.g. dropping a finding they've since fixed). Anything reworded needs to be shown again.
-4. `gh pr edit <number> --body-file <scratchpad>/body-new.md`, then check that the section is on the PR: `gh pr view <number> --json body -q .body | grep -c "Asides for Agents"`.
-5. Reply with the PR link and the number of findings in the section.
+3. `gh pr edit <number> --body-file <scratchpad>/body-new.md` without previewing it first: it's part of the PR description, which the user reviews on GitHub. Then check that the section is on the PR: `gh pr view <number> --json body -q .body | grep -c "Asides for Agents"`.
+4. Reply with the PR link and the number of findings in the section.
