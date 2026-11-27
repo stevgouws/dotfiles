@@ -1,0 +1,533 @@
+<title>VSP Sign-in Flows</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a reading column for context and decisions, with a wide walkthrough band of grey wireframes in a browser frame, steered by scenario chips and step arrows. */
+:root {
+	--bg: #f4f6f8;
+	--surface: #ffffff;
+	--ink: #1c2229;
+	--muted: #5f6b78;
+	--line: #cdd3da;
+	--wire: #e6eaee;
+	--wire-strong: #a9b2bc;
+	--note: #2563c9;
+	--note-bg: #eaf1fc;
+	--decide: #9a4d06;
+	--decide-bg: #fdf1e3;
+	--scrim: rgba(28, 34, 41, 0.38);
+	--font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-head: "Space Grotesk", "Inter", system-ui, sans-serif;
+	--font-wire: "Balsamiq Sans", "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--bg: #14181d; --surface: #1d232a; --ink: #e5e9ee; --muted: #9aa5b1; --line: #36404a;
+		--wire: #2a323b; --wire-strong: #58636f; --note: #7eaaf2; --note-bg: #1b2a40;
+		--decide: #f0b067; --decide-bg: #33240f; --scrim: rgba(0, 0, 0, 0.55); color-scheme: dark;
+	}
+}
+:root[data-theme="dark"] {
+	--bg: #14181d; --surface: #1d232a; --ink: #e5e9ee; --muted: #9aa5b1; --line: #36404a;
+	--wire: #2a323b; --wire-strong: #58636f; --note: #7eaaf2; --note-bg: #1b2a40;
+	--decide: #f0b067; --decide-bg: #33240f; --scrim: rgba(0, 0, 0, 0.55); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+	background: var(--bg);
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-size: 15px;
+	line-height: 1.55;
+}
+.wrap {
+	max-width: 1180px;
+	margin: 0 auto;
+	padding-block: 40px 64px;
+	padding-left: max(16px, env(safe-area-inset-left, 0px));
+	padding-right: max(16px, env(safe-area-inset-right, 0px));
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+}
+h1, h2, h3 { font-family: var(--font-head); font-weight: 600; text-wrap: balance; margin: 0; }
+h1 { font-size: 2.2rem; line-height: 1.15; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0; }
+.prose { max-width: 68ch; display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+code { font-size: 0.9em; background: var(--wire); padding: 1px 5px; border-radius: 4px; }
+a { color: var(--note); }
+
+/* Facts */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fact strong { font-weight: 600; }
+.fact .tag { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.tag.ok { color: #1f7a45; }
+.tag.limit { color: var(--decide); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag.ok { color: #6fd39b; } }
+:root[data-theme="dark"] .tag.ok { color: #6fd39b; }
+
+/* Walkthrough */
+.walk { display: flex; flex-direction: column; gap: 16px; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 3px; }
+.seg button { border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 0.9rem; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 0.88rem; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 600; }
+button:focus-visible { outline: 2px solid var(--note); outline-offset: 2px; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.frame-scroll { overflow-x: auto; border-radius: 12px; }
+.notes { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.step-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.step-count { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.step-nav { display: flex; gap: 8px; }
+.step-nav button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; padding: 6px 14px; border-radius: 8px; cursor: pointer; }
+.step-nav button:disabled { opacity: 0.4; cursor: default; }
+.caption { font-family: var(--font-head); font-size: 1.15rem; font-weight: 500; line-height: 1.35; }
+.note { border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem; }
+.note .label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.note.tech { background: var(--note-bg); }
+.note.tech .label { color: var(--note); }
+.note.decide { background: var(--decide-bg); }
+.note.decide .label { color: var(--decide); }
+.callout { background: var(--note-bg); border-left: 4px solid var(--note); border-radius: 8px; padding: 12px 16px; font-weight: 500; }
+.dots { display: flex; gap: 6px; }
+.dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots span.on { background: var(--ink); }
+
+/* Browser frame + wireframes */
+.browser { min-width: 640px; background: var(--surface); border: 1.5px solid var(--wire-strong); border-radius: 12px; overflow: hidden; font-family: var(--font-wire); color: var(--ink); }
+.tabs { display: flex; gap: 4px; padding: 8px 10px 0; background: var(--wire); }
+.tab { font-size: 0.8rem; padding: 6px 14px; border-radius: 8px 8px 0 0; color: var(--muted); border: 1.5px solid transparent; border-bottom: 0; }
+.tab.active { background: var(--surface); color: var(--ink); border-color: var(--wire-strong); }
+.tab.new { background: var(--note-bg); color: var(--note); border: 1.5px dashed var(--note); border-bottom: 0; font-weight: 700; }
+.new-tab-flag { align-self: center; margin-left: 6px; font-size: 0.78rem; font-weight: 700; color: var(--note); }
+.urlbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1.5px solid var(--wire-strong); }
+.urlbar .dotset { display: flex; gap: 5px; }
+.urlbar .dotset i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--wire-strong); }
+.url { flex: 1; border: 1.5px solid var(--wire-strong); border-radius: 999px; padding: 3px 12px; font-size: 0.8rem; color: var(--muted); }
+.viewport { position: relative; height: 440px; overflow: hidden; }
+
+.app { display: grid; grid-template-columns: 168px 1fr; height: 100%; }
+.side { border-right: 1.5px solid var(--wire-strong); padding: 12px 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; position: relative; }
+.logo { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+.group { font-size: 0.68rem; color: var(--muted); margin-top: 8px; display: flex; gap: 6px; align-items: center; }
+.badge { border: 1.5px solid var(--wire-strong); border-radius: 6px; padding: 0 5px; font-size: 0.62rem; }
+.item { padding: 3px 6px; border-radius: 6px; }
+.item.on { background: var(--wire); font-weight: 700; }
+.user { margin-top: auto; padding: 6px; border-top: 1.5px dashed var(--wire-strong); }
+.main { display: flex; flex-direction: column; min-width: 0; }
+.topbar { padding: 10px 14px; border-bottom: 1.5px solid var(--wire-strong); font-size: 0.8rem; }
+.banner { margin: 10px 14px 0; border: 1.5px dashed var(--wire-strong); border-radius: 8px; padding: 6px 10px; font-size: 0.72rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.content { padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ttl { font-weight: 700; font-size: 1.05rem; }
+.sub { font-size: 0.72rem; color: var(--muted); }
+.table { border: 1.5px solid var(--wire-strong); border-radius: 8px; overflow: hidden; font-size: 0.72rem; }
+.tr { display: grid; grid-template-columns: 0.8fr 0.8fr 1.2fr 1fr 2fr; gap: 8px; padding: 6px 10px; border-top: 1.5px solid var(--wire); }
+.tr:first-child { border-top: 0; color: var(--muted); }
+.bar { height: 8px; border-radius: 4px; background: var(--wire); align-self: center; }
+
+.w-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1.5px solid var(--ink); border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; background: var(--ink); color: var(--surface); white-space: nowrap; }
+.w-btn.ghost { background: transparent; color: var(--ink); border-color: var(--wire-strong); font-weight: 400; }
+.w-btn.wide { width: 100%; }
+.w-field { display: flex; flex-direction: column; gap: 3px; font-size: 0.75rem; }
+.w-input { border: 1.5px solid var(--wire-strong); border-radius: 7px; height: 30px; padding: 5px 9px; font-size: 0.78rem; color: var(--muted); }
+.w-link { font-size: 0.72rem; text-decoration: underline; text-align: center; color: var(--muted); }
+.w-error { font-size: 0.72rem; color: var(--decide); }
+.w-text { font-size: 0.78rem; color: var(--muted); }
+.otp { display: flex; gap: 6px; }
+.otp span { width: 30px; height: 34px; border: 1.5px solid var(--wire-strong); border-radius: 7px; display: grid; place-items: center; font-size: 0.85rem; }
+
+.card { border: 1.5px solid var(--wire-strong); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); }
+.center { height: 100%; display: grid; place-items: center; padding: 16px; }
+.prompt { max-width: 330px; text-align: center; align-items: center; margin: 20px auto 0; }
+.ico { width: 30px; height: 30px; border: 1.5px solid var(--wire-strong); border-radius: 8px; display: grid; place-items: center; font-size: 0.9rem; }
+
+.scrim { position: absolute; inset: 0; background: var(--scrim); display: grid; place-items: center; }
+.dialog { width: 320px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+.dialog .x { align-self: flex-end; margin: -6px -4px -12px 0; font-size: 0.8rem; color: var(--muted); }
+
+.menu { position: absolute; left: 8px; right: 8px; bottom: 44px; border: 1.5px solid var(--wire-strong); border-radius: 8px; background: var(--surface); box-shadow: 0 8px 20px rgba(0,0,0,0.18); font-size: 0.75rem; overflow: hidden; }
+.menu div { padding: 6px 10px; }
+.menu .who { border-bottom: 1.5px solid var(--wire); }
+.menu .hl { background: var(--wire); font-weight: 700; }
+.pointer { position: absolute; font-size: 1.1rem; }
+.toast { position: absolute; right: 14px; bottom: 14px; border: 1.5px solid var(--wire-strong); border-radius: 8px; background: var(--surface); padding: 8px 12px; font-size: 0.75rem; box-shadow: 0 6px 16px rgba(0,0,0,0.15); max-width: 260px; }
+
+.classic { height: 100%; display: grid; grid-template-columns: 150px 1fr; font-size: 0.78rem; }
+.classic .cside { background: var(--wire); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.classic .cmain { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tiles div { border: 1.5px solid var(--wire-strong); border-radius: 8px; height: 70px; }
+
+/* Lists */
+.decisions { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.decision { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.decision .opts { font-size: 0.9rem; color: var(--muted); }
+.later { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.later ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+@media (prefers-reduced-motion: no-preference) { .viewport > * { animation: fade 160ms ease-out; } }
+@keyframes fade { from { opacity: 0.4; } to { opacity: 1; } }
+</style>
+
+<div class="wrap">
+	<header class="prose">
+		<span class="eyebrow">UUI-2842 · New VSP UI · for Gustavo</span>
+		<h1>Signing in to VSP from the new UI</h1>
+		<p class="callout">VSP has one sign-in per browser, shared by the classic VSP and the new UI. Signing in to either signs you in to both.</p>
+	</header>
+
+	<section class="walk" aria-labelledby="walk-h">
+		<div class="prose">
+			<h2 id="walk-h">Walk through the flows</h2>
+			<p class="muted">Pick the kind of customer and a situation, then step through with the arrows or your arrow keys.</p>
+		</div>
+		<div class="controls">
+			<div class="seg" role="group" aria-label="Kind of customer">
+				<button type="button" id="mode-vcs" data-mode="vcsOnly" aria-pressed="true">VCS only</button>
+				<button type="button" id="mode-vsp" data-mode="vspOnly" aria-pressed="false">VSP only</button>
+				<button type="button" id="mode-both" data-mode="both" aria-pressed="false">VCS and VSP</button>
+			</div>
+		</div>
+		<div class="chips" id="chips" role="group" aria-label="Situation"></div>
+		<div class="stage">
+			<div class="frame-scroll"><div id="frame"></div></div>
+			<div class="notes" aria-live="polite">
+				<div class="step-head">
+					<span class="step-count" id="count"></span>
+					<div class="step-nav">
+						<button type="button" id="prev" aria-label="Previous step">← Back</button>
+						<button type="button" id="next" aria-label="Next step">Next →</button>
+					</div>
+				</div>
+				<div class="dots" id="dots" aria-hidden="true"></div>
+				<p class="caption" id="caption"></p>
+				<div class="note tech" id="tech"><span class="label">Good to know</span><span id="tech-text"></span></div>
+			</div>
+		</div>
+	</section>
+
+	<section class="prose" aria-labelledby="later-h" style="max-width:none">
+		<h2 id="later-h">Once VSP uses the VX1 login (SRC-2627)</h2>
+		<p class="muted" style="max-width:68ch">Everyone signs in once, with the VX1 login. The VSP sign-in goes away.</p>
+	</section>
+</div>
+
+<script>
+(function () {
+	const HOST = "sandbox2.dev.voxsmart.ai";
+
+	const scenarios = {
+		both: [
+			{ id: "first", label: "First visit", steps: [
+				{ screen: { kind: "vx1Login" }, url: "/vx1/login",
+					caption: "People sign in to VX1 as they do today." },
+				{ screen: { kind: "app", content: "prompt" }, url: "/vx1/capture/comms",
+					caption: "Opening Communications without a VSP session shows a sign-in message. Anyone already signed in to the classic VSP skips this and goes straight to the data." },
+				{ screen: { kind: "app", content: "prompt", dialog: "password" }, url: "/vx1/capture/comms",
+					caption: "Signing in to VSP happens inside the new UI, in a small box." },
+				{ screen: { kind: "app", content: "table" }, url: "/vx1/capture/comms",
+					caption: "The page loads the calls and messages." },
+			]},
+			{ id: "mfa", label: "Two-factor code", steps: [
+				{ screen: { kind: "app", content: "prompt", dialog: "password" }, url: "/vx1/capture/comms",
+					caption: "Someone whose VSP account has two-factor signs in as usual." },
+				{ screen: { kind: "app", content: "prompt", dialog: "mfa" }, url: "/vx1/capture/comms",
+					caption: "The same box asks for the 6-digit code." },
+				{ screen: { kind: "app", content: "table" }, url: "/vx1/capture/comms",
+					caption: "Signed in, and the page loads." },
+			]},
+			{ id: "sso", label: "Organisation uses SSO", steps: [
+				{ screen: { kind: "app", content: "prompt", dialog: "password", sso: true }, url: "/vx1/capture/comms",
+					caption: "When the organisation has SSO, the box offers it straight away.",
+					tech: "Password accounts at the same organisation, like admins, can still use the form." },
+				{ screen: { kind: "app", content: "prompt", dialog: "sso" }, url: "/vx1/capture/comms", tabs: 2, tabActive: 0, newTab: true,
+					caption: "Choosing SSO opens the organisation's sign-in page in a new tab, and the box waits.",
+					tech: "If someone whose account needs SSO types their username instead, the box switches to this step." },
+				{ screen: { kind: "idp" }, url: "login.microsoftonline.com/…", tabs: 2,
+					caption: "The organisation's sign-in page opens in a new tab.",
+					tech: "If their account also has a two-factor code, it's asked for here, in the classic VSP tab." },
+				{ screen: { kind: "classic" }, url: "/#/dashboard", tabs: 2,
+					caption: "Afterwards, VSP always lands on the classic VSP's dashboard." },
+				{ screen: { kind: "app", content: "table" }, url: "/vx1/capture/comms", tabs: 2, tabActive: 0, backTab: true,
+					caption: "Back on the new UI's tab, the page carries on by itself." },
+			]},
+			{ id: "ended", label: "Session ends mid-use", steps: [
+				{ screen: { kind: "app", content: "table" }, url: "/vx1/capture/comms",
+					caption: "Someone is working on Communications.",
+					tech: "The session can end because it times out, they sign out in the classic VSP, or they sign in on another computer." },
+				{ screen: { kind: "app", content: "table", dialog: "ended" }, url: "/vx1/capture/comms",
+					caption: "Their next action (a filter, a page, Refresh) opens a sign-in box over the page.",
+					tech: "There's no warning before a timeout." },
+				{ screen: { kind: "app", content: "table" }, url: "/vx1/capture/comms",
+					caption: "After signing in again, they're where they left off." },
+			]},
+			{ id: "signout", label: "Signing out", steps: [
+				{ screen: { kind: "app", content: "table", menu: true }, url: "/vx1/capture/comms",
+					caption: "The settings menu shows which VSP account is in use, and has one Sign out.",
+					tech: "The VSP account can be a different person from the VX1 one, e.g. on a shared computer." },
+				{ screen: { kind: "vx1Login" }, url: "/vx1/login",
+					caption: "Signing out ends both sessions and goes back to the VX1 login.",
+					tech: "Any open classic VSP tab is signed out too, and signing out in the classic VSP signs them out here." },
+			]},
+		],
+		vcsOnly: [
+			{ id: "first", label: "Signing in", steps: [
+				{ screen: { kind: "vx1Login" }, url: "/vx1/login",
+					caption: "They sign in to VX1 as they do today." },
+				{ screen: { kind: "app", content: "table", vcsOnly: true }, url: "/vx1/comms",
+					caption: "No changes. They never see the Capture pages or a VSP sign-in." },
+			]},
+		],
+		vspOnly: [
+			{ id: "first", label: "Signing in", steps: [
+				{ screen: { kind: "vspLogin", step: "password" }, url: "/vx1/login",
+					caption: "For customers with only VSP, VSP's sign-in is the login page." },
+				{ screen: { kind: "app", content: "table", vspOnly: true }, url: "/vx1/capture/comms",
+					caption: "They go straight to Communications. The sidebar only has the VSP pages." },
+			]},
+			{ id: "mfa", label: "Two-factor code", steps: [
+				{ screen: { kind: "vspLogin", step: "password" }, url: "/vx1/login",
+					caption: "They sign in with username and password." },
+				{ screen: { kind: "vspLogin", step: "mfa" }, url: "/vx1/login",
+					caption: "The login page asks for the 6-digit code." },
+				{ screen: { kind: "app", content: "table", vspOnly: true }, url: "/vx1/capture/comms",
+					caption: "Signed in." },
+			]},
+			{ id: "sso", label: "Organisation uses SSO", steps: [
+				{ screen: { kind: "vspLogin", step: "password", sso: true }, url: "/vx1/login",
+					caption: "When the organisation has SSO, the login page only offers SSO." },
+				{ screen: { kind: "vspLogin", step: "sso" }, url: "/vx1/login", tabs: 2, tabActive: 0, newTab: true,
+					caption: "Choosing SSO opens the organisation's sign-in page in a new tab." },
+				{ screen: { kind: "idp" }, url: "login.microsoftonline.com/…", tabs: 2,
+					caption: "The organisation's sign-in page." },
+				{ screen: { kind: "classic" }, url: "/#/dashboard", tabs: 2,
+					caption: "VSP lands on the classic VSP's dashboard." },
+				{ screen: { kind: "app", content: "table", vspOnly: true }, url: "/vx1/capture/comms", tabs: 2, tabActive: 0, backTab: true,
+					caption: "Back on the new UI's tab, it signs them in by itself." },
+			]},
+			{ id: "ended", label: "Session ends mid-use", steps: [
+				{ screen: { kind: "app", content: "table", vspOnly: true, dialog: "ended" }, url: "/vx1/capture/comms",
+					caption: "Their next action opens a sign-in box over the page.",
+					tech: "If they reload or come back later instead, they get the login page." },
+				{ screen: { kind: "app", content: "table", vspOnly: true }, url: "/vx1/capture/comms",
+					caption: "Signed in again, where they left off." },
+			]},
+			{ id: "signout", label: "Signing out", steps: [
+				{ screen: { kind: "app", content: "table", vspOnly: true, menu: true }, url: "/vx1/capture/comms",
+					caption: "Sign out is in the settings menu, as now." },
+				{ screen: { kind: "vspLogin", step: "password" }, url: "/vx1/login",
+					caption: "Back to the login page.",
+					tech: "An open classic VSP tab is signed out too." },
+			]},
+		],
+	};
+
+	const state = { mode: "vcsOnly", scenario: 0, step: 0 };
+	const MODE_HASH = { vspOnly: "vsp-only", vcsOnly: "vcs-only", both: "both" };
+	const $ = (id) => document.getElementById(id);
+
+	function render() {
+		const list = scenarios[state.mode];
+		const scenario = list[state.scenario];
+		const step = scenario.steps[state.step];
+
+		$("chips").innerHTML = list.map((s, i) =>
+			`<button type="button" class="chip" data-i="${i}" aria-pressed="${i === state.scenario}">${s.label}</button>`).join("");
+		document.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === state.mode)));
+
+		$("frame").innerHTML = browser(step);
+		$("count").textContent = `Step ${state.step + 1} of ${scenario.steps.length}`;
+		$("dots").innerHTML = scenario.steps.map((_, i) => `<span class="${i === state.step ? "on" : ""}"></span>`).join("");
+		$("caption").textContent = step.caption;
+		$("tech").hidden = !step.tech;
+		$("tech-text").textContent = step.tech || "";
+		$("prev").disabled = state.step === 0;
+		$("next").disabled = state.step === scenario.steps.length - 1;
+
+		try { history.replaceState(null, "", `#${MODE_HASH[state.mode]}-${scenario.id}`); } catch (e) {}
+	}
+
+	function browser(step) {
+		const tabs = step.tabs || 1;
+		const active = step.tabActive ?? (tabs - 1);
+		const names = [step.screen.kind === "app" ? "VoxSmart - Communications" : "VoxSmart - Login", step.screen.kind === "classic" ? "VSP (classic)" : "Microsoft sign-in"];
+		const url = step.url.startsWith("/") ? HOST + step.url : step.url;
+		return `<div class="browser">
+			<div class="tabs">${Array.from({ length: tabs }, (_, i) => {
+				const isNew = step.newTab && i === 1;
+				const isBack = step.backTab && i === 0;
+				const flag = isNew ? "← new tab opened" : isBack ? "← back on this tab" : "";
+				return `<span class="tab ${i === active ? "active" : ""} ${isNew || isBack ? "new" : ""}">${isNew ? "Microsoft sign-in" : names[i]}</span>${flag ? `<span class="new-tab-flag">${flag}</span>` : ""}`;
+			}).join("")}</div>
+			<div class="urlbar"><span class="dotset"><i></i><i></i><i></i></span><span class="url">${url}</span></div>
+			<div class="viewport">${screen(step.screen)}</div>
+		</div>`;
+	}
+
+	function screen(s) {
+		switch (s.kind) {
+			case "vx1Login": return vx1Login();
+			case "vspLogin": return vspLogin(s);
+			case "idp": return idp();
+			case "classic": return classic();
+			default: return app(s);
+		}
+	}
+
+	function vx1Login() {
+		return `<div class="center"><div class="card" style="width:300px">
+			<div class="logo" style="text-align:center">VoxSmart</div>
+			<div class="w-field">Username<div class="w-input"></div></div>
+			<div class="w-field">Password<div class="w-input"></div></div>
+			<span class="w-btn wide">Log in</span>
+			<span class="w-text" style="text-align:center">or</span>
+			<span class="w-btn ghost wide">Continue with SSO</span>
+		</div></div>`;
+	}
+
+	function signInForm(step, typed, sso, isLoginPage) {
+		if (step === "mfa") return `
+			<p class="w-text">We've sent a 6-digit code to your phone by SMS.</p>
+			<div class="w-field">Code<div class="otp"><span>4</span><span>8</span><span>1</span><span></span><span></span><span></span></div></div>
+			<span class="w-btn wide">Verify</span>
+			<span class="w-btn ghost wide">Back</span>`;
+		if (step === "sso") return `
+			<p class="w-text">Finish signing in on the tab we opened, then come back here. This carries on by itself.</p>
+			<span class="w-btn ghost wide">Open the sign-in page again ↗</span>
+			<span class="w-btn ghost wide">Back</span>`;
+		if (sso && isLoginPage) return `
+			<p class="w-text" style="text-align:center">Your organisation signs in with single sign-on.</p>
+			<span class="w-btn wide">Continue with SSO ↗</span>`;
+		return `
+			<div class="w-field">${isLoginPage ? "Username" : "VSP username"}<div class="w-input">${typed || "martin"}</div></div>
+			<div class="w-field">Password<div class="w-input">${typed ? "" : "••••••••"}</div></div>
+			<span class="w-btn wide">${isLoginPage ? "Sign in" : "Sign in to VSP"}</span>
+			<span class="w-link">Forgot your password?</span>
+			${sso ? `<span class="w-text" style="text-align:center">or</span><span class="w-btn ghost wide">Continue with SSO ↗</span>` : ""}`;
+	}
+
+	function vspLogin(s) {
+		return `<div class="center"><div class="card" style="width:300px">
+			<div class="logo" style="text-align:center">VoxSmart</div>
+			${signInForm(s.step, s.typed, s.sso, true)}
+		</div></div>`;
+	}
+
+	function app(s) {
+		const vspOnly = !!s.vspOnly;
+		const vcsOnly = !!s.vcsOnly;
+		const vcsNav = `<div class="group">Home</div><div class="item">Control Room</div>
+				<div class="group">Investigate</div><div class="item">Alerts</div><div class="item${vcsOnly ? " on" : ""}">Communications</div><div class="item">Cases</div>
+				<div class="group">Configure</div><div class="item">Policies</div>`;
+		const vspNav = vspOnly
+			? `<div class="group">Capture</div><div class="item on">Communications</div>`
+			: `<div class="group">Capture <span class="badge">New</span></div><div class="item on">Communications</div>`;
+		const nav = vspOnly ? vspNav : vcsOnly ? vcsNav : vcsNav + vspNav;
+		const menu = s.menu ? `<div class="menu">
+				<div class="who"><span class="sub">VSP account</span><br>Martin Jones (martin)</div>
+				<div>Change theme</div><div>Help</div><div>Switch to old UI</div><div class="hl">Sign out</div>
+			</div>` : "";
+		const content = s.content === "prompt" ? promptCard() : table();
+		const dialog = s.dialog ? `<div class="scrim"><div class="card dialog">
+				<span class="x">✕</span>
+				<div class="ttl" style="font-size:0.95rem">${s.dialog === "ended" ? "Your VSP session has ended" : "Sign in to VSP"}</div>
+				<p class="w-text">${s.dialog === "ended" ? "Sign in again to carry on where you left off." : "Calls and messages come from VSP, which has its own sign-in for now."}</p>
+				${signInForm(s.dialog === "ended" ? "password" : s.dialog, s.typed, s.sso)}
+			</div></div>` : "";
+		return `<div class="app">
+			<aside class="side"><div class="logo">VoxSmart</div>${nav}<div class="user">⚙ ${vspOnly ? "Martin Jones" : "Test User"}</div>${menu}</aside>
+			<div class="main">
+				<div class="topbar">Communications</div>
+				${vcsOnly ? "" : `<div class="banner"><span>You're using the new interface.</span><span style="text-decoration:underline">Switch to the old interface</span></div>`}
+				<div class="content">${content}</div>
+			</div>
+		</div>${dialog}`;
+	}
+
+	function promptCard() {
+		return `<div class="card prompt">
+			<span class="ico">→</span>
+			<div class="ttl">Sign in to VSP to see communications</div>
+			<p class="w-text">Calls and messages come from VSP, which has its own sign-in for now.</p>
+			<span class="w-btn">Sign in to VSP</span>
+		</div>`;
+	}
+
+	function table() {
+		const rows = [["Call", "Outbound", "+44 20 7946 0018", "26 Nov 09:12", "▶ 4:12"],
+			["Message", "Inbound", "Jamie Rivera", "26 Nov 09:40", "Can you confirm the price on the 5y?"],
+			["Message", "Outbound", "Jamie Rivera", "26 Nov 09:41", "Confirmed, sending over now"],
+			["Call", "Inbound", "+1 212 555 0147", "26 Nov 10:05", "▶ 1:03"]];
+		return `<div class="row"><div><div class="ttl">Communications</div></div><span class="w-btn ghost">Filters</span></div>
+			<div class="table">
+				<div class="tr"><span>Type</span><span>Direction</span><span>Far party</span><span>Date</span><span>Content</span></div>
+				${rows.map((r) => `<div class="tr">${r.map((c) => `<span>${c}</span>`).join("")}</div>`).join("")}
+				${[1, 2, 3].map(() => `<div class="tr">${[1, 2, 3, 4, 5].map(() => `<span class="bar"></span>`).join("")}</div>`).join("")}
+			</div>`;
+	}
+
+	function idp() {
+		return `<div class="center"><div class="card" style="width:300px">
+			<div class="logo">▦ Microsoft</div>
+			<div class="ttl" style="font-size:0.95rem">Sign in</div>
+			<div class="w-input">jo.smith@bank.com</div>
+			<span class="w-btn wide">Next</span>
+		</div></div>`;
+	}
+
+	function classic() {
+		return `<div class="classic">
+			<div class="cside"><b>VSP</b><span>Dashboard</span><span>Activity</span><span>Calls</span><span>Messages</span><span>Users</span></div>
+			<div class="cmain"><div class="ttl">Dashboard</div><div class="tiles"><div></div><div></div><div></div></div>
+				<div class="card" style="font-size:0.75rem">The classic VSP. Signed in, but on the old interface.</div>
+			</div>
+		</div>`;
+	}
+
+	function go(delta) {
+		const steps = scenarios[state.mode][state.scenario].steps;
+		state.step = Math.min(steps.length - 1, Math.max(0, state.step + delta));
+		render();
+	}
+
+	function fromHash() {
+		const m = /^#(both|vsp-only|vcs-only)-([a-z]+)$/.exec(location.hash || "");
+		if (!m) return;
+		state.mode = Object.keys(MODE_HASH).find((k) => MODE_HASH[k] === m[1]);
+		const i = scenarios[state.mode].findIndex((s) => s.id === m[2]);
+		state.scenario = i < 0 ? 0 : i;
+		state.step = 0;
+	}
+
+	document.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => {
+		state.mode = b.dataset.mode; state.scenario = 0; state.step = 0; render();
+	}));
+	$("chips").addEventListener("click", (e) => {
+		const b = e.target.closest(".chip"); if (!b) return;
+		state.scenario = Number(b.dataset.i); state.step = 0; render();
+	});
+	$("prev").addEventListener("click", () => go(-1));
+	$("next").addEventListener("click", () => go(1));
+	document.addEventListener("keydown", (e) => {
+		if (e.target.closest("input, textarea")) return;
+		if (e.key === "ArrowRight") go(1);
+		if (e.key === "ArrowLeft") go(-1);
+	});
+
+	fromHash();
+	render();
+})();
+</script>
