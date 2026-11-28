@@ -7,8 +7,7 @@ ROOT="$2"
 tmux rename-window -t "=${SESSION}:1" dev
 tmux new-window -t "=${SESSION}:2" -n test -c "$ROOT/packages/app"
 tmux new-window -t "=${SESSION}:3" -n claude \; \
-  send-keys start-claude-with-handover-support Enter \; \
-  split-window -h -d
+  send-keys start-claude-with-handover-support Enter \;
 tmux new-window -t "=${SESSION}:4" -n zsh
 
 tmux select-window -t "=${SESSION}:1"
