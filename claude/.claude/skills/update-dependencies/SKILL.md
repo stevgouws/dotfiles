@@ -255,12 +255,10 @@ Check the exact syntax against the package manager's docs before writing an over
 
 pnpm workspace with `app`, `user-guides` (Docusaurus), `shared`, `test-utils` and `e2e`. Follow the rules in its `AGENTS.md`, in particular never using ports 9000 and 9001. The `audit-mocked-app` crawl reports links to `localhost:9000` and `9001` (the `/help` iframe); those are only reported, not served by the check.
 
-**Pins and workarounds to keep.** Check which of these the branch has: some only exist before or after the vitest 5 upgrade.
+**Pins and workarounds to keep.**
 
-- **`jsdom` pin** (`"jsdom": "30.0.1"` in `pnpm.overrides`, and exact in `packages/app`): only on vitest 4. jsdom 30.1 breaks `FormData` and `Blob` request bodies under vitest 4 (`Cannot read properties of undefined (reading '_buffer')`). It goes with the vitest 5 upgrade, as `AGENTS.md` describes.
-- **jest-dom matcher types** (`packages/app/src/types/vitest.d.ts` and `packages/user-guides/src/types/vitest.d.ts` extending `TestingLibraryMatchers`): only on vitest 5. Keep a copy in each package; a shared one in `test-utils` doesn't reach `user-guides`, which gets its own copy of vitest. Remove the jest-dom part once a jest-dom release includes https://github.com/testing-library/jest-dom/pull/742. On vitest 4 the app's file only declares the custom `toHaveExactText` matcher.
-- **`"@radix-ui/react-select@<2.4.1": "^2.4.1"`**: not a security fix (it has no advisory). It works around a vx1-components issue that is fixed there but not yet merged (UUI-2511, `647ee2af`). Keep it until that fix is merged and released; the team removes it then.
-- **`pnpm.packageExtensions`** for `@voxsmartltd/vx1-components` and `@voxsmartltd/frontend-utils`: a compatibility fix, not an override (see `AGENTS.md`).
+- **jest-dom matcher types** (`packages/app/src/types/vitest.d.ts` and `packages/user-guides/src/types/vitest.d.ts` extending `TestingLibraryMatchers`). Keep a copy in each package; a shared one in `test-utils` doesn't reach `user-guides`, which gets its own copy of vitest. Remove the jest-dom part once a jest-dom release includes https://github.com/testing-library/jest-dom/pull/742.
+- **`pnpm.packageExtensions`** for `@voxsmartltd/vx1-components` and `@voxsmartltd/frontend-utils`: a compatibility fix, not an override (see `.claude/rules/dependencies.md`).
 - **`@easyops-cn/docusaurus-search-local`** is under `pnpm.patchedDependencies`.
 - **jimp loaded with `createRequire`**: `packages/user-guides/src/manual-images/toManualJpeg.ts` loads `jimp` with `createRequire` instead of an import. Docusaurus loads plugins through jiti 1 with `interopDefault`, which hands jimp zod 4's default export (no `z`), so a plain import breaks the docs build with "Cannot read properties of undefined (reading 'object')". Keep it while jimp is on zod 4 and Docusaurus on jiti 1.
 
