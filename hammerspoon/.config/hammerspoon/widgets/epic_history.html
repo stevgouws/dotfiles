@@ -45,6 +45,7 @@
 	.target li .pts { width: 1.2em; flex: none; text-align: right; color: var(--epic); font-variant-numeric: tabular-nums; }
 	.target li .name { overflow: hidden; text-overflow: ellipsis; }
 	.target li.more { font-weight: 400; color: var(--muted); }
+	.target .stage { margin-top: 10px; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 	svg { margin-top: 8px; }
 </style>
 </head>
@@ -128,19 +129,30 @@ function progressRow(label, done, target) {
 }
 
 /**
- * When short, the tickets, in work order, to get to Ready for Testing today for tomorrow to start on
- * track. Past maxRows, the last row says how many more there are.
+ * When short, the tickets to get to Ready for Testing today for tomorrow to start on track, under a
+ * heading for each stage they're at (in review, in progress, to do). Past maxRows, the last row says
+ * how many more there are.
  */
 function catchUp() {
 	if (!catchUpTickets.length) return "";
 	const count = catchUpTickets.length;
 	const maxRows = HISTORY.maxRows || count;
 	const shown = count > maxRows ? catchUpTickets.slice(0, maxRows - 1) : catchUpTickets;
-	const rows = shown.map((t) => `<li><span class="pts">${t.points ?? ""}</span><span class="name">${escape(t.title)}</span></li>`).join("");
-	const more = count > shown.length ? `<li class="more"><span class="pts"></span><span class="name">and ${count - shown.length} more</span></li>` : "";
+	const groups = [];
+	for (const t of shown) {
+		if (groups.at(-1)?.stage !== t.stage) groups.push({ stage: t.stage, tickets: [] });
+		groups.at(-1).tickets.push(t);
+	}
+	const lists = groups.map((group, i) => {
+		const rows = group.tickets.map((t) => `<li><span class="pts">${t.points ?? ""}</span><span class="name">${escape(t.title)}</span></li>`).join("");
+		const more = i === groups.length - 1 && count > shown.length
+			? `<li class="more"><span class="pts"></span><span class="name">and ${count - shown.length} more</span></li>`
+			: "";
+		return `<div class="stage">${escape(group.stage ?? "To do")}</div><ul>${rows}${more}</ul>`;
+	}).join("");
 	return `<div class="target">
 		<div class="sub">To Ready for Testing today to catch up</div>
-		<ul>${rows}${more}</ul>
+		${lists}
 	</div>`;
 }
 

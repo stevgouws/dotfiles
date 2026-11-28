@@ -67,6 +67,11 @@ const open = EPIC.tickets.filter((t) => !COMPLETE.has(t.status));
 const must = open.filter((t) => !t.stretch);
 const stretch = open.filter((t) => t.stretch);
 const done = EPIC.tickets.filter((t) => COMPLETE.has(t.status) && !t.stretch);
+const STAGES = {
+	"Ready for review": { rank: 0, name: "In review" },
+	"Waiting for review": { rank: 0, name: "In review" },
+	"In Progress": { rank: 1, name: "In progress" },
+};
 
 const daysUntilDue = workingDaysUntil(due);
 const epicDays = sum(must, "days");
@@ -211,19 +216,26 @@ function snapshot() {
 }
 
 /**
- * The must-haves to finish today, in work order, for the epic to start tomorrow on track: the
- * fewest from the front of the queue whose days cover the shortfall. Empty when it's on track already.
+ * The must-haves to finish today for the epic to start tomorrow on track: the fewest from the front
+ * of the queue whose days cover the shortfall. The queue starts with the tickets in review, then
+ * those in progress, as they're the closest to done, then the rest in work order. Empty when it's on
+ * track already.
  */
 function catchUp() {
-	const queue = [...must].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity) || a.key.localeCompare(b.key));
+	const queue = [...must].sort((a, b) =>
+		stageOf(a).rank - stageOf(b).rank || (a.order ?? Infinity) - (b.order ?? Infinity) || a.key.localeCompare(b.key));
 	const tickets = [];
 	let shortfall = -spare;
 	for (const t of queue) {
 		if (r1(shortfall) <= 0) break;
-		tickets.push({ key: t.key, title: t.title, points: t.points });
+		tickets.push({ key: t.key, title: t.title, points: t.points, stage: stageOf(t).name });
 		shortfall -= t.days;
 	}
 	return tickets;
+}
+
+function stageOf(ticket) {
+	return STAGES[ticket.status] ?? { rank: 2, name: "To do" };
 }
 
 function parseDate(iso) {
