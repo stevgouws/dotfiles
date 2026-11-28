@@ -3,16 +3,21 @@
 --- The two are matched by name: a session's directory is opened with `code .`, so the VS Code
 --- window's folder name is the same as the session name. This relies on VS Code's
 --- `window.title` setting being just `${rootName}`, so the window title is the folder name.
+---
+--- Going to tmux from a project with no session yet creates one with the `tx` script first.
 local M = {}
+
+local axuielement = require("hs.axuielement")
 
 local TMUX = "/opt/homebrew/bin/tmux"
 local CODE = "/opt/homebrew/bin/code"
+local TX = os.getenv("HOME") .. "/.config/scripts/tx"
 local VSCODE_BUNDLE_ID = "com.microsoft.VSCode"
 local ALACRITTY_BUNDLE_ID = "org.alacritty"
 
 -- Declared up front so the helpers below stay local to this file while sitting under their caller.
-local openInVSCode, switchToTmux, listClients, clientInApp, alacrittyAppFor, findVSCodeWindow,
-  exactTarget
+local openInVSCode, switchToTmux, switchClient, createSession, projectFolder, sessionExists,
+  sessionName, listClients, clientInApp, alacrittyAppFor, findVSCodeWindow, exactTarget
 
 -- Hammerspoon can garbage-collect a task that nothing references before it finishes.
 local pendingTask
@@ -46,17 +51,68 @@ end
 function switchToTmux(vscodeApp)
   local window = vscodeApp:focusedWindow()
   if not window then return end
-  local session = window:title()
+  local session = sessionName(window:title())
 
   local client = listClients()[1]
   if not client then return hs.alert.show("No terminal is attached to tmux") end
 
-  local _, switched = hs.execute(
-    TMUX .. " switch-client -c " .. client.tty .. " -t " .. exactTarget(session))
-  if not switched then return hs.alert.show("No tmux session called " .. session) end
+  if sessionExists(session) then return switchClient(client, session) end
 
+  local folder = projectFolder(window)
+  if not folder then
+    return hs.alert.show("Open a file in " .. window:title() .. " to start its tmux session")
+  end
+  createSession(folder, session, function() switchClient(client, session) end)
+end
+
+function switchClient(client, session)
+  hs.execute(TMUX .. " switch-client -c " .. client.tty .. " -t " .. exactTarget(session))
   local terminal = alacrittyAppFor(client.pid)
   if terminal then terminal:activate() end
+end
+
+--- Runs `tx` in the project folder to create and set up the session, without it opening VS Code
+--- or switching to the session itself.
+function createSession(folder, session, onCreated)
+  hs.alert.show("Starting tmux session " .. session)
+  pendingTask = hs.task.new(TX, function(exitCode, _, stderr)
+    if exitCode ~= 0 then return hs.alert.show("tx failed: " .. stderr) end
+    onCreated()
+  end, { session, "--detach" })
+    :setWorkingDirectory(folder)
+    -- Hammerspoon doesn't get the shell's PATH, which tx needs to find tmux and git.
+    :setEnvironment({
+      HOME = os.getenv("HOME"),
+      LANG = "en_US.UTF-8",
+      PATH = "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    })
+    :start()
+end
+
+--- The window's project folder, found by walking up from the file open in it to the folder named
+--- like the window. VS Code only tells other apps about the open file, so with no file open there's
+--- no way to find it.
+function projectFolder(window)
+  local url = axuielement.windowElement(window):attributeValue("AXDocument")
+  -- e.g. "file:///Users/me/my%20app/src/index.ts" becomes "/Users/me/my app/src/index.ts".
+  local folder = url and url:gsub("^file://", ""):gsub("%%(%x%x)", function(hex)
+    return string.char(tonumber(hex, 16))
+  end)
+  while folder and folder ~= "/" do
+    folder = folder:match("^(.*)/[^/]+$")
+    if folder and folder:match("[^/]+$") == window:title() then return folder end
+  end
+end
+
+function sessionExists(session)
+  local _, exists = hs.execute(TMUX .. " has-session -t " .. exactTarget(session))
+  return exists == true
+end
+
+--- tmux swaps "." and ":" in session names for "_", so "my.app" is opened as "my_app". The same
+--- rule as in the tx script.
+function sessionName(folderName)
+  return (folderName:gsub("[.:]", "_"))
 end
 
 --- tmux attaches each terminal window as a separate client. Returns them newest activity first.
@@ -104,11 +160,11 @@ function alacrittyAppFor(pid)
   end
 end
 
-function findVSCodeWindow(projectName)
+function findVSCodeWindow(session)
   local vscode = hs.application.get(VSCODE_BUNDLE_ID)
   if not vscode then return nil end
   for _, window in ipairs(vscode:allWindows()) do
-    if window:title() == projectName then return window end
+    if sessionName(window:title()) == session then return window end
   end
 end
 
