@@ -1,4 +1,7 @@
 {
+  "env": {
+    "_ZO_DOCTOR": "0"
+  },
   "attribution": {
     "pr": ""
   },
@@ -56,19 +59,19 @@
   },
   "outputStyle": "Concise",
   "effortLevel": "medium",
+  "tui": "fullscreen",
   "voice": {
-    "enabled": false,
+    "enabled": true,
     "mode": "tap"
   },
   "theme": "dark",
   "editorMode": "normal",
   "switchModelsOnFlag": false,
-  "voiceEnabled": false,
+  "voiceEnabled": true,
   "network": {
     "allowedDomains": [
       "api.github.com",
       "github.com"
     ]
-  },
-  "tui": "default"
+  }
 }
