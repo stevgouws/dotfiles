@@ -1,0 +1,122 @@
+#!/usr/bin/env sh
+# Open the first link or file path at or after the copy-mode cursor of the given pane, on the
+# cursor's line.
+#
+# A link whose target is hidden behind its text, like a Markdown link in Claude Code (or a long URL
+# wrapped over several lines), opens its real target, but only with the cursor on it.
+#
+# Otherwise this opens the first URL of any kind (https://, obsidian://, ...) or existing file path,
+# e.g. `src/app.ts:42` or ~/notes/report.html, starting from the word under the cursor. Relative
+# paths are looked up from the pane's current folder. A path that a program like Claude Code has
+# split over two lines, often with the second half indented, is joined back up with the line above
+# or below.
+#
+# Folders open in Finder, HTML files in Chrome, images in Preview, and other files in VS Code at the
+# line number if given.
+
+pane=$1
+url_pattern='[a-zA-Z][a-zA-Z0-9+.-]*://[^[:space:]<>"`]+'
+
+main() {
+  link=$(tmux display -p -t "$pane" '#{copy_cursor_hyperlink}')
+  [ -n "$link" ] && open_link "$link" && exit 0
+
+  candidates=$(candidates_from_cursor)
+  while IFS= read -r candidate; do
+    [ -n "$candidate" ] && open_link "$candidate" && exit 0
+  done <<EOF
+$candidates
+EOF
+
+  tmux display-message -t "$pane" "No link or file after the cursor"
+}
+
+# Opens a URL or file path. Fails if it's neither a URL nor a file that exists.
+open_link() {
+  case $1 in
+    file://*) open_path "${1#file://}" ;;
+    *://*) open "$1" ;;
+    *) open_path "$1" ;;
+  esac
+}
+
+open_path() {
+  path=$1
+  line=""
+
+  # Split off a line number, e.g. "app.ts:42" or "app.ts:42:7".
+  if printf '%s' "$path" | grep -Eq ':[0-9]+(:[0-9]+)?$'; then
+    line=":${path#*:}"
+    path=${path%%:*}
+  fi
+
+  case $path in
+    "~"/*) path="$HOME/${path#"~"/}" ;;
+    /*) ;;
+    *) path="$(tmux display -p -t "$pane" '#{pane_current_path}')/$path" ;;
+  esac
+
+  [ -e "$path" ] || return 1
+
+  if [ -d "$path" ]; then
+    open "$path"
+    return
+  fi
+
+  case $(printf '%s' "${path##*.}" | tr '[:upper:]' '[:lower:]') in
+    html | htm) open -a "Google Chrome" "$path" ;;
+    png | jpg | jpeg | gif | heic | webp | tiff | bmp) open -a Preview "$path" ;;
+    # Silenced because tmux shows anything a `run-shell` command prints in the pane, and the `code`
+    # CLI sometimes prints a hint about reading from stdin when it isn't run from a terminal.
+    *) code -g "$path$line" >/dev/null 2>&1 ;;
+  esac
+}
+
+# What might be a link or path, in the order to try them: each run of non-space characters from the
+# one under the cursor to the end of the line, one per line. A word at the start or end of the line
+# is also tried joined to the last word of the line above or the first word of the line below, in
+# case it's half of a path split over two lines. A URL inside a word is cut out, e.g. from
+# "url=https://example.com", and quotes, brackets or trailing punctuation around a word are dropped.
+candidates_from_cursor() {
+  x=$(tmux display -p -t "$pane" '#{copy_cursor_x}')
+  # Line 0 is the top of the screen when not scrolled back, and earlier lines are negative.
+  row=$(($(tmux display -p -t "$pane" '#{copy_cursor_y}') - $(tmux display -p -t "$pane" '#{scroll_position}')))
+
+  tmux display -p -t "$pane" '#{copy_cursor_line}' |
+    above=$(line_at $((row - 1))) below=$(line_at $((row + 1))) awk -v x="$x" '{
+      start = x + 1
+      while (substr($0, start, 1) !~ /[[:space:]]/ && start > 1 && substr($0, start - 1, 1) !~ /[[:space:]]/) start--
+      first_on_line = substr($0, 1, start - 1) !~ /[^[:space:]]/
+      count = split(substr($0, start), words)
+      above_count = split(ENVIRON["above"], above)
+      split(ENVIRON["below"], below)
+      previous = above_count ? above[above_count] : ""
+      next_word = below[1]
+
+      for (i = 1; i <= count; i++) {
+        print words[i]
+        joins_previous = i == 1 && first_on_line && previous != ""
+        joins_next = i == count && next_word != ""
+        if (joins_previous) print previous words[i]
+        if (joins_next) print words[i] next_word
+        if (joins_previous && joins_next) print previous words[i] next_word
+      }
+    }' |
+    while IFS= read -r word; do
+      url=$(printf '%s\n' "$word" | grep -Eo "$url_pattern" | head -n 1)
+      printf '%s\n' "${url:-$word}"
+    done |
+    sed -E 's/^[[("'"'"'`<]+//' |
+    strip_punctuation
+}
+
+line_at() {
+  tmux capture-pane -p -t "$pane" -S "$1" -E "$1"
+}
+
+# Drops trailing punctuation, e.g. the ")." in "(see https://example.com)."
+strip_punctuation() {
+  sed -E 's/[]).,;:!?"'"'"'`>]+$//'
+}
+
+main
